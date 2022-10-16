@@ -302,7 +302,7 @@ PlotAnalyzedTF <- function(framework, index, method = c("dwt", "cwt", "cwt.avg",
              tf <- list(HF = framework$Analyses[[index]]$Coupling$y.leads.x$HF,
                         LF = framework$Analyses[[index]]$Coupling$y.leads.x$LF, Time = Data$Data[,1])
              im1 <- data.frame(Time = tf$Time, Total = framework$Analyses[[index]]$Coupling$y.leads.x$Total)
-             im1 <- ggplot2::ggplot(data = im1, mapping = aes(x = Time, y = Total)) +
+             im1 <- ggplot2::ggplot(data = im1, mapping = ggplot2::aes(x = Time, y = Total)) +
                ggplot2::geom_line()
              im2 <- PlotTransferFunDWT(tf, time_flags, col = time_col, tem = tem, plotHF = plotHF,
                                       plotLF = plotLF)
@@ -895,7 +895,7 @@ ModelClinicalData <- function(framework, type = c("BRS", "HRV"), band = c("HF", 
   r <- summary(model)$r.squared
   p <- summary(model)$coefficients[2,4]
   data <- data.frame(values = values, clinical = clin)
-  Plot <- ggplot2::ggplot(data, aes(clinical, values)) +
+  Plot <- ggplot2::ggplot(data, ggplot2::aes(clinical, values)) +
     ggplot2::geom_point() + ggplot2::geom_smooth(method = "lm", color = "red") +
      ggplot2::theme_minimal() + ggplot2::labs(y = paste(type, " (", band, " band, ", unit2, ")", sep = ""),
                                              x = paste(names(framework$Clinical)[variable + 1], " (",
