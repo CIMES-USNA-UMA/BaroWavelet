@@ -42,7 +42,7 @@
 TransferFunDWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
                   wv = "d4", hrv = FALSE){
                   RHRVobjects <- GenerateRHRVObjects(data)
-                  RHRVobjects <- SendDataToRHRV(RHRVobjects, HF, LF, VLF)
+                  RHRVobjects <- SendDataToRHRV(RHRVobjects, HF, LF, VLF, wv)
                   SBP_HF <- RHRVobjects$SBP$FreqAnalysis[[1]]$HF
                   SBP_LF <- RHRVobjects$SBP$FreqAnalysis[[1]]$LF
                   RR_HF <- RHRVobjects$RR$FreqAnalysis[[1]]$HF
@@ -118,7 +118,8 @@ GenerateRHRVObjects <- function(data){
 #'
 #' @examples
 #' # ADD EXAMPLE!
-SendDataToRHRV <- function(RHRVobjects, HF = 0.4, LF = 0.15, VLF = 0.04){
+SendDataToRHRV <- function(RHRVobjects, HF = 0.4, LF = 0.15, VLF = 0.04,
+                           wv = "d4"){
   for(n in 1:2){
     RHRVobjects[[n]] <-
       AdaptSBPtoRHRV(RHRVobjects[[n]])
