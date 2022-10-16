@@ -132,7 +132,7 @@ SendDataToRHRV <- function(RHRVobjects, HF = 0.4, LF = 0.15, VLF = 0.04,
       HFmin = LF, HFmax = HF,
       type = "wavelet", wavelet = wv)
   }
-  return(RHRVObjects)
+  return(RHRVobjects)
 }
 
 

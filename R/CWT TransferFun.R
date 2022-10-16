@@ -86,7 +86,8 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
 #' @examples
 #' # ADD EXAMPLE!
 SmoothTransforms <- function(x, y, chosen.dj = 1/20){
-  inverse_scales <- matrix(rep(1/t(WT.x$scale), ncol(x$wave), nrow = nrow(x$wave)))
+  inverse_scales <- matrix(rep(1/t(x$scale),ncol(x$wave)), ncol = ncol(x$wave),
+                           nrow = nrow(x$wave))
   XWT <- (Conj(x$wave) * y$wave)
   sWT.x <- biwavelet::smooth.wavelet(inverse_scales * (abs(x$wave)^2),
                                      x$dt, chosen.dj, x$scale)
