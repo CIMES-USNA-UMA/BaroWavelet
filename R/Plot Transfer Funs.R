@@ -36,12 +36,12 @@ PlotTransferFunDWT <- function(tf, time_flags = NULL, col = "brown", tem  =FALSE
                   plottingData <- data.frame(Time = time, LF = LF, HF = HF)
                   if(plotHF & plotLF) par(mfrow = c(2,1))
                   if(plotHF){
-                  im <- ggplot2::ggplot(data = plottingData, mapping = aes(x = Time, y = HF)) +
+                  im <- ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = HF)) +
                       ggplot2::geom_line()
                   if(use.xlim) im <- im + ggplot2::xlim(time_flags[1]*60, time_flags[2]*60)
                   return(im)
                   }else{
-                  im <- ggplot2::ggplot(data = plottingData, mapping = aes(x = Time, y = LF)) +
+                  im <- ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = LF)) +
                       ggplot2::geom_line()
                   if(use.xlim) im <- im + ggplot2::xlim(time_flags[1]*60, time_flags[2]*60)
                   return(im)
@@ -82,7 +82,7 @@ PlotCwtTransferFun <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL
                   xlim = NULL
                   if(use.xlim) xlim = time_flags * 60
                   par(oma = c(0, 0, 0, 1), mar = c(5, 4, 5, 5) + 0.1)
-                  plot(fun, plot.sig = FALSE, plot.phase = TRUE, 
+                  plot(fun, plot.sig = FALSE, plot.phase = TRUE,
                      type = "wavelet", plot.cb = TRUE, arrow.cutoff = thr, plot.coi = show.coi,
                         main = "Transfer Function by CWT (ms/mmHg)",
                           ylim = c(1/HF, 1/VLF), xlim = xlim, fill.cols = col, zlim = c(0,Max))
@@ -94,12 +94,12 @@ PlotCwtTransferFun <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL
                      time_flags = time_flags * 60
                      abline(v = time_flags[1], lwd = 3, col = "black")
                      abline(v = time_flags[2], lwd = 3, col = "black")
-                  }   
-                  abline(h = log2(1/LF), lwd = 3, col = "brown")  
+                  }
+                  abline(h = log2(1/LF), lwd = 3, col = "brown")
                   if(tem){
                      dev.off()
                      return(im)
-                  }     
+                  }
 }
 
 PlotAvgCwtTransferFun <- function(fun, thr = 0.5, use.thr = TRUE, scale = 1,
@@ -113,7 +113,7 @@ PlotAvgCwtTransferFun <- function(fun, thr = 0.5, use.thr = TRUE, scale = 1,
                   sel_power <- fun$power
                   if(use.thr){
                      fun$power[which(fun$rsq < thr)] <- NA
-                  }          
+                  }
                   min_freqs <- min(freqs)
                   max_freqs <- max(freqs)
                   if(max_freqs > HF) max_freqs <- HF
@@ -130,7 +130,7 @@ PlotAvgCwtTransferFun <- function(fun, thr = 0.5, use.thr = TRUE, scale = 1,
                   } else {
                      freq_results <- rowMeans(fun$power, na.rm = TRUE)
                   }
-                  time_results.HF <- colMeans(fun$power[(freqs <= HF) & (freqs > LF),], 
+                  time_results.HF <- colMeans(fun$power[(freqs <= HF) & (freqs > LF),],
                      na.rm = TRUE)
                   time_results.LF <- colMeans(fun$power[(freqs <= LF) & (freqs > VLF),],
                      na.rm = TRUE)
@@ -138,33 +138,33 @@ PlotAvgCwtTransferFun <- function(fun, thr = 0.5, use.thr = TRUE, scale = 1,
                   time_results.HF[is.na(time_results.HF)] <- 0
                   time_results.LF[is.na(time_results.LF)] <- 0
                   plot(log2(1/fun$period), freq_results,
-                     "l", xlab = "Frequency", ylab = "BRS (ms/mmHg)", 
-                        main = "Frequency Domain Transfer Function", ylim = 
+                     "l", xlab = "Frequency", ylab = "BRS (ms/mmHg)",
+                        main = "Frequency Domain Transfer Function", ylim =
                           c(0, max(freq_results)), xaxt = "n")
-                  polygon(x = c(log2(freqs[(freqs <= HF) & (freqs >= VLF)]), 
+                  polygon(x = c(log2(freqs[(freqs <= HF) & (freqs >= VLF)]),
                       rev( log2(freqs[(freqs <= HF) & (freqs >= VLF)]))),
                     y = c(freq_results[(freqs <= HF) & (freqs >= VLF)],
                       double(NROW(freqs[(freqs <= HF) & (freqs >= VLF)]))),
                       col = HFcolor)
-                  polygon(x = c(log2(freqs[(freqs <= LF) & (freqs > VLF)]), 
+                  polygon(x = c(log2(freqs[(freqs <= LF) & (freqs > VLF)]),
                       rev( log2(freqs[(freqs <= LF) & (freqs > VLF)]))),
                     y = c(freq_results[(freqs <= LF) & (freqs > VLF)],
                       double(NROW(freqs[(freqs <= LF) & (freqs > VLF)]))),
                       col = LFcolor)
-                  axis(1, at = log2(1/fun$period[seq(1,NROW(fun$period), len = len)]), 
+                  axis(1, at = log2(1/fun$period[seq(1,NROW(fun$period), len = len)]),
                      labels = round(1/fun$period[seq(1,NROW(fun$period), len = len)],3))
-                  plot(fun$t, time_results.HF, "l", xlab = "Time", ylab = "BRS (ms/mmHg)", 
+                  plot(fun$t, time_results.HF, "l", xlab = "Time", ylab = "BRS (ms/mmHg)",
                         main = "Time Domain Transfer Function (HF band)")
                   if(!is.null(time_flags)){
-                     polygon(x = c(select_t, rev(select_t)), 
+                     polygon(x = c(select_t, rev(select_t)),
                        y = c(time_results.HF[match(select_t, fun$t)],
                       double(NROW(select_t))),
                       col = Tcolor)
                   }
-                  plot(fun$t, time_results.LF, "l", xlab = "Time", ylab = "BRS (ms/mmHg)", 
+                  plot(fun$t, time_results.LF, "l", xlab = "Time", ylab = "BRS (ms/mmHg)",
                         main = "Time Domain Transfer Function (LF band)")
                   if(!is.null(time_flags)){
-                     polygon(x = c(select_t, rev(select_t)), 
+                     polygon(x = c(select_t, rev(select_t)),
                        y = c(time_results.LF[match(select_t, fun$t)],
                       double(NROW(select_t))),
                       col = Tcolor)
@@ -183,7 +183,7 @@ GetBiwaveletObject <- function(data, use.thr = TRUE, thr = 0.5){
                   biwave_object$period <- 1/data$Freqs
                   biwave_object$power <- abs(data$TransferFun)
                   biwave_object$wave <- abs(data$TransferFun)
-                  biwave_object$phase <- atan2(Im(data$TransferFun), 
+                  biwave_object$phase <- atan2(Im(data$TransferFun),
                      Re(data$TransferFun))
                   biwave_object$rsq <- data$Coherence
                   biwave_object$coi <- data$Cone

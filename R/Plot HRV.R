@@ -10,22 +10,22 @@ PlotHRV <- function(hrv, time_flags = NULL, col = "brown", tem  =FALSE, plotHF =
   }
   plottingData <- data.frame(Time = Time, LF = LF, HF = HF, LFHF = LFHF)
   if(plotHF & !plotLF){
-    im <- ggplot2::ggplot(data = plottingData, mapping = aes(x = Time, y = HF)) +
+    im <- ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = HF)) +
       ggplot2::geom_line()
     return(im)
   }else if(plotLF & !plotHF){
-    im <- ggplot2::ggplot(data = plottingData, mapping = aes(x = Time, y = LF)) +
+    im <- ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = LF)) +
       ggplot2::geom_line()
     return(im)
   }else if(plotLF & plotHF){
-    im <- ggplot2::ggplot(data = plottingData, mapping = aes(x = Time, y = LFHF)) +
+    im <- ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = LFHF)) +
       ggplot2::geom_line()
     return(im)
   }
-    
+
   if(tem){
     dev.off()
     return(im)
   }
-  
+
 }
