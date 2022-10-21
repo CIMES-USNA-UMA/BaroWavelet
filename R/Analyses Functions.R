@@ -219,13 +219,30 @@ AddAvgCwtData <- function(framework, index){
 
 
 
-AddCausalCoupling <- function(framework, index){
+NOTAddCausalCoupling <- function(framework, index){
   Data <- ExtractDataFromAnalysis(framework, index)
   Time <- Data$Data[,"Time"]
   dt = abs(diff(Time)[1])
   Coupling <- GetPhaseInducedCoherence(Data$Data, VLF  = Data$VLF, LF  = Data$LF, HF = Data$HF,
                                 #thr = Data$Coherence * Data$Threshold, chosen.dj = 1/20, dt = dt)
                                 thr = Data$Coherence * Data$Threshold, chosen.dj = 1/20, dt = dt)
+  Coupling <- DivideByBands(Coupling, coh = TRUE, dif = TRUE, VLF  = Data$VLF, LF  = Data$LF, HF = Data$HF)
+  framework$Analyses[[index]]$Coupling <- Coupling
+  return(framework)
+
+}
+
+AddCausalCoupling <- function(framework, index){
+  Data <- ExtractDataFromAnalysis(framework, index)
+  Time <- Data$Data[,"Time"]
+  tf <- framework$Analyses[[index]]$BRS$CWT
+  dt = abs(diff(Time)[1])
+  Couplings <- CalculateCausalCouplings(tf)
+  Coupling <- Couplings
+  Coupling[[1]] <- tf$Coherence
+  Coupling[[2]] <- Couplings[[1]]
+  Coupling[[3]] <- Couplings[[2]]
+  Coupling$Freqs <- tf$Freqs
   Coupling <- DivideByBands(Coupling, coh = TRUE, dif = TRUE, VLF  = Data$VLF, LF  = Data$LF, HF = Data$HF)
   framework$Analyses[[index]]$Coupling <- Coupling
   return(framework)
@@ -299,14 +316,21 @@ PlotAnalyzedTF <- function(framework, index, method = c("dwt", "cwt", "cwt.avg",
                                       plotLF = plotLF)
              return(im)
            } else if(method == "coupling"){
-             tf <- list(HF = framework$Analyses[[index]]$Coupling$y.leads.x$HF,
-                        LF = framework$Analyses[[index]]$Coupling$y.leads.x$LF, Time = Data$Data[,1])
-             im1 <- data.frame(Time = tf$Time, Total = framework$Analyses[[index]]$Coupling$y.leads.x$Total)
-             im1 <- ggplot2::ggplot(data = im1, mapping = ggplot2::aes(x = Time, y = Total)) +
-               ggplot2::geom_line()
-             im2 <- PlotTransferFunDWT(tf, time_flags, col = time_col, tem = tem, plotHF = plotHF,
+             tfinst <- list(HF = framework$Analyses[[index]]$Coupling$Instantaneous$HF,
+                        LF = framework$Analyses[[index]]$Coupling$Instantaneous$LF,Time = Data$Data[,1])
+             tflag <- list(
+                            HF = framework$Analyses[[index]]$Coupling$Lagged$HF,
+                            LF = framework$Analyses[[index]]$Coupling$Lagged$LF,Time = Data$Data[,1])
+             tftotal <- list(
+               HF = framework$Analyses[[index]]$Coupling$Instantaneous$Total,
+               LF = framework$Analyses[[index]]$Coupling$Lagged$Total,Time = Data$Data[,1])
+             im1 <- PlotTransferFunDWT(tftotal, time_flags, col = time_col, tem = tem, plotHF = plotHF,
+                                       plotLF = plotLF)
+             im2 <- PlotTransferFunDWT(tfinst, time_flags, col = time_col, tem = tem, plotHF = plotHF,
                                       plotLF = plotLF)
-             im <- list(Total = im1, HFLF = im2)
+             im3 <- PlotTransferFunDWT(tflag, time_flags, col = time_col, tem = tem, plotHF = plotHF,
+                                       plotLF = plotLF)
+             im <- list(Total = im1, inst = im2, lag = im3)
              return(im[[coupling_index]])
 
            }

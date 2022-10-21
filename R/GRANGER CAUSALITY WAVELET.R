@@ -19,11 +19,11 @@ GetCausalCoupling34 <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
   # Therefore, argument data is a matrix with three columns that are:
   # [Time, Y, X]. Therefore, if one should study the influence between SBP
   # and RR, then the data should be arranged as [Time, RR, SBP]
-  sWT.x <- biwavelet::smooth.wavelet(s.inv * (abs(WT.x$wave)^2), 
+  sWT.x <- biwavelet::smooth.wavelet(s.inv * (abs(WT.x$wave)^2),
                                      WT.x$dt, chosen.dj, WT.x$scale) / ncol(WT.x$wave)
-  sWT.y <- biwavelet::smooth.wavelet(s.inv * (abs(WT.y$wave)^2), WT.x$dt, 
+  sWT.y <- biwavelet::smooth.wavelet(s.inv * (abs(WT.y$wave)^2), WT.x$dt,
                                      chosen.dj, WT.x$scale) / ncol(WT.x$wave)
-  sXWT = biwavelet::smooth.wavelet(s.inv * XWT, WT.x$dt, 
+  sXWT = biwavelet::smooth.wavelet(s.inv * XWT, WT.x$dt,
                                    chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   Coherence <- abs(sXWT)^2 / (sWT.x * sWT.y)
   Total_GC <- log(1 - Coherence)
@@ -48,10 +48,10 @@ GetCausalCoupling34 <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
   tol <- tol * pi / 180
   fun2 <- exp((-(phase2 - (pi/4))^2)/(2*tol^2))
   fun2 <- (Coherence >= thr)*1
-  sXWT1 = biwavelet::smooth.wavelet(s.inv * XWT * fun11 * fun2, WT.x$dt, 
+  sXWT1 = biwavelet::smooth.wavelet(s.inv * XWT * fun11 * fun2, WT.x$dt,
                                     chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   # X leads, Y lags. X predicts Y
-  sXWT2 = biwavelet::smooth.wavelet(s.inv * XWT * fun12 * fun2, WT.x$dt, 
+  sXWT2 = biwavelet::smooth.wavelet(s.inv * XWT * fun12 * fun2, WT.x$dt,
                                     chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   # Y leads, X lags. Y predicts X
   Coherence1 <- abs(sXWT1)^2 / (sWT.x * sWT.y) # X predicts Y
@@ -72,7 +72,7 @@ GetCausalCoupling34 <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
   # Remember: X = Output, Y = Input. If you are measuring BRS:
   # X = SBP, Y = RR, and Coherence2 will contain BRS information.
   Objects <- list()
-  # The list returned by the funcion will have the following elements: Total Coherence, 
+  # The list returned by the funcion will have the following elements: Total Coherence,
   # Feedback coherence, Feedforward coherence, Total Cohesion, Feedback Cohesion, Feedforward
   # Cohesion
   return(list(Coherence = Coherence, Coherence1 = Coherence1, Coherence2 = Coherence2, Cohesion = Cohesion,
@@ -100,11 +100,11 @@ GetPhaseInducedCoherence <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
   # Therefore, argument data is a matrix with three columns that are:
   # [Time, Y, X]. Therefore, if one should study the influence between SBP
   # and RR, then the data should be arranged as [Time, RR, SBP]
-  sWT.x <- biwavelet::smooth.wavelet(s.inv * (abs(WT.x$wave)^2), 
+  sWT.x <- biwavelet::smooth.wavelet(s.inv * (abs(WT.x$wave)^2),
                                      WT.x$dt, chosen.dj, WT.x$scale) / ncol(WT.x$wave)
-  sWT.y <- biwavelet::smooth.wavelet(s.inv * (abs(WT.y$wave)^2), WT.x$dt, 
+  sWT.y <- biwavelet::smooth.wavelet(s.inv * (abs(WT.y$wave)^2), WT.x$dt,
                                      chosen.dj, WT.x$scale) / ncol(WT.x$wave)
-  sXWT = biwavelet::smooth.wavelet(s.inv * XWT, WT.x$dt, 
+  sXWT = biwavelet::smooth.wavelet(s.inv * XWT, WT.x$dt,
                                    chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   Coherence <- abs(sXWT)^2 / (sWT.x * sWT.y)
   Total_GC <- log(1 - Coherence)
@@ -126,10 +126,10 @@ GetPhaseInducedCoherence <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
       #}
     }
   }
-  sXWT1 = biwavelet::smooth.wavelet(s.inv * XWT * fun11, WT.x$dt, 
+  sXWT1 = biwavelet::smooth.wavelet(s.inv * XWT * fun11, WT.x$dt,
                                     chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   # X leads, Y lags
-  sXWT2 = biwavelet::smooth.wavelet(s.inv * XWT * fun12, WT.x$dt, 
+  sXWT2 = biwavelet::smooth.wavelet(s.inv * XWT * fun12, WT.x$dt,
                                     chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   # Y leads, X lags
   Coherence1 <- abs(Im(sXWT1))^2 / (sWT.x * sWT.y) # X leads Y
@@ -138,7 +138,7 @@ GetPhaseInducedCoherence <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
   # Remember: X = Output, Y = Input. If you are measuring BRS:
   # X = SBP, Y = RR, and Coherence2 will contain BRS information.
 
-  # The list returned by the funcion will have the following elements: Total Coherence, 
+  # The list returned by the funcion will have the following elements: Total Coherence,
   # Feedback coherence, Feedforward coherence, Total Cohesion, Feedback Cohesion, Feedforward
   # Cohesion
   return(list(Coherence = Coherence, Coherence1 = Coherence1, Coherence2 = Coherence2, Coherence3 = Coherence3,
@@ -183,11 +183,11 @@ GetCausalCoupling2 <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
   # Therefore, argument data is a matrix with three columns that are:
   # [Time, Y, X]. Therefore, if one should study the influence between SBP
   # and RR, then the data should be arranged as [Time, RR, SBP]
-  sWT.x <- biwavelet::smooth.wavelet(s.inv * (abs(WT.x$wave)^2), 
+  sWT.x <- biwavelet::smooth.wavelet(s.inv * (abs(WT.x$wave)^2),
                                      WT.x$dt, chosen.dj, WT.x$scale) / ncol(WT.x$wave)
-  sWT.y <- biwavelet::smooth.wavelet(s.inv * (abs(WT.y$wave)^2), WT.x$dt, 
+  sWT.y <- biwavelet::smooth.wavelet(s.inv * (abs(WT.y$wave)^2), WT.x$dt,
                                      chosen.dj, WT.x$scale) / ncol(WT.x$wave)
-  sXWT = biwavelet::smooth.wavelet(s.inv * XWT, WT.x$dt, 
+  sXWT = biwavelet::smooth.wavelet(s.inv * XWT, WT.x$dt,
                                    chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   Coherence <- abs(sXWT)^2 / (sWT.x * sWT.y)
   Total_GC <- log(1 - Coherence)
@@ -212,19 +212,19 @@ GetCausalCoupling2 <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
   tol <- tol * pi / 180
   fun2 <- exp((-(phase2 - (pi/4))^2)/(2*tol^2))
   fun2 <- (Coherence >= thr)*1
-  sXWT1 = biwavelet::smooth.wavelet(s.inv * XWT * fun11 * fun2, WT.x$dt, 
+  sXWT1 = biwavelet::smooth.wavelet(s.inv * XWT * fun11 * fun2, WT.x$dt,
                                     chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   # X leads, Y lags. X predicts Y
-  sXWT2 = biwavelet::smooth.wavelet(s.inv * XWT * fun12 * fun2, WT.x$dt, 
+  sXWT2 = biwavelet::smooth.wavelet(s.inv * XWT * fun12 * fun2, WT.x$dt,
                                     chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   # Y leads, X lags. Y predicts X
-  sWT.x2 <- biwavelet::smooth.wavelet(s.inv * (abs(WT.x$wave * fun11*fun2)^2), WT.x$dt, 
+  sWT.x2 <- biwavelet::smooth.wavelet(s.inv * (abs(WT.x$wave * fun11*fun2)^2), WT.x$dt,
                                                chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   coupling <- sWT.x2/sWT.x
-  
+
   return(list(Coupling = coupling, Freqs = freqs))
 }
-  
+
 GetCausalCoupling4 <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
                                chosen.dj = 1/20, dt = 0.25, demean = TRUE, tol = 15, thr = 0.5,
                                in_phase = TRUE, out_phase = TRUE){
@@ -246,11 +246,11 @@ GetCausalCoupling4 <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
   # Therefore, argument data is a matrix with three columns that are:
   # [Time, Y, X]. Therefore, if one should study the influence between SBP
   # and RR, then the data should be arranged as [Time, RR, SBP]
-  sWT.x <- biwavelet::smooth.wavelet(s.inv * (abs(WT.x$wave)^2), 
+  sWT.x <- biwavelet::smooth.wavelet(s.inv * (abs(WT.x$wave)^2),
                                      WT.x$dt, chosen.dj, WT.x$scale) / ncol(WT.x$wave)
-  sWT.y <- biwavelet::smooth.wavelet(s.inv * (abs(WT.y$wave)^2), WT.x$dt, 
+  sWT.y <- biwavelet::smooth.wavelet(s.inv * (abs(WT.y$wave)^2), WT.x$dt,
                                      chosen.dj, WT.x$scale) / ncol(WT.x$wave)
-  sXWT = biwavelet::smooth.wavelet(s.inv * XWT, WT.x$dt, 
+  sXWT = biwavelet::smooth.wavelet(s.inv * XWT, WT.x$dt,
                                    chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   Coherence <- sXWT / sqrt(sWT.x * sWT.y)
   mask = Coherence
@@ -285,11 +285,11 @@ GetCausalCoupling <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
   # Therefore, argument data is a matrix with three columns that are:
   # [Time, Y, X]. Therefore, if one should study the influence between SBP
   # and RR, then the data should be arranged as [Time, RR, SBP]
-  sWT.x <- biwavelet::smooth.wavelet(s.inv * (abs(WT.x$wave)^2), 
+  sWT.x <- biwavelet::smooth.wavelet(s.inv * (abs(WT.x$wave)^2),
                                      WT.x$dt, chosen.dj, WT.x$scale) / ncol(WT.x$wave)
-  sWT.y <- biwavelet::smooth.wavelet(s.inv * (abs(WT.y$wave)^2), WT.x$dt, 
+  sWT.y <- biwavelet::smooth.wavelet(s.inv * (abs(WT.y$wave)^2), WT.x$dt,
                                      chosen.dj, WT.x$scale) / ncol(WT.x$wave)
-  sXWT = biwavelet::smooth.wavelet(s.inv * XWT, WT.x$dt, 
+  sXWT = biwavelet::smooth.wavelet(s.inv * XWT, WT.x$dt,
                                    chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   Coherence <- abs(sXWT)^2 / (sWT.x * sWT.y)
   phase <- atan2(Im(sXWT), Re(sXWT))
@@ -298,9 +298,9 @@ GetCausalCoupling <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
   for(n in 1:nrow(phase2)){
     for(m in 1:ncol(phase2)){
       if(((phase[n,m] > 0 ))){ # Output leads
-        fun11[n,m] <- 1 
+        fun11[n,m] <- 1
       } else if(((phase[n,m] < 0))){  # Input leads
-        fun12[n,m] <- 1 
+        fun12[n,m] <- 1
       }
       #if(abs(phase[n,m]) > pi/4){
       #  phase2[n,m] <- abs(phase2[n,m] - pi/2)
@@ -308,7 +308,7 @@ GetCausalCoupling <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
     }
   }
   sXWT1 = biwavelet::smooth.wavelet(s.inv * XWT * fun11, WT.x$dt, # Output leads
-                                    chosen.dj, WT.x$scale) / ncol(WT.x$wave) 
+                                    chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   sXWT2 = biwavelet::smooth.wavelet(s.inv * XWT * fun12, WT.x$dt, # Input leads
                                     chosen.dj, WT.x$scale) / ncol(WT.x$wave)
   Coherence1 <- abs(Im(sXWT1))^2 / (sWT.x * sWT.y) # Non baroreflex
@@ -321,7 +321,7 @@ GetCausalCoupling <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
       if((Coherence[n,m]) >= thr) mask2[n,m] <- 1
     }
   }
-  # The list returned by the funcion will have the following elements: Total Coherence, 
+  # The list returned by the funcion will have the following elements: Total Coherence,
   # Feedback coherence, Feedforward coherence, Total Cohesion, Feedback Cohesion, Feedforward
   # Cohesion
   return(list(Coherence = Coherence, Coherence1 = Coherence1, Coherence2 = Coherence2, mask1 = mask1, mask2 = mask2,
@@ -333,8 +333,8 @@ GetCausalCoupling <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
 DivideByBands <- function(Coupling, HF = 0.4, LF = 0.15, VLF = 0.04, dif = FALSE,
                           coh = TRUE){
   Freqs <- Coupling$Freqs
-  Coupling1 <- Coupling[[3]]
-  Coupling2 <- Coupling[[2]]
+  Coupling1 <- Coupling[[2]]
+  Coupling2 <- Coupling[[3]]
   Coupling3 <- Coupling[[1]]
   HFb <- Freqs[(Freqs <= HF) & (Freqs >= LF)]
   LFb <- Freqs[(Freqs < LF) & (Freqs >= VLF)]
@@ -343,15 +343,15 @@ DivideByBands <- function(Coupling, HF = 0.4, LF = 0.15, VLF = 0.04, dif = FALSE
   LF <- match(LFb, Freqs)
   total <- match(total, Freqs)
   Coupling1 <- list(Total = colMeans(Coupling1[total,], na.rm = TRUE),
-                    HF = colMeans(Coupling1[HF,], na.rm = TRUE), 
+                    HF = colMeans(Coupling1[HF,], na.rm = TRUE),
                     LF = colMeans(Coupling1[LF,], na.rm = TRUE))
   Coupling2 <- list(Total = colMeans(Coupling2[total,], na.rm = TRUE),
-                    HF = colMeans(Coupling2[HF,], na.rm = TRUE), 
+                    HF = colMeans(Coupling2[HF,], na.rm = TRUE),
                     LF = colMeans(Coupling2[LF,], na.rm = TRUE))
   Coherence <- list(Total = colMeans(Coupling3[total,], na.rm = TRUE),
-                    HF = colMeans(Coupling3[HF,], na.rm = TRUE), 
+                    HF = colMeans(Coupling3[HF,], na.rm = TRUE),
                     LF = colMeans(Coupling3[LF,], na.rm = TRUE))
-  Coupling <- list(y.leads.x = Coupling1, x.leads.y = Coupling2, Coherence = Coherence)
+  Coupling <- list(Instantaneous = Coupling1, Lagged = Coupling2, Coherence = Coherence)
   #for(n in 1:3) Coupling[[n]] <- Coupling[[n]] - Coupling2[[n]]*dif
   return(Coupling)
 }

@@ -31,7 +31,7 @@
 #' @examples
 #' # ADD EXAMPLE!
 TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
-  chosen.dj = 1/20, dt = 0.25, demean = TRUE){
+  chosen.dj = 1/20, dt = 0.25, demean = TRUE, phase.restrict = FALSE, feedback = TRUE){
                   if(demean){
                      for(n in 2:ncol(data)){
                          data[,n] <- data[,n] - mean(data[,n])
@@ -45,12 +45,20 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
                   Smoothed <- SmoothTransforms(WT.x, WT.y, chosen.dj)
                   sWT.x <- Smoothed$sWT.x
                   sWT.y <- Smoothed$sWT.y
+                  XWT <- Smoothed$XWT
                   sXWT <- Smoothed$sXWT
+                  if(phase.restrict){
+                    sXWT <- RestrictByPhase(XWT, sXWT, WT.x, feedback = feedback)
+                  }
                   TransferFun <- sXWT / sWT.x
-                  Coherence <- abs(sXWT)^2 / (sWT.x * sWT.y)
+                  Cospectrum <- Re(sXWT/ sqrt(sWT.x * sWT.y))
+                  Quadrature <- Im(sXWT/ sqrt(sWT.x * sWT.y))
+                  #Coherence <- abs(sXWT)^2 / (sWT.x * sWT.y)
+                  Coherence <- abs(Cospectrum + Quadrature*1i)^2
                   return(list(TransferFun = TransferFun, Coherence = Coherence,
                       Freqs = 1/WT.x$period, Cone = WT.x$coi, Time = data[,1],
-                         HF = HF, LF = LF, VLF = VLF, type = "TFun_cwt"))
+                         HF = HF, LF = LF, VLF = VLF, type = "TFun_cwt",
+                      Cospectrum = Cospectrum, Quadrature = Quadrature))
 }
 
 #########################################################
@@ -95,9 +103,38 @@ SmoothTransforms <- function(x, y, chosen.dj = 1/20){
                                      chosen.dj, x$scale)
   sXWT = biwavelet::smooth.wavelet(inverse_scales * XWT, x$dt,
                                    chosen.dj, x$scale)
-  return(list(sWT.x = sWT.x, sWT.y = sWT.y, sXWT = sXWT))
+  return(list(sWT.x = sWT.x, sWT.y = sWT.y, sXWT = sXWT, XWT = XWT))
 }
 
 
+RestrictByPhase <- function(XWT, sXWT, WT.x, in_phase = TRUE, out_phase = TRUE, feedback = TRUE){
+  inverse_scales <- 1/t(WT.x$scale)
+  inverse_scales <- matrix(rep(inverse_scales, ncol(WT.x$wave)),
+                  nrow = nrow(WT.x$wave))
+  phase <- atan2(Im(sXWT), Re(sXWT))
+  phase2 <- phase
+  fun11 <- fun12 <- matrix(0, ncol = ncol(phase), nrow = nrow(phase))
+  for(n in 1:nrow(phase2)){
+    for(m in 1:ncol(phase2)){
+      if(((phase[n,m] > 0 & phase[n,m] < pi/2)&in_phase) | ((phase[n,m] > -pi & phase[n,m] < -pi/2)& out_phase)){
+        fun11[n,m] <- 1 # X leads, Y lags
+      } else if(((phase[n,m] > pi/2 & phase[n,m] < pi)&out_phase) | ((phase[n,m] > -pi/2 & phase[n,m] < 0)& in_phase)){
+        fun12[n,m] <- 1 # Y leads, X lags
+      }
+      #if(abs(phase[n,m]) > pi/2){
+      #  phase2[n,m] <- abs(phase2[n,m]) - pi/2
+      # }
+      #if(abs(phase[n,m]) > pi/4){
+      #  phase2[n,m] <- abs(phase2[n,m] - pi/2)
+      #}
+    }
+  }
+  if(feedback){
+    fun <- fun12
+  } else{ fun <- fun11}
 
+  sXWT = biwavelet::smooth.wavelet(inverse_scales * XWT * fun, WT.x$dt,
+                                   WT.x$dj, WT.x$scale)
+  return(sXWT)
+}
 
