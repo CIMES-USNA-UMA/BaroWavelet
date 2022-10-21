@@ -121,19 +121,13 @@ RestrictByPhase <- function(XWT, sXWT, WT.x, in_phase = TRUE, out_phase = TRUE, 
       } else if(((phase[n,m] > pi/2 & phase[n,m] < pi)&out_phase) | ((phase[n,m] > -pi/2 & phase[n,m] < 0)& in_phase)){
         fun12[n,m] <- 1 # Y leads, X lags
       }
-      #if(abs(phase[n,m]) > pi/2){
-      #  phase2[n,m] <- abs(phase2[n,m]) - pi/2
-      # }
-      #if(abs(phase[n,m]) > pi/4){
-      #  phase2[n,m] <- abs(phase2[n,m] - pi/2)
-      #}
     }
   }
   if(feedback){
-    fun <- fun12
-  } else{ fun <- fun11}
+    fun_phase <- fun12
+  } else{ fun_phase <- fun11}
 
-  sXWT = biwavelet::smooth.wavelet(inverse_scales * XWT * fun, WT.x$dt,
+  sXWT = biwavelet::smooth.wavelet(inverse_scales * XWT * fun_phase, WT.x$dt,
                                    WT.x$dj, WT.x$scale)
   return(sXWT)
 }
