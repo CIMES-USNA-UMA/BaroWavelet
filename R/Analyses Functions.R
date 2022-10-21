@@ -25,7 +25,7 @@
 #' @examples
 #' # ADD EXAMPLE!
 BuildStructure <- function(name = NULL, HF = 0.4, LF = 0.15, VLF = 0.04, wv = "d4",
-   coh = 0.5, dj = 1/20, use.weight = TRUE, use.coherence = TRUE){
+   coh = 0.5, dj = 1/20, use.weight = TRUE, use.coherence = TRUE, use.phase = FALSE){
               Framework <- list()
               if(is.null(name)) name <- "BRS Study"
               Framework$Name <- name
@@ -39,6 +39,7 @@ BuildStructure <- function(name = NULL, HF = 0.4, LF = 0.15, VLF = 0.04, wv = "d
               Framework$"General Data"$dj <- dj
               Framework$"General Data"$Weight <- use.weight
               Framework$"General Data"$Threshold <- use.coherence
+              Framework$"General Data"$Phase <- use.phase
               Framework$n <- 0
               Framework$Analyses <- list()
               Framework$Controls <- list()
@@ -182,7 +183,8 @@ AnalyzeTransferFun <- function(framework, index, method = c("both", "dwt", "cwt"
               framework <- AddTFtoAnalysis(framework, tf, index)
            } else if(method == "cwt"){
               tf <- TransferFunCWT(Data$Data, Data$HF, Data$LF, Data$VLF,
-                Data$dj, diff(Data$Data[,1])[1])
+                Data$dj, diff(Data$Data[,1])[1], phase.restrict = Data$Phase,
+                feedback = (Data$Phase == "feedback"))
               framework <- AddTFtoAnalysis(framework, tf, index)
            } else if(method == "both"){
               tf_dwt <- TransferFunDWT(Data$Data, Data$HF, Data$LF, Data$VLF,
@@ -321,16 +323,21 @@ PlotAnalyzedTF <- function(framework, index, method = c("dwt", "cwt", "cwt.avg",
              tflag <- list(
                             HF = framework$Analyses[[index]]$Coupling$Lagged$HF,
                             LF = framework$Analyses[[index]]$Coupling$Lagged$LF,Time = Data$Data[,1])
-             tftotal <- list(
+             tftotal_inst <- list(
                HF = framework$Analyses[[index]]$Coupling$Instantaneous$Total,
+               LF = framework$Analyses[[index]]$Coupling$Instantaneous$Total,Time = Data$Data[,1])
+             tftotal_lagged <- list(
+               HF = framework$Analyses[[index]]$Coupling$Lagged$Total,
                LF = framework$Analyses[[index]]$Coupling$Lagged$Total,Time = Data$Data[,1])
-             im1 <- PlotTransferFunDWT(tftotal, time_flags, col = time_col, tem = tem, plotHF = plotHF,
+             im1 <- PlotTransferFunDWT(tftotal_inst, time_flags, col = time_col, tem = tem, plotHF = plotHF,
                                        plotLF = plotLF)
-             im2 <- PlotTransferFunDWT(tfinst, time_flags, col = time_col, tem = tem, plotHF = plotHF,
+             im2 <- PlotTransferFunDWT(tftotal_lagged, time_flags, col = time_col, tem = tem, plotHF = plotHF,
+                                       plotLF = plotLF)
+             im3 <- PlotTransferFunDWT(tfinst, time_flags, col = time_col, tem = tem, plotHF = plotHF,
                                       plotLF = plotLF)
-             im3 <- PlotTransferFunDWT(tflag, time_flags, col = time_col, tem = tem, plotHF = plotHF,
+             im4 <- PlotTransferFunDWT(tflag, time_flags, col = time_col, tem = tem, plotHF = plotHF,
                                        plotLF = plotLF)
-             im <- list(Total = im1, inst = im2, lag = im3)
+             im <- list(Total_inst = im1, Total_lagged = im2, inst = im3, lag = im4)
              return(im[[coupling_index]])
 
            }
