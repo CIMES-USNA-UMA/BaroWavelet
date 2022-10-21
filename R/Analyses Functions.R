@@ -190,7 +190,8 @@ AnalyzeTransferFun <- function(framework, index, method = c("both", "dwt", "cwt"
               tf_dwt <- TransferFunDWT(Data$Data, Data$HF, Data$LF, Data$VLF,
                 wv = Data$Wavelet, hrv = TRUE)
               tf_cwt <- TransferFunCWT(Data$Data, Data$HF, Data$LF, Data$VLF,
-                Data$dj, diff(Data$Data[,1])[1])
+                                       Data$dj, diff(Data$Data[,1])[1], phase.restrict = (Data$Phase != FALSE),
+                                       feedback = (Data$Phase == "feedback"))
               framework <- AddTFtoAnalysis(framework, tf_dwt, index)
               framework <- AddTFtoAnalysis(framework, tf_cwt, index)
            }
