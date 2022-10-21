@@ -183,7 +183,7 @@ AnalyzeTransferFun <- function(framework, index, method = c("both", "dwt", "cwt"
               framework <- AddTFtoAnalysis(framework, tf, index)
            } else if(method == "cwt"){
               tf <- TransferFunCWT(Data$Data, Data$HF, Data$LF, Data$VLF,
-                Data$dj, diff(Data$Data[,1])[1], phase.restrict = Data$Phase,
+                Data$dj, diff(Data$Data[,1])[1], phase.restrict = (Data$Phase != FALSE),
                 feedback = (Data$Phase == "feedback"))
               framework <- AddTFtoAnalysis(framework, tf, index)
            } else if(method == "both"){
