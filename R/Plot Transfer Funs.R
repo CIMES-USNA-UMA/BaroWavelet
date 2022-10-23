@@ -82,7 +82,7 @@ PlotCwtTransferFun <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL
                   xlim = NULL
                   if(use.xlim) xlim = time_flags * 60
                   par(oma = c(0, 0, 0, 1), mar = c(5, 4, 5, 5) + 0.1)
-                  plot(fun, plot.sig = FALSE, plot.phase = TRUE,
+                  biwavelet::plot.biwavelet(fun, plot.sig = FALSE, plot.phase = TRUE,
                      type = "wavelet", plot.cb = TRUE, arrow.cutoff = thr, plot.coi = show.coi,
                         main = "Transfer Function by CWT (ms/mmHg)",
                           ylim = c(1/HF, 1/VLF), xlim = xlim, fill.cols = col, zlim = c(0,Max))
