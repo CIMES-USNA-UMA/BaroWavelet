@@ -330,6 +330,8 @@ PlotAnalyzedTF <- function(framework, index, method = c("dwt", "cwt", "cwt.avg",
              tftotal_lagged <- list(
                HF = framework$Analyses[[index]]$Coupling$Lagged$Total,
                LF = framework$Analyses[[index]]$Coupling$Lagged$Total,Time = Data$Data[,1])
+             tf_differences <- tflag
+             for(n in 1:2) tf_differences[[n]] <- tf_differences[[n]] - tfinst[[n]]
              im1 <- PlotTransferFunDWT(tftotal_inst, time_flags, col = time_col, tem = tem, plotHF = plotHF,
                                        plotLF = plotLF)
              im2 <- PlotTransferFunDWT(tftotal_lagged, time_flags, col = time_col, tem = tem, plotHF = plotHF,
@@ -338,7 +340,9 @@ PlotAnalyzedTF <- function(framework, index, method = c("dwt", "cwt", "cwt.avg",
                                       plotLF = plotLF)
              im4 <- PlotTransferFunDWT(tflag, time_flags, col = time_col, tem = tem, plotHF = plotHF,
                                        plotLF = plotLF)
-             im <- list(Total_inst = im1, Total_lagged = im2, inst = im3, lag = im4)
+             im5 <- PlotTransferFunDWT(tf_differences, time_flags, col = time_col, tem = tem, plotHF = plotHF,
+                                       plotLF = plotLF)
+             im <- list(Total_inst = im1, Total_lagged = im2, inst = im3, lag = im4, difs = im5)
              return(im[[coupling_index]])
 
            }
