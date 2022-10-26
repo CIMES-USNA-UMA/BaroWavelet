@@ -56,6 +56,7 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
                   Cospectrum <- Re(sXWT_pr/ sqrt(sWT.x * sWT.y))
                   Quadrature <- Im(sXWT_pr/ sqrt(sWT.x * sWT.y))
                   Coherence <- abs(sXWT)^2 / (sWT.x * sWT.y)
+                  Phase <- atan2(Im(sXWT), Re(sXWT))
                   return(list(TransferFun = TransferFun, Coherence = Coherence,
                       Freqs = 1/WT.x$period, Cone = WT.x$coi, Time = data[,1],
                          HF = HF, LF = LF, VLF = VLF, type = "TFun_cwt",

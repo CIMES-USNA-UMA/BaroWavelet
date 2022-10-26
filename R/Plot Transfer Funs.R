@@ -183,8 +183,9 @@ GetBiwaveletObject <- function(data, use.thr = TRUE, thr = 0.5){
                   biwave_object$period <- 1/data$Freqs
                   biwave_object$power <- abs(data$TransferFun)
                   biwave_object$wave <- abs(data$TransferFun)
-                  biwave_object$phase <- atan2(Im(data$TransferFun),
-                     Re(data$TransferFun))
+                  #biwave_object$phase <- atan2(Im(data$TransferFun),
+                  #   Re(data$TransferFun))
+                  biwave_object$phase <- data$Phase
                   biwave_object$rsq <- data$Coherence
                   biwave_object$coi <- data$Cone
                   if(use.thr){
