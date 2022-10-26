@@ -47,8 +47,9 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
                   sWT.y <- Smoothed$sWT.y
                   XWT <- Smoothed$XWT
                   sXWT <- Smoothed$sXWT
+                  phase.restrict_data <- RestrictByPhase(XWT, sXWT, WT.x, feedback = feedback)
                   if(phase.restrict){
-                    sXWT_pr <- RestrictByPhase(XWT, sXWT, WT.x, feedback = feedback)
+                    sXWT_pr <- phase.restrict_data$sXWT
                   } else {
                     sXWT_pr <- sXWT
                   }
@@ -56,7 +57,7 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
                   Cospectrum <- Re(sXWT_pr/ sqrt(sWT.x * sWT.y))
                   Quadrature <- Im(sXWT_pr/ sqrt(sWT.x * sWT.y))
                   Coherence <- abs(sXWT)^2 / (sWT.x * sWT.y)
-                  Phase <- atan2(Im(sXWT), Re(sXWT))
+                  Phase <- phase.restrict_data$phase
                   return(list(TransferFun = TransferFun, Coherence = Coherence,
                       Freqs = 1/WT.x$period, Cone = WT.x$coi, Time = data[,1],
                          HF = HF, LF = LF, VLF = VLF, type = "TFun_cwt",
@@ -131,6 +132,6 @@ RestrictByPhase <- function(XWT, sXWT, WT.x, in_phase = TRUE, out_phase = TRUE, 
 
   sXWT = biwavelet::smooth.wavelet(inverse_scales * XWT * fun_phase, WT.x$dt,
                                    WT.x$dj, WT.x$scale)
-  return(sXWT)
+  return(list(sXWT = sXWT, phase = phase))
 }
 
