@@ -934,7 +934,7 @@ PlotTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
                                                   symbols = c("****", "***", "**", "*", "NS")), method = methods[1],
                                paired = paired, label.y = max_HF) +
     ggplot2::ggtitle(paste(title, "(HF)"))
-  if(paired) plot1 <- plot1 + ggplot2::geom_point() + ggplot2::geom_line(aes(group = id))
+  if(paired) plot1 <- plot1 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
   plot2 <- ggplot2::ggplot(LF, ggplot2::aes(Group, Gain), fill = Group) +
     ggplot2::geom_boxplot() +
     ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, Max + 2)) +
@@ -943,7 +943,7 @@ PlotTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
                                                   symbols = c("****", "***", "**", "*", "NS")), method = methods[2],
                                paired = paired, label.y = max_LF) +
     ggplot2::ggtitle(paste(title, "(LF)"))
-  if(paired) plot2 <- plot2 + ggplot2::geom_point() + ggplot2::geom_line(aes(group = id))
+  if(paired) plot2 <- plot2 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
   gridExtra::grid.arrange(plot1, plot2, ncol = 2)
   if(tem){
     dev.off()
@@ -981,7 +981,7 @@ PlotHRVTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
                                                   symbols = c("****", "***", "**", "*", "NS")), method = methods[1],
                                paired = paired, label.y = max_HF) +
     ggplot2::ggtitle(paste(title, "(HF)"))
-  if(paired) plot1 <- plot1 + ggplot2::geom_point() + ggplot2::geom_line(aes(group = id))
+  if(paired) plot1 <- plot1 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
   plot2 <- ggplot2::ggplot(LF, ggplot2::aes(Group, Power), fill = Group) +
     ggplot2::geom_boxplot() +
     ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, 1.2*Max + 2)) +
@@ -990,7 +990,7 @@ PlotHRVTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
                                                   symbols = c("****", "***", "**", "*", "NS")), method = methods[2],
                                paired = paired, label.y = max_LF) +
     ggplot2::ggtitle(paste(title, "(LF)"))
-  if(paired) plot2 <- plot2 + ggplot2::geom_point() + ggplot2::geom_line(aes(group = id))
+  if(paired) plot2 <- plot2 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
   plot3 <- ggplot2::ggplot(LFHF, ggplot2::aes(Group, Power), fill = Group) +
     ggplot2::geom_boxplot() +
     ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, 2*max_LFHF + 2)) +
@@ -999,7 +999,7 @@ PlotHRVTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
                                                   symbols = c("****", "***", "**", "*", "NS")), method = methods[2],
                                paired = paired, label.y = max_LF) +
     ggplot2::ggtitle(paste(title, "(LF/HF)"))
-  if(paired) plot3 <- plot3 + ggplot2::geom_point() + ggplot2::geom_line(aes(group = id))
+  if(paired) plot3 <- plot3 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
   gridExtra::grid.arrange(plot1, plot2, plot3, ncol = 3)
   if(tem){
     dev.off()
