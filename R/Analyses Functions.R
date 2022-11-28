@@ -928,7 +928,7 @@ PlotTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
   }
   plot1 <- ggplot2::ggplot(HF, ggplot2::aes(Group, Gain), fill = Group) +
     ggplot2::geom_boxplot() +
-    ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, Max + 2)) +
+    ggplot2::theme_bw() +
     ggpubr::stat_compare_means(ggplot2::aes(Group, Gain), comparisons = comparisons,
                                symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
                                                   symbols = c("****", "***", "**", "*", "NS")), method = methods[1],
@@ -937,7 +937,7 @@ PlotTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
   if(paired) plot1 <- plot1 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
   plot2 <- ggplot2::ggplot(LF, ggplot2::aes(Group, Gain), fill = Group) +
     ggplot2::geom_boxplot() +
-    ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, Max + 2)) +
+    ggplot2::theme_bw() +
     ggpubr::stat_compare_means(ggplot2::aes(Group, Gain), comparisons = comparisons,
                                symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
                                                   symbols = c("****", "***", "**", "*", "NS")), method = methods[2],
@@ -975,7 +975,7 @@ PlotHRVTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
   }
   plot1 <- ggplot2::ggplot(HF, ggplot2::aes(Group, Power), fill = Group) +
     ggplot2::geom_boxplot() +
-    ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, 1.2*Max + 2)) +
+    ggplot2::theme_bw() +
     ggpubr::stat_compare_means(ggplot2::aes(Group, Power), comparisons = comparisons,
                                symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
                                                   symbols = c("****", "***", "**", "*", "NS")), method = methods[1],
@@ -984,7 +984,7 @@ PlotHRVTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
   if(paired) plot1 <- plot1 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
   plot2 <- ggplot2::ggplot(LF, ggplot2::aes(Group, Power), fill = Group) +
     ggplot2::geom_boxplot() +
-    ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, 1.2*Max + 2)) +
+    ggplot2::theme_bw() +
     ggpubr::stat_compare_means(ggplot2::aes(Group, Power), comparisons = comparisons,
                                symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
                                                   symbols = c("****", "***", "**", "*", "NS")), method = methods[2],
@@ -993,7 +993,7 @@ PlotHRVTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
   if(paired) plot2 <- plot2 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
   plot3 <- ggplot2::ggplot(LFHF, ggplot2::aes(Group, Power), fill = Group) +
     ggplot2::geom_boxplot() +
-    ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, 2*max_LFHF + 2)) +
+    ggplot2::theme_bw() +
     ggpubr::stat_compare_means(ggplot2::aes(Group, Power), comparisons = comparisons,
                                symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
                                                   symbols = c("****", "***", "**", "*", "NS")), method = methods[2],
