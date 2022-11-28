@@ -771,7 +771,7 @@ TestHRV <- function(framework, index1, index2, name = NULL, method = NULL,
   return(framework)
 }
 
-PlotTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
+PlotTestResults2 <- function(framework, index, tem = FALSE, newPlot = TRUE){
               test <- framework$Tests[[index]]
               if(newPlot) x11(title = paste("Results from test",
                  test$Name))
@@ -825,7 +825,7 @@ PlotTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
               }
 }
 
-PlotHRVTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
+PlotHRVTestResults2 <- function(framework, index, tem = FALSE, newPlot = TRUE){
   test <- framework$TestsHRV[[index]]
   if(newPlot) x11(title = paste("Results from test",
                                 test$Name))
@@ -901,6 +901,111 @@ PlotHRVTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
   }
 }
 
+
+PlotTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
+  test <- framework$Tests[[index]]
+  if(newPlot) x11(title = paste("Results from test",
+                                test$Name))
+  HF <- test$Tables$HF
+  LF <- test$Tables$LF
+  max_HF <- max(test$Tables$HF[,3]) + max(test$Tables$HF[,4])
+  max_LF <- max(test$Tables$LF[,3]) + max(test$Tables$LF[,4])
+  Max = max(max_HF, max_LF)
+  paired <- test$Paired
+  methods <- test$Methods
+  type <- test$Type
+  if(type == "dwt"){
+    title <- "Transfer Function by DWT"
+  } else {
+    title <- "Transfer Function by CWT"
+  }
+  comparisons <- list(test$Variables)
+  if(paired) HF$id <- LF$id <- rep(1:framework$n, 2)
+  par(mfrow = c(1,2))
+  if(tem){
+    im <- tempfile(fileext = ".png")
+    png(filename = im, width = 6.2, height = 6, units = "in", res = 400)
+  }
+  plot1 <- ggplot2::ggplot(HF, ggplot2::aes(Group, Gain), fill = Group) +
+    ggplot2::geom_boxplot() +
+    ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, Max + 2)) +
+    ggpubr::stat_compare_means(ggplot2::aes(Group, Gain), comparisons = comparisons,
+                               symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+                                                  symbols = c("****", "***", "**", "*", "NS")), method = methods[1],
+                               paired = paired, label.y = max_HF) +
+    ggplot2::ggtitle(paste(title, "(HF)"))
+  if(paired) plot1 <- plot1 + ggplot2::geom_point() + ggplot2::geom_line(aes(group = id))
+  plot2 <- ggplot2::ggplot(LF, ggplot2::aes(Group, Gain), fill = Group) +
+    ggplot2::geom_boxplot() +
+    ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, Max + 2)) +
+    ggpubr::stat_compare_means(ggplot2::aes(Group, Gain), comparisons = comparisons,
+                               symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+                                                  symbols = c("****", "***", "**", "*", "NS")), method = methods[2],
+                               paired = paired, label.y = max_LF) +
+    ggplot2::ggtitle(paste(title, "(LF)"))
+  if(paired) plot2 <- plot2 + ggplot2::geom_point() + ggplot2::geom_line(aes(group = id))
+  gridExtra::grid.arrange(plot1, plot2, ncol = 2)
+  if(tem){
+    dev.off()
+    return(im)
+  }
+}
+
+PlotHRVTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
+  test <- framework$TestsHRV[[index]]
+  if(newPlot) x11(title = paste("Results from test",
+                                test$Name))
+  HF <- test$Tables$HF
+  LF <- test$Tables$LF
+  LFHF <- test$Tables$LFHF
+  max_HF <- max(test$Tables$HF[,3]) + max(test$Tables$HF[,4])
+  max_LF <- max(test$Tables$LF[,3]) + max(test$Tables$LF[,4])
+  max_LFHF <- max(test$Tables$LFHF[,3]) + max(test$Tables$LFHF[,4])
+  min_LFHF <- min(min(test$Tables$LFHF[,3]), min(test$Tables$LFHF[,4]))
+  Max = max(max_HF, max_LF)
+  paired <- test$Paired
+  methods <- test$Methods
+  title <- "HRV"
+  comparisons <- list(test$Variables)
+  if(paired) HF$id <- LF$id <- LFHF$id <- rep(1:framework$n, 2)
+  par(mfrow = c(1,3))
+  if(tem){
+    im <- tempfile(fileext = ".png")
+    png(filename = im, width = 6.2, height = 6, units = "in", res = 400)
+  }
+  plot1 <- ggplot2::ggplot(HF, ggplot2::aes(Group, Power), fill = Group) +
+    ggplot2::geom_boxplot() +
+    ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, 1.2*Max + 2)) +
+    ggpubr::stat_compare_means(ggplot2::aes(Group, Power), comparisons = comparisons,
+                               symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+                                                  symbols = c("****", "***", "**", "*", "NS")), method = methods[1],
+                               paired = paired, label.y = max_HF) +
+    ggplot2::ggtitle(paste(title, "(HF)"))
+  if(paired) plot1 <- plot1 + ggplot2::geom_point() + ggplot2::geom_line(aes(group = id))
+  plot2 <- ggplot2::ggplot(LF, ggplot2::aes(Group, Power), fill = Group) +
+    ggplot2::geom_boxplot() +
+    ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, 1.2*Max + 2)) +
+    ggpubr::stat_compare_means(ggplot2::aes(Group, Power), comparisons = comparisons,
+                               symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+                                                  symbols = c("****", "***", "**", "*", "NS")), method = methods[2],
+                               paired = paired, label.y = max_LF) +
+    ggplot2::ggtitle(paste(title, "(LF)"))
+  if(paired) plot2 <- plot2 + ggplot2::geom_point() + ggplot2::geom_line(aes(group = id))
+  plot3 <- ggplot2::ggplot(LFHF, ggplot2::aes(Group, Power), fill = Group) +
+    ggplot2::geom_boxplot() +
+    ggplot2::theme_bw() + ggplot2::coord_cartesian(ylim = c(0, 2*max_LFHF + 2)) +
+    ggpubr::stat_compare_means(ggplot2::aes(Group, Power), comparisons = comparisons,
+                               symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+                                                  symbols = c("****", "***", "**", "*", "NS")), method = methods[2],
+                               paired = paired, label.y = max_LF) +
+    ggplot2::ggtitle(paste(title, "(LF/HF)"))
+  if(paired) plot3 <- plot3 + ggplot2::geom_point() + ggplot2::geom_line(aes(group = id))
+  gridExtra::grid.arrange(plot1, plot2, plot3, ncol = 3)
+  if(tem){
+    dev.off()
+    return(im)
+  }
+}
 
 
 ModelClinicalData <- function(framework, type = c("BRS", "HRV"), band = c("HF", "LF", "LFHF"), segment = 1, variable = 1, use.names = TRUE){
