@@ -926,7 +926,7 @@ PlotTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
     im <- tempfile(fileext = ".png")
     png(filename = im, width = 6.2, height = 6, units = "in", res = 400)
   }
-  plot1 <- ggplot2::ggplot(HF, ggplot2::aes(Group, Gain), fill = Group) +
+  plot1 <- ggplot2::ggplot(HF, ggplot2::aes(Group, Gain, fill = Group)) +
     ggplot2::geom_boxplot() +
     ggplot2::theme_bw() +
     ggpubr::stat_compare_means(ggplot2::aes(Group, Gain), comparisons = comparisons,
@@ -935,7 +935,7 @@ PlotTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
                                paired = paired, label.y = max_HF) +
     ggplot2::ggtitle(paste(title, "(HF)"))
   if(paired) plot1 <- plot1 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
-  plot2 <- ggplot2::ggplot(LF, ggplot2::aes(Group, Gain), fill = Group) +
+  plot2 <- ggplot2::ggplot(LF, ggplot2::aes(Group, Gain, fill = Group)) +
     ggplot2::geom_boxplot() +
     ggplot2::theme_bw() +
     ggpubr::stat_compare_means(ggplot2::aes(Group, Gain), comparisons = comparisons,
@@ -973,7 +973,7 @@ PlotHRVTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
     im <- tempfile(fileext = ".png")
     png(filename = im, width = 6.2, height = 6, units = "in", res = 400)
   }
-  plot1 <- ggplot2::ggplot(HF, ggplot2::aes(Group, Power), fill = Group) +
+  plot1 <- ggplot2::ggplot(HF, ggplot2::aes(Group, Power, fill = Group)) +
     ggplot2::geom_boxplot() +
     ggplot2::theme_bw() +
     ggpubr::stat_compare_means(ggplot2::aes(Group, Power), comparisons = comparisons,
@@ -982,7 +982,7 @@ PlotHRVTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
                                paired = paired, label.y = max_HF) +
     ggplot2::ggtitle(paste(title, "(HF)"))
   if(paired) plot1 <- plot1 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
-  plot2 <- ggplot2::ggplot(LF, ggplot2::aes(Group, Power), fill = Group) +
+  plot2 <- ggplot2::ggplot(LF, ggplot2::aes(Group, Power, fill = Group)) +
     ggplot2::geom_boxplot() +
     ggplot2::theme_bw() +
     ggpubr::stat_compare_means(ggplot2::aes(Group, Power), comparisons = comparisons,
@@ -991,7 +991,7 @@ PlotHRVTestResults <- function(framework, index, tem = FALSE, newPlot = TRUE){
                                paired = paired, label.y = max_LF) +
     ggplot2::ggtitle(paste(title, "(LF)"))
   if(paired) plot2 <- plot2 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
-  plot3 <- ggplot2::ggplot(LFHF, ggplot2::aes(Group, Power), fill = Group) +
+  plot3 <- ggplot2::ggplot(LFHF, ggplot2::aes(Group, Power, fill = Group)) +
     ggplot2::geom_boxplot() +
     ggplot2::theme_bw() +
     ggpubr::stat_compare_means(ggplot2::aes(Group, Power), comparisons = comparisons,
