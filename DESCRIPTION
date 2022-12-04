@@ -7,7 +7,7 @@ Author: Alvaro Chao Ecija [aut, cre] ([https://orcid.org/0000-0002-2691-6936]),
 Maintainer: Alvaro Chao Ecija <alvaro.rprojects@gmail.com>
 Description: This package allows autonomic evaluation and baroreflex sensitivity assessment
              using Wavelet Transforms. 
-License: 
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Imports:
