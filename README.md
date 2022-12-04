@@ -11,7 +11,7 @@ PACKAGE CURRENTLY UNDER DEVELOPMENT AND TESTING
 
 ## Issues and requests
 
-Please access the following website to create an issue or request:
+Please access the following link to create an issue or request:
 
 https://github.com/CIMES-USNA-UMA/BaroWavelet/issues
 
