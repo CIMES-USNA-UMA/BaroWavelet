@@ -5,7 +5,7 @@
 # Sympathetic Contribution to Baroreflex Sensitivity as Cause of Variable Phase
 # Delay Between Blood Pressure and Heart Rate".
 
-
+#' @export
 DataSimulation <- function(use.noise = TRUE){
   set.seed(1)
   SBP <- 5  *sin(2*pi*0.1*(1:2000)) + 5  *sin(2*pi*0.25*(1:2000)) +

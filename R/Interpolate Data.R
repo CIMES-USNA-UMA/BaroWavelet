@@ -1,6 +1,6 @@
 
 
-
+#' @export
 InterpolateData <- function(x, f = 4){
                    IntFunRR <- splinefun(x$Time, x$RR, 
                        method = "monoH.FC", ties = "ordered")

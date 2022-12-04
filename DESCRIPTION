@@ -18,4 +18,4 @@ Imports:
 Depends: 
     R (>= 3.0.0)
 NeedsCompilation: no
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2

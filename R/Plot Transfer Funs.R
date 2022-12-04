@@ -1,4 +1,4 @@
-
+#' @export
 PlotTransferFun <- function(tf, avg = FALSE, time_col = "brown", HFcolor = "yellow",
     LFcolor = "green", time_flags = NULL, thr = 0.5,
        use.thr = TRUE, nfreqs = 7, tem = FALSE, newPlot = TRUE, title, plotHF = TRUE,

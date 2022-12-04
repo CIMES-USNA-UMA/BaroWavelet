@@ -287,6 +287,7 @@ PlotAnalyzedTF <- function(framework, index, method = c("dwt", "cwt", "cwt.avg",
              im <- PlotTransferFunDWT(tf, time_flags, col = time_col, tem = tem, plotHF = plotHF,
                                       plotLF = plotLF)
              return(im)
+           }
 
            if(tem){
               return(im)

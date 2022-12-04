@@ -4,7 +4,7 @@
 
 
 
-
+#' @export
 PreprocessData <- function(data, maxSBP = 300, minSBP = 30,
                            minbpm = 25, maxbpm = 200, use.RHRV = TRUE){
   Time <- data[[1]]
@@ -47,7 +47,7 @@ PreprocessData <- function(data, maxSBP = 300, minSBP = 30,
 
 
 
-
+#' @export
 PrepareTachoForRHRV <- function(time){
   HRV <- list()
   HRV$Ext <- "hrv"
