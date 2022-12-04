@@ -21,7 +21,7 @@
 #'
 #' @examples
 #' # ADD EXAMPLE!
-ExpectedValues <- function(fun, time_flags = NULL, weight = TRUE, thr = 0.5,
+ExpectedValues <- function(fun, time_flags = NULL, weight = FALSE, thr = 0.5,
    use.coherence = TRUE){
                   if(fun$type == "TFun_dwt"){
                     eVals <- ExpectedValsDWT(fun, time_flags, weight)
@@ -32,7 +32,7 @@ ExpectedValues <- function(fun, time_flags = NULL, weight = TRUE, thr = 0.5,
                   return(eVals)
 }
 
-ExpectedValsDWT <- function(fun, time_flags = NULL, weight = TRUE){
+ExpectedValsDWT <- function(fun, time_flags = NULL){
                   if(is.null(time_flags)){
                      select_time <- 1:NROW(fun$Time)
                   } else {
@@ -41,14 +41,8 @@ ExpectedValsDWT <- function(fun, time_flags = NULL, weight = TRUE){
                         (fun$Time <= time_flags[2])]
                      select_time <- match(select_time, fun$Time)
                   }
-                  if(weight){
-                     w <- 1:NROW(select_time)
-                     w <- exp(-((w - mean(w))^2) / (2 * var(w)))
-                  } else {
-                     w <- rep(1,NROW(select_time))
-                  }
-                  results.HF <- weighted.mean(fun$HF[select_time], w, na.rm = TRUE)
-                  results.LF <- weighted.mean(fun$LF[select_time], w, na.rm = TRUE)
+                  results.HF <- mean(fun$HF[select_time], na.rm = TRUE)
+                  results.LF <- mean(fun$LF[select_time], na.rm = TRUE)
                   output <- c(results.HF, results.LF)
                   names(output) <- c("HF", "LF")
                   return(output)
@@ -57,7 +51,7 @@ ExpectedValsDWT <- function(fun, time_flags = NULL, weight = TRUE){
 
 
 ExpectedValsCWT <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL,
-    weight = TRUE){
+    weight = FALSE){
                   HF <- fun$HF
                   LF <- fun$LF
                   VLF <- fun$VLF

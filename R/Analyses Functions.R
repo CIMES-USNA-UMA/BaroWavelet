@@ -25,7 +25,7 @@
 #' @examples
 #' # ADD EXAMPLE!
 BuildStructure <- function(name = NULL, HF = 0.4, LF = 0.15, VLF = 0.04, wv = "d4",
-   coh = 0.5, dj = 1/20, use.weight = TRUE, use.coherence = TRUE, use.phase = FALSE){
+   coh = 0.5, dj = 1/20, use.weight = FALSE, use.coherence = TRUE){
               Framework <- list()
               if(is.null(name)) name <- "BRS Study"
               Framework$Name <- name
@@ -39,7 +39,6 @@ BuildStructure <- function(name = NULL, HF = 0.4, LF = 0.15, VLF = 0.04, wv = "d
               Framework$"General Data"$dj <- dj
               Framework$"General Data"$Weight <- use.weight
               Framework$"General Data"$Threshold <- use.coherence
-              Framework$"General Data"$Phase <- use.phase
               Framework$n <- 0
               Framework$Analyses <- list()
               Framework$Controls <- list()
@@ -183,15 +182,13 @@ AnalyzeTransferFun <- function(framework, index, method = c("both", "dwt", "cwt"
               framework <- AddTFtoAnalysis(framework, tf, index)
            } else if(method == "cwt"){
               tf <- TransferFunCWT(Data$Data, Data$HF, Data$LF, Data$VLF,
-                Data$dj, diff(Data$Data[,1])[1], phase.restrict = (Data$Phase != FALSE),
-                feedback = (Data$Phase == "feedback"))
+                Data$dj, diff(Data$Data[,1])[1])
               framework <- AddTFtoAnalysis(framework, tf, index)
            } else if(method == "both"){
               tf_dwt <- TransferFunDWT(Data$Data, Data$HF, Data$LF, Data$VLF,
                 wv = Data$Wavelet, hrv = TRUE)
               tf_cwt <- TransferFunCWT(Data$Data, Data$HF, Data$LF, Data$VLF,
-                                       Data$dj, diff(Data$Data[,1])[1], phase.restrict = (Data$Phase != FALSE),
-                                       feedback = (Data$Phase == "feedback"))
+                                       Data$dj, diff(Data$Data[,1])[1])
               framework <- AddTFtoAnalysis(framework, tf_dwt, index)
               framework <- AddTFtoAnalysis(framework, tf_cwt, index)
            }
@@ -222,35 +219,8 @@ AddAvgCwtData <- function(framework, index){
 
 
 
-NOTAddCausalCoupling <- function(framework, index){
-  Data <- ExtractDataFromAnalysis(framework, index)
-  Time <- Data$Data[,"Time"]
-  dt = abs(diff(Time)[1])
-  Coupling <- GetPhaseInducedCoherence(Data$Data, VLF  = Data$VLF, LF  = Data$LF, HF = Data$HF,
-                                #thr = Data$Coherence * Data$Threshold, chosen.dj = 1/20, dt = dt)
-                                thr = Data$Coherence * Data$Threshold, chosen.dj = 1/20, dt = dt)
-  Coupling <- DivideByBands(Coupling, coh = TRUE, dif = TRUE, VLF  = Data$VLF, LF  = Data$LF, HF = Data$HF)
-  framework$Analyses[[index]]$Coupling <- Coupling
-  return(framework)
 
-}
 
-AddCausalCoupling <- function(framework, index){
-  Data <- ExtractDataFromAnalysis(framework, index)
-  Time <- Data$Data[,"Time"]
-  tf <- framework$Analyses[[index]]$BRS$CWT
-  dt = abs(diff(Time)[1])
-  Couplings <- CalculateCausalCouplings(tf)
-  Coupling <- Couplings
-  Coupling[[1]] <- tf$Coherence
-  Coupling[[2]] <- Couplings[[1]]
-  Coupling[[3]] <- Couplings[[2]]
-  Coupling$Freqs <- tf$Freqs
-  Coupling <- DivideByBands(Coupling, coh = TRUE, dif = TRUE, VLF  = Data$VLF, LF  = Data$LF, HF = Data$HF)
-  framework$Analyses[[index]]$Coupling <- Coupling
-  return(framework)
-
-}
 
 
 #' Plot analyzed transfer function
@@ -271,7 +241,6 @@ AddCausalCoupling <- function(framework, index){
 #' @param plotHF Boolean, plot results form the HF band. Default is TRUE
 #' @param plotLF Boolean, plot results from the LF band. Default is TRUE
 #' @param thr Coherence threshold to be used for the plot. Default is NULL
-#' @param coupling_index Integer specifying type of coupling. Default is 1
 #'
 #' @return None
 #'
@@ -282,7 +251,7 @@ AddCausalCoupling <- function(framework, index){
 #'
 #' @examples
 #' # ADD EXAMPLE!
-PlotAnalyzedTF <- function(framework, index, method = c("dwt", "cwt", "cwt.avg", "cwt.phase", "coupling"),
+PlotAnalyzedTF <- function(framework, index, method = c("dwt", "cwt", "cwt.avg", "cwt.phase"),
   time_col = "brown", HFcolor = "yellow",
     LFcolor = "green", time_flags = NULL,
        use.coherence = TRUE, nfreqs = 7, tem = FALSE, newPlot = TRUE, plotHF = TRUE, plotLF = TRUE,
@@ -318,34 +287,6 @@ PlotAnalyzedTF <- function(framework, index, method = c("dwt", "cwt", "cwt.avg",
              im <- PlotTransferFunDWT(tf, time_flags, col = time_col, tem = tem, plotHF = plotHF,
                                       plotLF = plotLF)
              return(im)
-           } else if(method == "coupling"){
-             tfinst <- list(HF = framework$Analyses[[index]]$Coupling$Instantaneous$HF,
-                        LF = framework$Analyses[[index]]$Coupling$Instantaneous$LF,Time = Data$Data[,1])
-             tflag <- list(
-                            HF = framework$Analyses[[index]]$Coupling$Lagged$HF,
-                            LF = framework$Analyses[[index]]$Coupling$Lagged$LF,Time = Data$Data[,1])
-             tftotal_inst <- list(
-               HF = framework$Analyses[[index]]$Coupling$Instantaneous$Total,
-               LF = framework$Analyses[[index]]$Coupling$Instantaneous$Total,Time = Data$Data[,1])
-             tftotal_lagged <- list(
-               HF = framework$Analyses[[index]]$Coupling$Lagged$Total,
-               LF = framework$Analyses[[index]]$Coupling$Lagged$Total,Time = Data$Data[,1])
-             tf_differences <- tflag
-             for(n in 1:2) tf_differences[[n]] <- tf_differences[[n]] - tfinst[[n]]
-             im1 <- PlotTransferFunDWT(tftotal_inst, time_flags, col = time_col, tem = tem, plotHF = plotHF,
-                                       plotLF = plotLF)
-             im2 <- PlotTransferFunDWT(tftotal_lagged, time_flags, col = time_col, tem = tem, plotHF = plotHF,
-                                       plotLF = plotLF)
-             im3 <- PlotTransferFunDWT(tfinst, time_flags, col = time_col, tem = tem, plotHF = plotHF,
-                                      plotLF = plotLF)
-             im4 <- PlotTransferFunDWT(tflag, time_flags, col = time_col, tem = tem, plotHF = plotHF,
-                                       plotLF = plotLF)
-             im5 <- PlotTransferFunDWT(tf_differences, time_flags, col = time_col, tem = tem, plotHF = plotHF,
-                                       plotLF = plotLF)
-             im <- list(Total_inst = im1, Total_lagged = im2, inst = im3, lag = im4, difs = im5)
-             return(im[[coupling_index]])
-
-           }
 
            if(tem){
               return(im)
