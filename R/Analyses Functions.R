@@ -90,7 +90,6 @@ AddAnalysis <- function(framework, name = NULL){
   output$Name <- name
   output$BRS <- output$HRV <- output$Data <- list()
   output$BRS$CWT <- output$BRS$DWT <- list()
-  output$Coupling <- list()
   framework$Analyses[[N + 1]] <- output
   framework$n <- framework$n + 1
   return(framework)
