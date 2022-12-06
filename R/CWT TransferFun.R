@@ -53,7 +53,7 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
                   Coherence <- abs(sm.XWTransform)^2 / (sm.WTransform.x * sm.WTransform.y)
                   Phase <- atan2(Quadrature, Cospectrum)
                   return(list(TransferFun = TransferFun, Coherence = Coherence,
-                      Freqs = 1/WT.x$period, Cone = WT.x$coi, Time = data[,1],
+                      Freqs = 1/WTransform.x$period, Cone = WTransform.x$coi, Time = data[,1],
                          HF = HF, LF = LF, VLF = VLF, type = "TFun_cwt",
                       Cospectrum = Cospectrum, Quadrature = Quadrature, Phase = Phase))
 }
