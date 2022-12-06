@@ -63,44 +63,20 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
 #########################################################
 
 
-#' Smooth Continuous Wavelet Transforms results
-#'
-#' Smooths results obtained for Continuous Wavelet Transform, so as to compute the
-#' baroreflex transfer function.
-#' @param x The Continuous Wavelet Transform of variable x
-#' @param y The Continuous Wavelet Transform of variable y
-#' @param chosen.dj Frequency resolution. Default is 1/20
 
-#'
-#' @return A list with the smoothed transforms:
-#' \item{sWT.x}{The smoothed transform of variable x}
-#' \item{sWT.y}{The smoothed transform of variable y}
-#' \item{sXWT}{The smoothed cross-wavelet transform between x and y}
-#'
-#' @details This function is based on the code that function biwavelet uses to calculate the
-#' wavelet coherence. For more information, please check the reference section.
-#'
-#' @author Alvaro Chao-Ecija
-#'
-#'
-#' @keywords internal
-#'
-#'
-#' @import biwavelet
-#'
-#' @examples
-#' # ADD EXAMPLE!
+
 SmoothTransforms <- function(x, y, chosen.dj = 1/20){
   N <- nrow(x$wave)
-  inverse_scales <- matrix(rep(1/t(x$scale), N), ncol = N,
+  M <- ncol(x$wave)
+  inverse_scales <- matrix(rep(1/t(x$scale), N), ncol = M, 
                            nrow = N)
   XWTransform <- (Conj(x$wave) * y$wave)
-  sm.WTransform.x <- biwavelet::smooth.wavelet(inverse_scales * (abs(x$wave)^2),
-                                     x$dt, chosen.dj, x$scale)
-  sm.WTransform.y <- biwavelet::smooth.wavelet(inverse_scales * (abs(y$wave)^2), x$dt,
-                                     chosen.dj, x$scale)
-  sm.XWTransform = biwavelet::smooth.wavelet(inverse_scales * XWT, x$dt,
-                                   chosen.dj, x$scale)
+  sm.WTransform.x <- biwavelet::smooth.wavelet(inverse_scales * 
+                                                 (abs(x$wave)^2), x$dt, chosen.dj, x$scale)
+  sm.WTransform.y <- biwavelet::smooth.wavelet(inverse_scales * 
+                                                 (abs(y$wave)^2), x$dt, chosen.dj, x$scale)
+  sm.XWTransform = biwavelet::smooth.wavelet(inverse_scales * 
+                                               XWTransform, x$dt, chosen.dj, x$scale)
   return(list(sm.WTransform.x = sm.WTransform.x, sm.WTransform.y = sm.WTransform.y,
               sm.XWTransform = sm.XWTransform, XWTransform = XWTransform ))
 }
