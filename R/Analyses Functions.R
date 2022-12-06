@@ -93,6 +93,10 @@ AddAnalysis <- function(framework, name = NULL){
   output$Coupling <- list()
   framework$Analyses[[N + 1]] <- output
   framework$n <- framework$n + 1
+  if(length(framework$ExpectedVals) > 0){
+    framework <- PrepareIntervalSlots(framework, "dwt")
+    framework <- PrepareIntervalSlots(framework, "cwt")
+  }
   return(framework)
 }
 
@@ -1163,6 +1167,8 @@ AddExpectedHRV <- function(framework, a_index, t_index, use.name = TRUE){
   return(framework)
 }
 
+
+#' @export
 PrepareIntervalSlots <- function(framework, method = c("dwt", "cwt")){
   n <- framework$n
   method <- match.arg(method)
