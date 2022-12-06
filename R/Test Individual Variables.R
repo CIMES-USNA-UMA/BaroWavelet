@@ -2,7 +2,7 @@
 
 
 
-
+#' @export
 TestIndRaw <- function(raw, time_flags1, time_flags2, 
                        weight = TRUE, use.thr = TRUE, set.control = 2){
   fun <- list(Time = raw[,"Time"], HR = 60000/raw[,"RR"], SBP = raw[,"SBP"])
@@ -70,7 +70,7 @@ TestIndRaw <- function(raw, time_flags1, time_flags2,
   return(output)
 }
 
-
+#' @export
 TestIndHRV <- function(fun, time_flags1, time_flags2, 
                        weight = TRUE, use.thr = TRUE, set.control = 2){
   #if(min(time_flags1) >= max(time_flags2)){
@@ -201,6 +201,7 @@ SplitByCoherence <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL,
   return(output)
 }
 
+#' @export
 TestIndBRS <- function(fun, time_flags1, time_flags2, 
                              weight = TRUE, use.thr = TRUE, set.control = 2){
   Estimate1 <- ExpectedValues(fun, time_flags1, weight = weight)
