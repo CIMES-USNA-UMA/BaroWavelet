@@ -93,10 +93,6 @@ AddAnalysis <- function(framework, name = NULL){
   output$Coupling <- list()
   framework$Analyses[[N + 1]] <- output
   framework$n <- framework$n + 1
-  if(length(framework$ExpectedVals) > 0){
-    framework <- PrepareIntervalSlots(framework, "dwt")
-    framework <- PrepareIntervalSlots(framework, "cwt")
-  }
   return(framework)
 }
 
@@ -358,6 +354,10 @@ AddTimeInterval <- function(framework, name = NULL,
                             output$DWT <- list()
                             output$CWT <- list()
                             framework$ExpectedVals[[output$Index]] <- output
+                            if(length(framework$ExpectedVals) > 0){
+                              framework <- PrepareIntervalSlots(framework, "dwt")
+                              framework <- PrepareIntervalSlots(framework, "cwt")
+                            }
                             return(framework)
 }
 
