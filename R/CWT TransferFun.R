@@ -30,7 +30,7 @@
 #'
 #' @examples
 #' # ADD EXAMPLE!
-TransferFunCWT2 <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
+TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
   chosen.dj = 1/20, dt = 0.25, demean = TRUE){
                   if(demean){
                      for(n in 2:ncol(data)){
