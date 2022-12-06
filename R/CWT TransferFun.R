@@ -30,7 +30,7 @@
 #'
 #' @examples
 #' # ADD EXAMPLE!
-TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
+TransferFunCWT2 <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
   chosen.dj = 1/20, dt = 0.25, demean = TRUE){
                   if(demean){
                      for(n in 2:ncol(data)){
@@ -55,8 +55,12 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
                   return(list(TransferFun = TransferFun, Coherence = Coherence,
                       Freqs = 1/WTransform.x$period, Cone = WTransform.x$coi, Time = data[,1],
                          HF = HF, LF = LF, VLF = VLF, type = "TFun_cwt",
-                      Cospectrum = Cospectrum, Quadrature = Quadrature, Phase = Phase))
+                      Cospectrum = Cospectrum, Quadrature = Quadrature, Phase = Phase,
+                      Scales = WTransform.x$scale))
 }
+
+
+
 
 #########################################################
 # AUXILIARY FUNCTIONS                                   #
@@ -80,3 +84,27 @@ SmoothTransforms <- function(x, y, chosen.dj = 1/20){
   return(list(sm.WTransform.x = sm.WTransform.x, sm.WTransform.y = sm.WTransform.y,
               sm.XWTransform = sm.XWTransform, XWTransform = XWTransform ))
 }
+
+
+
+GetCWTscales <- function(HF = 0.4, VLF = 0.04, chosen.dj = 1/20){
+  max_scale = 1/(VLF - 0.01)
+  min_scale = 1/(HF + 0.1)
+  limit <- round(max_scale) + 1
+  scales = seq(log2(min_scale), log2(limit), by = chosen.dj)
+  scales <- scales[scales <= max_scale]
+  scales <- 2^scales
+  return(scales)
+}
+
+
+GetInverseCWTscales <- function(x, HF = 0.4, VLF = 0.04, chosen.dj = 1/20){
+  N <- nrow(x)
+  M <- ncol(x)
+  scales <- GetCWTscales(HF = HF, VLF = VLF, chosen.dj = chosen.dj)
+  inverse_scales <- matrix(rep(1/t(scales), M), ncol = M, 
+                           nrow = N)
+  return(inverse_scales)
+}
+
+
