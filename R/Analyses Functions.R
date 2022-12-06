@@ -294,6 +294,7 @@ PlotAnalyzedTF <- function(framework, index, method = c("dwt", "cwt", "cwt.avg",
            }
 }
 
+#' @export
 PlotAnalyzedHRV <- function(framework, index,
                            time_col = "brown", HFcolor = "yellow",
                            LFcolor = "green", time_flags = NULL,
@@ -1047,7 +1048,7 @@ ModelClinicalData <- function(framework, type = c("BRS", "HRV"), band = c("HF", 
 
 # Auxiliar Functions:
 
-
+#' @export
 ExtractDataFromAnalysis <- function(framework, index){
           Data <- framework$"General Data"
           Data$Data <- framework$Analyses[[index]]$Data
@@ -1137,6 +1138,8 @@ AddExpectedValues <- function(framework, a_index, t_index, time_flags,
                    return(framework)
 }
 
+
+
 AddExpectedHRV <- function(framework, a_index, t_index, use.name = TRUE){
   interval <- framework$ExpectedVals[[t_index]]
   others <- interval$HRV
@@ -1168,7 +1171,6 @@ AddExpectedHRV <- function(framework, a_index, t_index, use.name = TRUE){
 }
 
 
-#' @export
 PrepareIntervalSlots <- function(framework, method = c("dwt", "cwt")){
   n <- framework$n
   method <- match.arg(method)
