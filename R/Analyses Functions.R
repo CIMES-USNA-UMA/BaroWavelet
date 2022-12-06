@@ -947,6 +947,7 @@ AddTFtoAnalysis <- function(framework, tf, index){
            return(framework)
 }
 
+#' @export
 AssembleCwtTransferFun <- function(framework, index){
                   Data <- framework$"General Data"
                   TFun <- framework$Analyses[[index]]$BRS$CWT
