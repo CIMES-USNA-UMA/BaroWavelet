@@ -24,7 +24,7 @@
 ExpectedValues <- function(fun, time_flags = NULL, weight = FALSE, thr = 0.5,
    use.coherence = TRUE){
                   if(fun$type == "TFun_dwt"){
-                    eVals <- ExpectedValsDWT(fun, time_flags, weight)
+                    eVals <- ExpectedValsDWT(fun, time_flags)
                   } else if(fun$type == "TFun_cwt"){
                     eVals <- ExpectedValsCWT(fun, time_flags = time_flags,
                      weight = weight, thr = thr, use.thr = use.coherence)
