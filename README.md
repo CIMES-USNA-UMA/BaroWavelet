@@ -17,6 +17,6 @@ https://github.com/CIMES-USNA-UMA/BaroWavelet/issues
 
 ## Contact information
 
-Email: alvaro.rprojects@gmail.com
+Email: alvarochaoecija.rprojects@gmail.com
 
 ORCID: https://orcid.org/0000-0002-2691-6936
