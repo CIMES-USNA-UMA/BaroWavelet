@@ -39,7 +39,7 @@ A list with the estimated components of the baroreflex transfer function in the 
 \item{LF}{The computed vector of alpha indices for the LF band}
 \item{VLF}{The chosen maximum limit of the VLF band}
 \item{Time}{The original vector of time values}
-\item{type}{A character string specifying which type of transfer function this is}
+\item{type}{A character string specifying which type of BRS has been computed}
 \item{hrv}{A list containing the variability results computed at the HF and LF bands, as well as the
            LF/HF ratio. Only returned if the hrv argument is set to TRUE}
 }
@@ -56,7 +56,7 @@ Also, the function allows to return the computed heart variability results by \h
 }
 \examples{
 Data <- InterpolateData(DataSimulation(), f = 1)
-AlphaIndex <- TAlphaIndexDWT(Data, wv = "d8" error = 0.0005)
+AlphaIndex <- AlphaIndexDWT(Data, wv = "d8" error = 0.0005)
 }
 \references{
 Leandro Rodriguez-Linares, Xose Vila, Maria Jose Lado, Arturo Mendez, Abraham Otero and Constantino

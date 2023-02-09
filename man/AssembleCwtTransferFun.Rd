@@ -12,7 +12,7 @@ AssembleCwtTransferFun(framework, locator)
 \item{locator}{A locator indicating which analysis should be used}
 }
 \value{
-A list containg the assembled transfer function or alpha index
+A list containing the assembled transfer function or alpha index
 }
 \description{
 Assembles a transfer function or alpha index computed with the CWT for further processing

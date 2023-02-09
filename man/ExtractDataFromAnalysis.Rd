@@ -24,9 +24,6 @@ Study <- AddAnalysis(Study, name = "Simulation")
 Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 
 New_data <- ExtractDataFromAnalysis(Data, 1)
-
-
-PlotHRVTestResults(Study, 1)
 }
 \author{
 Alvaro Chao-Ecija

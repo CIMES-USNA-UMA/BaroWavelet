@@ -16,9 +16,9 @@ AddTimeInterval(
 
 \item{name}{An optional name for the interval. The default is NULL}
 
-\item{use.default}{Use the default variables from "General Data".}
+\item{use.default}{Boolean. Use the default variables from "General Data". Default is TRUE}
 
-\item{use.coherence}{Boolean, should a coherence threshold be used in the analyses? Default is TRUE.}
+\item{use.coherence}{Boolean, should a coherence threshold be used in the analyses? Default is TRUE}
 }
 \value{
 A framework with the new additional interval.

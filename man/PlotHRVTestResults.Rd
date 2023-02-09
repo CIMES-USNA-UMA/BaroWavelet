@@ -19,7 +19,7 @@ PlotHRVTestResults(
 
 \item{tem}{Boolean, creates a temporal file for the plot. Default is FALSE}
 
-\item{newPlot}{Boolean, generates a new plot without overwriting a previous plot. Default is TRUEhould the HRV be normalized before comparison? Default is FALSE}
+\item{newPlot}{Boolean, generates a new plot without overwriting a previous plot. Default is TRUE}
 
 \item{draw_paired}{Boolean. If the groups are paired, draw lines connecting each couple of paired estimates. Default is FALSE}
 }

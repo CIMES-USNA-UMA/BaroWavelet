@@ -46,7 +46,7 @@ A list with the estimated components of the baroreflex transfer function in the 
 \item{HF}{The chosen maximum limit of the HF band}
 \item{LF}{The chosen maximum limit of the LF band}
 \item{VLF}{The chosen maximum limit of the VLF band}
-\item{type}{A character string specifying which type of transfer function this is}
+\item{type}{A character string specifying which type of BRS has been computed}
 }
 \description{
 Computes barorreflex sensitivity as a transfer function suing the Continuous Wavelet Transform
