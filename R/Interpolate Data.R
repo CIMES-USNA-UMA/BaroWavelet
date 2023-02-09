@@ -1,6 +1,20 @@
 
+#' Interpolate data
+#'
+#' Interpolates data up to a certain sample frequency
+#' @param x Multivariate time series to be interpolated
+#' @param f Sample frequency. Default is 4 Hz
 
+#' @return An interpolated time series.
+#'
+#' @author Alvaro Chao-Ecija
+#'
+#'
 #' @export
+#'
+#' @examples
+#' Data <- InterpolateData(DataSimulation(), f = 1)
+#' 
 InterpolateData <- function(x, f = 4){
                    IntFunRR <- splinefun(x$Time, x$RR, 
                        method = "monoH.FC", ties = "ordered")

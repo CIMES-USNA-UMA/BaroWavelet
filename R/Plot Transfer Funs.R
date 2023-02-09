@@ -1,19 +1,57 @@
+#' Plot individual BRS
+#'
+#' Plots an already computed BRS from a specific subject
+#' @param fun BRS obtained either by \link[BaroWavelet]{AlphaIndexDWT} or
+#' \link[BaroWavelet]{TransferFunCWT}
+#' @param avg Boolean. Plot the scale-averaged CWT BRS? Default is FALSE
+#' @param time_col Color used to highlight a specific time interval. Default is brown
+#' @param HFcolor Color to be used to highlight the HF band
+#' @param LFcolor Color to be used to highlight the LF band
+#' @param time_flags A vector containing the minimum and maximum limits of a time interval, in minutes.
+#'                   Default is NULL.
+#' @param thr Coherence threshold to be used for the plot. Default is 0.5
+#' @param use.thr Boolean, should a coherence threshold be used in the analyses? Default is TRUE.
+#' @param nfreqs Number of frequencies to be used. Default is 7
+#' @param tem Boolean, creates a temporal file for the plot. Default is FALSE
+#' @param newPlot Boolean, generates a new plot without overwriting a previous plot. Default is TRUE
+#' @param title Title of the plot
+#' @param plotHF Boolean, plot results form the HF band. Default is TRUE
+#' @param plotLF Boolean, plot results from the LF band. Default is TRUE
+#'
+#' @return None
+#'
+#' @author Alvaro Chao-Ecija
+#'
+#'
 #' @export
-PlotTransferFun <- function(tf, avg = FALSE, time_col = "brown", HFcolor = "yellow",
+#'
+#' @examples
+#' Data <- InterpolateData(DataSimulation(), f = 1)
+#' Study <- BuildStructure()
+#' Study <- AddAnalysis(Study, name = "Simulation")
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
+#' Study <- AnalyzeBRS(Study, 1)
+#' Study <- GetAvgCwtData(Study, 1)
+#' 
+#' 
+#' PlotAnalyzedBRS(Study, 1, "dwt)
+#' 
+#' PlotAnalyzedBRS(Study, 1, "cwt)
+PlotBRS <- function(fun, avg = FALSE, time_col = "brown", HFcolor = "yellow",
     LFcolor = "green", time_flags = NULL, thr = 0.5,
        use.thr = TRUE, nfreqs = 7, tem = FALSE, newPlot = TRUE, title, plotHF = TRUE,
     plotLF = TRUE){
         #if(dev.cur() > 1) dev.off()
         if(newPlot) x11(title = paste("Transfer Function from", title))
-        if(tf$type == "TFun_dwt"){
-           im <- PlotTransferFunDWT(tf, time_flags = time_flags, col = time_col, tem = tem)
-        } else if(tf$type == "TFun_cwt"){
+        if(fun$type == "brs_dwt"){
+           im <- PlotDwtBRS(fun, time_flags = time_flags, col = time_col, tem = tem)
+        } else if(fun$type == "brs_cwt"){
            if(avg){
-             im <- PlotAvgCwtTransferFun(tf, thr, use.thr, time_flags = time_flags,
+             im <- PlotAvgCwtBRS(fun, thr, use.thr, time_flags = time_flags,
               len = nfreqs, HFcolor = HFcolor, LFcolor = LFcolor,
                  Tcolor = time_col, tem = tem)
            } else {
-              im <- PlotCwtTransferFun(tf, thr, use.thr, time_flags = time_flags,
+              im <- PlotCwtBRS(fun, thr, use.thr, time_flags = time_flags,
                 tem = tem)
            }
        }
@@ -24,11 +62,11 @@ PlotTransferFun <- function(tf, avg = FALSE, time_col = "brown", HFcolor = "yell
 
 
 
-PlotTransferFunDWT <- function(tf, time_flags = NULL, col = "brown", tem  =FALSE, plotHF = TRUE,
+PlotDwtBRS <- function(fun, time_flags = NULL, col = "brown", tem  =FALSE, plotHF = TRUE,
                                plotLF = TRUE, use.xlim = FALSE){
-                  time <- tf$Time
-                  HF <- tf$HF
-                  LF <- tf$LF
+                  time <- fun$Time
+                  HF <- fun$HF
+                  LF <- fun$LF
                   if(tem){
                      im <- tempfile(fileext = ".png")
                      png(filename = im, width = 6, height = 6, units = "in", res = 400)
@@ -53,7 +91,7 @@ PlotTransferFunDWT <- function(tf, time_flags = NULL, col = "brown", tem  =FALSE
 
 }
 
-PlotCwtTransferFun <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL,
+PlotCwtBRS <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL,
    tem  = FALSE, Max = NULL, use.xlim = FALSE, show.coi = TRUE){
                   HF <- fun$HF
                   LF <- fun$LF
@@ -102,7 +140,7 @@ PlotCwtTransferFun <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL
                   }
 }
 
-PlotAvgCwtTransferFun <- function(fun, thr = 0.5, use.thr = TRUE, scale = 1,
+PlotAvgCwtBRS <- function(fun, thr = 0.5, use.thr = TRUE, scale = 1,
     time_flags = NULL, len = 7, HFcolor = "yellow", LFcolor = "green",
       Tcolor = "brown", tem  =FALSE){
                   HF <- fun$HF
@@ -197,14 +235,14 @@ GetBiwaveletObject <- function(data, use.thr = TRUE, thr = 0.5){
 
 
 
-AssembleCwtTransferFun <- function(framework, index){
+AssembleCwtBRS <- function(framework, index){
                   Data <- framework$"General Data"
-                  TFun <- framework$Analyses[[index]]$BRS$CWT
-                  TFun$HF <- Data$HF
-                  TFun$LF <- Data$LF
-                  TFun$VLF <- Data$VLF
-                  TFun$Time <- framework$Analyses[[index]]$Data[,1]
-                  return(TFun)
+                  funun <- framework$Analyses[[index]]$BRS$CWT
+                  funun$HF <- Data$HF
+                  funun$LF <- Data$LF
+                  funun$VLF <- Data$VLF
+                  funun$Time <- framework$Analyses[[index]]$Data[,1]
+                  return(funun)
 }
 
 

@@ -9,7 +9,8 @@
 #' @param chosen.dj Frequency resolution. Default is 1/20
 #' @param dt Time resolution (inverse of the sample rate). Default is 0.25
 #' @param demean Boolean, should the data be demeaned before analysis? Default is TRUE
-#'
+#' @param smooth Boolean, smooth the transforms so that the BRS correlates with the coherence. Default is TRUE
+#' @param alpha Boolean, compute an alpha index representative of the BRS instead of the transfer function. Default is FALSE
 #' @return A list with the estimated components of the baroreflex transfer function in the wavelet domain:
 #' \item{TransferFun}{The computed baroreflex transfer function}
 #' \item{Coherence}{The computed coherence between the two variables}
@@ -19,7 +20,7 @@
 #' \item{HF}{The chosen maximum limit of the HF band}
 #' \item{LF}{The chosen maximum limit of the LF band}
 #' \item{VLF}{The chosen maximum limit of the VLF band}
-#' \item{type}{A character string specifying which type of transfer function this is}
+#' \item{type}{A character string specifying which type of BRS has been computed}
 #'
 #'
 #' @author Alvaro Chao-Ecija
@@ -29,36 +30,46 @@
 #' @export
 #'
 #' @examples
-#' # ADD EXAMPLE!
+#' Data <- InterpolateData(DataSimulation(), f = 1)
+#' TransferFun <- TransferFunCWT(Data)
 TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
-  chosen.dj = 1/20, dt = 0.25, demean = TRUE){
-                  if(demean){
-                     for(n in 2:ncol(data)){
-                         data[,n] <- data[,n] - mean(data[,n])
-                     }
-                  }
-                  time <- data[,1]
-                  WTransform.x <- biwavelet::wt(cbind(time, data[,3]), dj = chosen.dj,
-                     s0 = 1/(HF + 0.1), max.scale = 1/(VLF - 0.01))
-                  WTransform.y <- biwavelet::wt(cbind(time, data[,2]), dj = chosen.dj,
-                     s0 = 1/(HF + 0.1), max.scale = 1/(VLF - 0.01))
-                  Smoothed <- SmoothTransforms(WTransform.x, WTransform.y, chosen.dj)
-                  sm.WTransform.x <- Smoothed$sm.WTransform.x
-                  sm.WTransform.y <- Smoothed$sm.WTransform.y
-                  XWTransform <- Smoothed$XWTransform
-                  sm.XWTransform <- Smoothed$sm.XWTransform
-                  TransferFun <- sm.XWTransform/ sm.WTransform.x
-                  Cospectrum <- Re(sm.XWTransform/ sqrt(sm.WTransform.x * sm.WTransform.y))
-                  Quadrature <- Im(sm.XWTransform/ sqrt(sm.WTransform.x * sm.WTransform.y))
-                  Coherence <- abs(sm.XWTransform)^2 / (sm.WTransform.x * sm.WTransform.y)
-                  Phase <- atan2(Quadrature, Cospectrum)
-                  return(list(TransferFun = TransferFun, Coherence = Coherence,
-                      Freqs = 1/WTransform.x$period, Cone = WTransform.x$coi, Time = data[,1],
-                         HF = HF, LF = LF, VLF = VLF, type = "TFun_cwt",
-                      Cospectrum = Cospectrum, Quadrature = Quadrature, Phase = Phase,
-                      Scales = WTransform.x$scale))
+                           chosen.dj = 1/20, dt = 0.25, demean = TRUE, smooth = TRUE, alpha = FALSE){
+  if(!is.data.frame(data)) data <- as.data.frame(data)
+  if(demean){
+    for(n in 2:ncol(data)){
+      data[,n] <- data[,n] - mean(data[,n])
+    }
+  }
+  time <- data[,1]
+  WTransform.x <- biwavelet::wt(cbind(time, data[,3]), dj = chosen.dj,
+                                s0 = 1/(HF + 0.1), max.scale = 1/(VLF - 0.01))
+  WTransform.y <- biwavelet::wt(cbind(time, data[,2]), dj = chosen.dj,
+                                s0 = 1/(HF + 0.1), max.scale = 1/(VLF - 0.01))
+  Smoothed <- BaroWavelet:::SmoothTransforms(WTransform.x, WTransform.y, chosen.dj)
+  sm.WTransform.x <- Smoothed$sm.WTransform.x
+  sm.WTransform.y <- Smoothed$sm.WTransform.y
+  XWTransform <- Smoothed$XWTransform
+  sm.XWTransform <- Smoothed$sm.XWTransform
+  Cospectrum <- Re(sm.XWTransform/ sqrt(sm.WTransform.x * sm.WTransform.y))
+  Quadrature <- Im(sm.XWTransform/ sqrt(sm.WTransform.x * sm.WTransform.y))
+  Coherence <- abs(sm.XWTransform)^2 / (sm.WTransform.x * sm.WTransform.y)
+  Phase <- atan2(Quadrature, Cospectrum)
+  if(!smooth){
+    sm.WTransform.x <- abs(WTransform.x$wave)^2
+    sm.WTransform.y <- abs(WTransform.y$wave)^2
+    sm.XWTransform <- XWTransform
+  }
+  if(!alpha){
+     TransferFun <- sm.XWTransform/ sm.WTransform.x
+  } else {
+    TransferFun <- sqrt(sm.WTransform.y/ sm.WTransform.x)
+  }
+  return(list(TransferFun = TransferFun, Coherence = Coherence,
+              Freqs = 1/WTransform.x$period, Cone = WTransform.x$coi, Time = data[,1],
+              HF = HF, LF = LF, VLF = VLF, type = "brs_cwt",
+              Cospectrum = Cospectrum, Quadrature = Quadrature, Phase = Phase,
+              Scales = WTransform.x$scale))
 }
-
 
 
 

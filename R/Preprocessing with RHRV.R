@@ -3,7 +3,17 @@
 
 
 
-
+#'Preprocess data with RHRV
+#'
+#'@param data Cardiovascular data to be processed
+#'@param maxSBP Maximum value allowed for the SBP
+#'@param minSBP Minimum value allowed for the SBP
+#'@param minbpm Minimum bpm allowed
+#'@param maxbpm Maximum bpm allowed
+#'@param use.RHRV Boolean. Should RHRV be used in the preprocessing step? Default is TRUE.
+#'
+#'@author 
+#'Alvaro Chao-Ecija
 #' @export
 PreprocessData <- function(data, maxSBP = 300, minSBP = 30,
                            minbpm = 25, maxbpm = 200, use.RHRV = TRUE){
@@ -46,7 +56,11 @@ PreprocessData <- function(data, maxSBP = 300, minSBP = 30,
 
 
 
-
+#' Prepare tachogram for RHRV
+#' @param time Time support for the HR recording
+#' 
+#' @author 
+#' Alvaro Chao-Ecija
 #' @export
 PrepareTachoForRHRV <- function(time){
   HRV <- list()
