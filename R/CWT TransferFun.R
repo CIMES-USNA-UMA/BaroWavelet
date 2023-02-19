@@ -45,7 +45,7 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
                                 s0 = 1/(HF + 0.1), max.scale = 1/(VLF - 0.01))
   WTransform.y <- biwavelet::wt(cbind(time, data[,2]), dj = chosen.dj,
                                 s0 = 1/(HF + 0.1), max.scale = 1/(VLF - 0.01))
-  Smoothed <- BaroWavelet:::SmoothTransforms(WTransform.x, WTransform.y, chosen.dj)
+  Smoothed <- SmoothTransforms(WTransform.x, WTransform.y, chosen.dj)
   sm.WTransform.x <- Smoothed$sm.WTransform.x
   sm.WTransform.y <- Smoothed$sm.WTransform.y
   XWTransform <- Smoothed$XWTransform
