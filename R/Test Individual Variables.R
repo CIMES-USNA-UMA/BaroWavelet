@@ -60,6 +60,8 @@ TestBRSDWT <- function(fun, time_flags1, time_flags2){
       stop("Intervals are equal")
     }
   }
+  select_time1 <- match(select_time1, fun$Time)
+  select_time2 <- match(select_time2, fun$Time)
   HF1 <- fun$HF[select_time1]
   LF1 <- fun$LF[select_time1]
   HF2 <- fun$HF[select_time2]
@@ -101,6 +103,8 @@ TestBRSCWT <- function(fun, time_flags1, time_flags2, thr = 0.5, use.thr = TRUE)
       stop("Intervals are equal")
     }
   }
+  select_time1 <- match(select_time1, fun$Time)
+  select_time2 <- match(select_time2, fun$Time)
   fun <- BaroWavelet:::GetBiwaveletObject(fun)
   freqs <- 1/fun$period
   sel_power <- fun$power
@@ -176,6 +180,8 @@ TestIndHRandBP <- function(data, time_flags1, time_flags2){
       stop("Intervals are equal")
     }
   }
+  select_time1 <- match(select_time1, fun$Time)
+  select_time2 <- match(select_time2, fun$Time)
   HRtest <- ks.test(data$HR[select_time1], data$HR[select_time2])$p.value
   SBPtest <- ks.test(data$SBP[select_time1], data$SBP[select_time2])$p.value
   output <- c(HRtest, SBPtest)
@@ -232,6 +238,8 @@ TestIndHRV <- function(fun, time_flags1, time_flags2){
       stop("Intervals are equal")
     }
   }
+  select_time1 <- match(select_time1, fun$Time)
+  select_time2 <- match(select_time2, fun$Time)
   HFtest <- ks.test(fun$HF[select_time1], fun$HF[select_time2])$p.value
   LFtest <- ks.test(fun$LF[select_time1], fun$LF[select_time2])$p.value
   LFHFtest <- ks.test(fun$LFHF[select_time1], fun$LFHF[select_time2])$p.value
