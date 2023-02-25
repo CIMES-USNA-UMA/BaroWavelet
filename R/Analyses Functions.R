@@ -201,13 +201,13 @@ AnalyzeBRS <- function(framework, locator, method = c("both", "dwt", "cwt")){
               framework <- AddBRStoAnalysis(framework, tf, locator)
            } else if(method == "cwt"){
               tf <- TransferFunCWT(Data$Data, Data$HF, Data$LF, Data$VLF,
-                Data$dj, diff(Data$Data[,1])[1], alpha = (Data$"CWT Type" == "alpha"))
+                Data$dj, alpha = (Data$"CWT Type" == "alpha"))
               framework <- AddBRStoAnalysis(framework, tf, locator)
            } else if(method == "both"){
               a_dwt <- AlphaIndexDWT(Data$Data, Data$HF, Data$LF, Data$VLF,
                 wv = Data$Wavelet, hrv = TRUE, error = Data$Error, error.type = Data$"Error Type")
               tf_cwt <- TransferFunCWT(Data$Data, Data$HF, Data$LF, Data$VLF,
-                                       Data$dj, diff(Data$Data[,1])[1], alpha = (Data$"CWT Type" == "alpha"))
+                                       Data$dj, alpha = (Data$"CWT Type" == "alpha"))
               framework <- AddBRStoAnalysis(framework, a_dwt, locator)
               framework <- AddBRStoAnalysis(framework, tf_cwt, locator)
            }
