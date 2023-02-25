@@ -6,8 +6,7 @@
 #' @param HF Maximum limit of the HF band. Default is 0.4 Hz
 #' @param LF Maximum limit of the LF band. Default is 0.15 Hz
 #' @param VLF Maximum limit of the VLF band. Default is 0.04 Hz
-#' @param chosen.dj Frequency resolution. Default is 1/20
-#' @param dt Time resolution (inverse of the sample rate). Default is 0.25
+#' @param chosen.dj Frequency resolution to be passed to the \code{link[biwavelet]{wt}} function. Default is 1/20
 #' @param demean Boolean, should the data be demeaned before analysis? Default is TRUE
 #' @param smooth Boolean, smooth the transforms so that the BRS correlates with the coherence. Default is TRUE
 #' @param alpha Boolean, compute an alpha index representative of the BRS instead of the transfer function. Default is FALSE
@@ -22,9 +21,22 @@
 #' \item{VLF}{The chosen maximum limit of the VLF band}
 #' \item{type}{A character string specifying which type of BRS has been computed}
 #'
+#' @details This function makes use of the Continuous Wavelet Transform methods 
+#' provided by package \href{https://CRAN.R-project.org/package=biwavelet}{biwavelet} to
+#' compute the baroreflex sensitivity. It employs the functions \code{link[biwavelet]{wt}} 
+#' and \code{link[biwavelet]{smooth.wavelet}}. This last function is used in a smoothing routine
+#' based on the one that biwavelet function \code{link[biwavelet]{wtc}} uses to smooth 
+#' the wavelet transforms. Further information regarding this method of computation
+#' can be accessed through the references section.
+#' 
+#'
 #'
 #' @author Alvaro Chao-Ecija
 #'
+#' @references 
+#' Keissar K, Maestri R, Pinna GD, La Rovere MT, Gilad O. Non-invasive 
+#' baroreflex sensitivity assessment using wavelet transfer function-based 
+#' time-frequency analysis. Physiol Meas. 2010 ;31(7):1021-36.
 #'
 #' @import biwavelet
 #' @export
@@ -33,7 +45,7 @@
 #' Data <- InterpolateData(DataSimulation(), f = 1)
 #' TransferFun <- TransferFunCWT(Data)
 TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
-                           chosen.dj = 1/20, dt = 0.25, demean = TRUE, smooth = TRUE, alpha = FALSE){
+                           chosen.dj = 1/20, demean = TRUE, smooth = TRUE, alpha = FALSE){
   if(!is.data.frame(data)) data <- as.data.frame(data)
   if(demean){
     for(n in 2:ncol(data)){
@@ -60,7 +72,7 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
     sm.XWTransform <- XWTransform
   }
   if(!alpha){
-     TransferFun <- sm.XWTransform / sm.WTransform.x
+    TransferFun <- sm.XWTransform / sm.WTransform.x
   } else {
     TransferFun <- sqrt(sm.WTransform.y / sm.WTransform.x)
   }
@@ -80,6 +92,11 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
 
 
 
+# Private function to smooth the wavelet transforms for the computation of the BRS. 
+# This function is based on the routine that the biwavelet function wtc uses to 
+# calculate the wavelet coherence, using the biwavelet function smooth.wavelet. 
+# This function adapts this routine for the computation of the BRS (for more 
+# information, please check the references section at the top of this document)
 SmoothTransforms <- function(x, y, chosen.dj = 1/20){
   N <- nrow(x$wave)
   M <- ncol(x$wave)
@@ -91,31 +108,7 @@ SmoothTransforms <- function(x, y, chosen.dj = 1/20){
   sm.WTransform.y <- biwavelet::smooth.wavelet(inverse_scales * 
                                                  (abs(y$wave)^2), x$dt, chosen.dj, x$scale)
   sm.XWTransform <- biwavelet::smooth.wavelet(inverse_scales * 
-                                               XWTransform, x$dt, chosen.dj, x$scale)
+                                                XWTransform, x$dt, chosen.dj, x$scale)
   return(list(sm.WTransform.x = sm.WTransform.x, sm.WTransform.y = sm.WTransform.y,
               sm.XWTransform = sm.XWTransform, XWTransform = XWTransform ))
 }
-
-
-
-GetCWTscales <- function(HF = 0.4, VLF = 0.04, chosen.dj = 1/20){
-  max_scale <- 1/(VLF - 0.01)
-  min_scale <- 1/(HF + 0.1)
-  limit <- round(max_scale) + 1
-  scales <- seq(log2(min_scale), log2(limit), by = chosen.dj)
-  scales <- scales[scales <= max_scale]
-  scales <- 2^scales
-  return(scales)
-}
-
-
-GetInverseCWTscales <- function(x, HF = 0.4, VLF = 0.04, chosen.dj = 1/20){
-  N <- nrow(x)
-  M <- ncol(x)
-  scales <- GetCWTscales(HF = HF, VLF = VLF, chosen.dj = chosen.dj)
-  inverse_scales <- matrix(rep(1/t(scales), M), ncol = M, 
-                           nrow = N)
-  return(inverse_scales)
-}
-
-
