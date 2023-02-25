@@ -46,7 +46,7 @@ A list with the estimated components of the baroreflex transfer function in the 
 \item{type}{A character string specifying which type of BRS has been computed}
 }
 \description{
-Computes barorreflex sensitivity as a transfer function suing the Continuous Wavelet Transform
+Computes barorreflex sensitivity as a transfer function using the Continuous Wavelet Transform
 }
 \details{
 This function makes use of the Continuous Wavelet Transform methods 

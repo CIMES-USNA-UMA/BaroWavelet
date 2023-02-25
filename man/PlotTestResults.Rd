@@ -41,7 +41,7 @@ Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$T
 Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1001:1300])
 Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1501:1800])
 for(n in 1:4) Study <- AnalyzeBRS(Study, n)
-for(n in 1:4) Study <- GetAvgCwtData(Study, 1)
+for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
 
 Study <- AddTimeInterval(Study, "First interval")
 Study <- AddTimeInterval(Study, "Second interval")

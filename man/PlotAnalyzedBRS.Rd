@@ -2,7 +2,7 @@
 % Please edit documentation in R/Analyses Functions.R
 \name{PlotAnalyzedBRS}
 \alias{PlotAnalyzedBRS}
-\title{Plot analyzed transfer function}
+\title{Plot analyzed baroreflex sensitivity}
 \usage{
 PlotAnalyzedBRS(
   framework,
@@ -63,12 +63,12 @@ Study <- BuildStructure()
 Study <- AddAnalysis(Study, name = "Simulation")
 Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 Study <- AnalyzeBRS(Study, 1)
-Study <- GetAvgCwtData(Study, 1)
+Study <- AddAvgCwtData(Study, 1)
 
 
-PlotAnalyzedBRS(Study, 1, "dwt)
+PlotAnalyzedBRS(Study, 1, "dwt")
 
-PlotAnalyzedBRS(Study, 1, "cwt)
+PlotAnalyzedBRS(Study, 1, "cwt")
 }
 \author{
 Alvaro Chao-Ecija
