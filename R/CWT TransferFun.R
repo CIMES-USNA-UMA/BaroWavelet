@@ -60,9 +60,9 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
     sm.XWTransform <- XWTransform
   }
   if(!alpha){
-     TransferFun <- sm.XWTransform/ sm.WTransform.x
+     TransferFun <- sm.XWTransform / sm.WTransform.x
   } else {
-    TransferFun <- sqrt(sm.WTransform.y/ sm.WTransform.x)
+    TransferFun <- sqrt(sm.WTransform.y / sm.WTransform.x)
   }
   return(list(TransferFun = TransferFun, Coherence = Coherence,
               Freqs = 1/WTransform.x$period, Cone = WTransform.x$coi, Time = data[,1],
@@ -90,7 +90,7 @@ SmoothTransforms <- function(x, y, chosen.dj = 1/20){
                                                  (abs(x$wave)^2), x$dt, chosen.dj, x$scale)
   sm.WTransform.y <- biwavelet::smooth.wavelet(inverse_scales * 
                                                  (abs(y$wave)^2), x$dt, chosen.dj, x$scale)
-  sm.XWTransform = biwavelet::smooth.wavelet(inverse_scales * 
+  sm.XWTransform <- biwavelet::smooth.wavelet(inverse_scales * 
                                                XWTransform, x$dt, chosen.dj, x$scale)
   return(list(sm.WTransform.x = sm.WTransform.x, sm.WTransform.y = sm.WTransform.y,
               sm.XWTransform = sm.XWTransform, XWTransform = XWTransform ))
@@ -99,10 +99,10 @@ SmoothTransforms <- function(x, y, chosen.dj = 1/20){
 
 
 GetCWTscales <- function(HF = 0.4, VLF = 0.04, chosen.dj = 1/20){
-  max_scale = 1/(VLF - 0.01)
-  min_scale = 1/(HF + 0.1)
+  max_scale <- 1/(VLF - 0.01)
+  min_scale <- 1/(HF + 0.1)
   limit <- round(max_scale) + 1
-  scales = seq(log2(min_scale), log2(limit), by = chosen.dj)
+  scales <- seq(log2(min_scale), log2(limit), by = chosen.dj)
   scales <- scales[scales <= max_scale]
   scales <- 2^scales
   return(scales)

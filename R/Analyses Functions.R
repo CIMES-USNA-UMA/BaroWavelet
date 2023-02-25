@@ -123,7 +123,7 @@ AddAnalysis <- function(framework, name = NULL){
 #' ShowLocatorIndices(Study, "intervals")
 #' ShowLocatorIndices(Study, "tests")
 ShowLocatorIndices <- function(framework, type = c("analyses", "controls", "intervals", "tests")){
-              type = match.arg(type)
+              type <- match.arg(type)
               if(type == "analyses"){
                  data <- framework$Analyses
               } else if(type == "controls"){
@@ -1039,7 +1039,7 @@ PlotTestResults <- function(framework, locator, tem = FALSE, newPlot = FALSE, dr
   LF <- test$Tables$LF
   max_HF <- max(test$Tables$HF[,3]) + max(test$Tables$HF[,4])
   max_LF <- max(test$Tables$LF[,3]) + max(test$Tables$LF[,4])
-  Max = max(max_HF, max_LF)
+  Max <- max(max_HF, max_LF)
   paired <- test$Paired
   methods <- test$Methods
   type <- test$Type
@@ -1131,7 +1131,7 @@ PlotHRVTestResults <- function(framework, locator, tem = FALSE, newPlot = FALSE,
   max_LF <- max(test$Tables$LF[,3]) + max(test$Tables$LF[,4])
   max_LFHF <- max(test$Tables$LFHF[,3]) + max(test$Tables$LFHF[,4])
   min_LFHF <- min(min(test$Tables$LFHF[,3]), min(test$Tables$LFHF[,4]))
-  Max = max(max_HF, max_LF)
+  Max <- max(max_HF, max_LF)
   paired <- test$Paired
   methods <- test$Methods
   title <- "HRV"
@@ -1317,7 +1317,7 @@ AssembleCwtTransferFun <- function(framework, locator){
 AddIndividualIndices <- function(framework, a_locator, t_locator, time_flags,
    method = c("dwt", "cwt"), use.name = TRUE){
                    interval <- framework$IndividualIndices[[t_locator]]
-                   method = match.arg(method)
+                   method <- match.arg(method)
                    Data <- framework$"General Data"
                    Analysis <- framework$Analyses[[a_locator]]
                    if(method == "dwt"){

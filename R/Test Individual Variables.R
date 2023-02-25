@@ -64,8 +64,8 @@ TestBRSDWT <- function(fun, time_flags1, time_flags2){
   LF1 <- fun$LF[select_time1]
   HF2 <- fun$HF[select_time2]
   LF2 <- fun$LF[select_time2]
-  HFtest = ks.test(HF1, HF2)$p.value
-  LFtest = ks.test(LF1, LF2)$p.value
+  HFtest <- ks.test(HF1, HF2)$p.value
+  LFtest <- ks.test(LF1, LF2)$p.value
   output <- c(HFtest, LFtest)
   names(output) <- c("HF", "LF")
   return(output)
@@ -119,8 +119,8 @@ TestBRSCWT <- function(fun, time_flags1, time_flags2, thr = 0.5, use.thr = TRUE)
   LF1 <- results.LF[select_time1]
   HF2 <- results.HF[select_time2]
   LF2 <- results.LF[select_time2]
-  HFtest = ks.test(HF1, HF2)$p.value
-  LFtest = ks.test(LF1, LF2)$p.value
+  HFtest <- ks.test(HF1, HF2)$p.value
+  LFtest <- ks.test(LF1, LF2)$p.value
   output <- c(HFtest, LFtest)
   names(output) <- c("HF", "LF")
   return(output)
@@ -176,8 +176,8 @@ TestIndHRandBP <- function(data, time_flags1, time_flags2){
       stop("Intervals are equal")
     }
   }
-  HRtest = ks.test(data$HR[select_time1], data$HR[select_time2])$p.value
-  SBPtest = ks.test(data$SBP[select_time1], data$SBP[select_time2])$p.value
+  HRtest <- ks.test(data$HR[select_time1], data$HR[select_time2])$p.value
+  SBPtest <- ks.test(data$SBP[select_time1], data$SBP[select_time2])$p.value
   output <- c(HRtest, SBPtest)
   names(output) <- c("HR", "SBP")
   return(output)
@@ -232,9 +232,9 @@ TestIndHRV <- function(fun, time_flags1, time_flags2){
       stop("Intervals are equal")
     }
   }
-  HFtest = ks.test(fun$HF[select_time1], fun$HF[select_time2])$p.value
-  LFtest = ks.test(fun$LF[select_time1], fun$LF[select_time2])$p.value
-  LFHFtest = ks.test(fun$LFHF[select_time1], fun$LFHF[select_time2])$p.value
+  HFtest <- ks.test(fun$HF[select_time1], fun$HF[select_time2])$p.value
+  LFtest <- ks.test(fun$LF[select_time1], fun$LF[select_time2])$p.value
+  LFHFtest <- ks.test(fun$LFHF[select_time1], fun$LFHF[select_time2])$p.value
   output <- c(HFtest, LFtest, LFHFtest)
   names(output) <- c("HF", "LF", "LFHF")
   return(output)

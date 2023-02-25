@@ -39,14 +39,14 @@ IndividualIndices <- function(fun, time_flags = NULL, thr = 0.5,
 IndividualIndicesDWT <- function(fun, time_flags = NULL, method = c("median", "mean")){
   method <- match.arg(method)
   if(method == "mean"){
-    method1 = mean
-    method2 = sd
-    output_rnames = c("mean", "sd")
+    method1 <- mean
+    method2 <- sd
+    output_rnames <- c("mean", "sd")
     
   } else if(method == "median"){
-    method1 = median
-    method2 = quantile
-    output_rnames = c("median", "P25", "P75")
+    method1 <- median
+    method2 <- quantile
+    output_rnames <- c("median", "P25", "P75")
   }
   if(is.null(time_flags)){
     select_time <- 1:NROW(fun$Time)
@@ -79,14 +79,14 @@ IndividualIndicesCWT <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NU
                                method = c("median", "mean")){
   method <- match.arg(method)
   if(method == "mean"){
-    method1 = mean
-    method2 = sd
-    output_rnames = c("mean", "sd")
+    method1 <- mean
+    method2 <- sd
+    output_rnames <- c("mean", "sd")
     
   } else if(method == "median"){
-    method1 = median
-    method2 = quantile
-    output_rnames = c("median", "P25", "P75")
+    method1 <- median
+    method2 <- quantile
+    output_rnames <- c("median", "P25", "P75")
   }
   HF <- fun$HF
   LF <- fun$LF

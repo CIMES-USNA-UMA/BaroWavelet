@@ -117,7 +117,7 @@ PlotCwtBRS <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL,
                      im <- tempfile(fileext = ".png")
                      png(filename = im, width = 1500, height = 400)
                   }
-                  xlim = NULL
+                  xlim <- NULL
                   if(use.xlim) xlim = time_flags * 60
                   par(oma = c(0, 0, 0, 1), mar = c(5, 4, 5, 5) + 0.1)
                   biwavelet::plot.biwavelet(fun, plot.sig = FALSE, plot.phase = TRUE,
