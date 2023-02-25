@@ -1,6 +1,6 @@
 #' Continuous Wavelet Transform Transfer Function
 #'
-#' Computes barorreflex sensitivity as a transfer function suing the Continuous Wavelet Transform
+#' Computes barorreflex sensitivity as a transfer function using the Continuous Wavelet Transform
 #' @param data A matrix with 3 columns containing time values (first column), RR and SBP values (second
 #'             and third column).
 #' @param HF Maximum limit of the HF band. Default is 0.4 Hz
