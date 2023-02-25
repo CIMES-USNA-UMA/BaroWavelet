@@ -37,10 +37,12 @@ TestIndBRS <- function(fun, time_flags1, time_flags2, thr = 0.5,
 TestBRSDWT <- function(fun, time_flags1, time_flags2){
   time_flags1 <- time_flags1 * 60
   time_flags2 <- time_flags2 * 60
-  select_time1 <- fun$Time[(fun$Time >= time_flags1[1]) &
-                              (fun$Time <= time_flags1[2])]
-  select_time2 <- fun$Time[(fun$Time >= time_flags2[1]) &
-                             (fun$Time <= time_flags2[2])]
+  select_time1 <- fun$Time[(fun$Time >= as.integer(time_flags1[1])) &
+                              (fun$Time <= as.integer(time_flags1[2]))]
+  select_time2 <- fun$Time[(fun$Time >= as.integer(time_flags2[1])) &
+                             (fun$Time <= as.integer(time_flags2[2]))]
+  select_time1 <- match(select_time1, fun$Time)
+  select_time2 <- match(select_time2, fun$Time)
   if((sum(select_time1 %in% select_time2)) != 0){
     if(((min(select_time1) - min(select_time2)) < 0) & 
        ((max(select_time1) - max(select_time2)) < 0)){
@@ -60,8 +62,6 @@ TestBRSDWT <- function(fun, time_flags1, time_flags2){
       stop("Intervals are equal")
     }
   }
-  select_time1 <- match(select_time1, fun$Time)
-  select_time2 <- match(select_time2, fun$Time)
   HF1 <- fun$HF[select_time1]
   LF1 <- fun$LF[select_time1]
   HF2 <- fun$HF[select_time2]
@@ -80,10 +80,12 @@ TestBRSCWT <- function(fun, time_flags1, time_flags2, thr = 0.5, use.thr = TRUE)
   VLF <- fun$VLF
   time_flags1 <- time_flags1 * 60
   time_flags2 <- time_flags2 * 60
-  select_time1 <- fun$Time[(fun$Time >= time_flags1[1]) &
-                             (fun$Time <= time_flags1[2])]
-  select_time2 <- fun$Time[(fun$Time >= time_flags2[1]) &
-                             (fun$Time <= time_flags2[2])]
+  select_time1 <- fun$Time[(fun$Time >= as.integer(time_flags1[1])) &
+                             (fun$Time <= as.integer(time_flags1[2]))]
+  select_time2 <- fun$Time[(fun$Time >= as.integer(time_flags2[1])) &
+                             (fun$Time <= as.integer(time_flags2[2]))]
+  select_time1 <- match(select_time1, fun$Time)
+  select_time2 <- match(select_time2, fun$Time)
   if((sum(select_time1 %in% select_time2)) != 0){
     if(((min(select_time1) - min(select_time2)) < 0) & 
        ((max(select_time1) - max(select_time2)) < 0)){
@@ -103,8 +105,6 @@ TestBRSCWT <- function(fun, time_flags1, time_flags2, thr = 0.5, use.thr = TRUE)
       stop("Intervals are equal")
     }
   }
-  select_time1 <- match(select_time1, fun$Time)
-  select_time2 <- match(select_time2, fun$Time)
   fun <- BaroWavelet:::GetBiwaveletObject(fun)
   freqs <- 1/fun$period
   sel_power <- fun$power
@@ -154,12 +154,12 @@ TestBRSCWT <- function(fun, time_flags1, time_flags2, thr = 0.5, use.thr = TRUE)
 TestIndHRandBP <- function(data, time_flags1, time_flags2){
   data <- list(Time = data[,"Time"], HR = 60000/data[,"RR"], SBP = data[,"SBP"])
   time_flags1 <- time_flags1 * 60
-  select_time1 <- fun$Time[(fun$Time >= time_flags1[1]) &
-                             (fun$Time <= time_flags1[2])]
+  select_time1 <- fun$Time[(fun$Time >= as.integer(time_flags1[1])) &
+                             (fun$Time <= as.integer(time_flags1[2]))]
   select_time1 <- match(select_time1, fun$Time)
   time_flags2 <- time_flags2 * 60
-  select_time2 <- fun$Time[(fun$Time >= time_flags2[1]) &
-                             (fun$Time <= time_flags2[2])]
+  select_time2 <- fun$Time[(fun$Time >= as.integer(time_flags2[1])) &
+                             (fun$Time <= as.integer(time_flags2[2]))]
   select_time2 <- match(select_time2, fun$Time)
   if((sum(select_time1 %in% select_time2)) != 0){
     if(((min(select_time1) - min(select_time2)) < 0) & 
@@ -180,8 +180,6 @@ TestIndHRandBP <- function(data, time_flags1, time_flags2){
       stop("Intervals are equal")
     }
   }
-  select_time1 <- match(select_time1, fun$Time)
-  select_time2 <- match(select_time2, fun$Time)
   HRtest <- ks.test(data$HR[select_time1], data$HR[select_time2])$p.value
   SBPtest <- ks.test(data$SBP[select_time1], data$SBP[select_time2])$p.value
   output <- c(HRtest, SBPtest)
@@ -212,12 +210,12 @@ TestIndHRandBP <- function(data, time_flags1, time_flags2){
 #' TestIndHRV(AlphaIndex, c(0, 1.7), c(8, 9.5))
 TestIndHRV <- function(fun, time_flags1, time_flags2){
   time_flags1 <- time_flags1 * 60
-  select_time1 <- fun$Time[(fun$Time >= time_flags1[1]) &
-                             (fun$Time <= time_flags1[2])]
+  select_time1 <- fun$Time[(fun$Time >= as.integer(time_flags1[1])) &
+                             (fun$Time <= as.integer(time_flags1[2]))]
   select_time1 <- match(select_time1, fun$Time)
   time_flags2 <- time_flags2 * 60
-  select_time2 <- fun$Time[(fun$Time >= time_flags2[1]) &
-                             (fun$Time <= time_flags2[2])]
+  select_time2 <- fun$Time[(fun$Time >= as.integer(time_flags2[1])) &
+                             (fun$Time <= as.integer(time_flags2[2]))]
   select_time2 <- match(select_time2, fun$Time)
   if((sum(select_time1 %in% select_time2)) != 0){
     if(((min(select_time1) - min(select_time2)) < 0) & 
@@ -238,8 +236,6 @@ TestIndHRV <- function(fun, time_flags1, time_flags2){
       stop("Intervals are equal")
     }
   }
-  select_time1 <- match(select_time1, fun$Time)
-  select_time2 <- match(select_time2, fun$Time)
   HFtest <- ks.test(fun$HF[select_time1], fun$HF[select_time2])$p.value
   LFtest <- ks.test(fun$LF[select_time1], fun$LF[select_time2])$p.value
   LFHFtest <- ks.test(fun$LFHF[select_time1], fun$LFHF[select_time2])$p.value
