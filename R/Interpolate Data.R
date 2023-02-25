@@ -25,7 +25,7 @@ InterpolateData <- function(x, f = 4){
                   #    method = "monoH.FC", ties = "ordered")
                   # IntFunPP <- splinefun(x$Time, x$PP, 
                   #     method = "monoH.FC", ties = "ordered")
-                   Time = seq(x$Time[1], x$Time[NROW(x$Time)], 1/f)
+                   Time <- seq(x$Time[1], x$Time[NROW(x$Time)], 1/f)
                    return(list(Time = Time, RR = IntFunRR(Time), 
                           SBP = IntFunSBP(Time))) 
                    # Code for future potential implementation:
