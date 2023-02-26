@@ -27,16 +27,15 @@
 #'
 #' @examples
 #' Data <- InterpolateData(DataSimulation(), f = 1)
-#' Study <- BuildStructure()
-#' Study <- AddAnalysis(Study, name = "Simulation")
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
-#' Study <- AnalyzeBRS(Study, 1)
-#' Study <- GetAvgCwtData(Study, 1)
+#' AlphaIndex <- AlphaIndexDWT(Data, wv = "d8", error = 0.0005)
+#' TransferFun <- TransferFunCWT(Data)
 #' 
 #' 
-#' PlotAnalyzedBRS(Study, 1, "dwt")
+#' PlotBRS(AlphaIndex)
 #' 
-#' PlotAnalyzedBRS(Study, 1, "cwt")
+#' PlotBRS(TransferFun)
+#' 
+#' PlotBRS(TransferFun, avg = TRUE)
 PlotBRS <- function(fun, avg = FALSE, time_col = "brown", HFcolor = "yellow",
     LFcolor = "green", time_flags = NULL, thr = 0.5,
        use.thr = TRUE, nfreqs = 7, tem = FALSE, newPlot = TRUE, title = "data", plotHF = TRUE,
