@@ -204,7 +204,7 @@ TestIndHRandBP <- function(data, time_flags1, time_flags2){
 #'
 #' @examples
 #' Data <- InterpolateData(DataSimulation(), f = 1)
-#' AlphaIndex <- AlphaIndexDWT(Data, wv = "d8" error = 0.0005, hrv = TRUE)
+#' AlphaIndex <- AlphaIndexDWT(Data, wv = "d8", error = 0.0005, hrv = TRUE)
 #' 
 #' TestIndHRV(AlphaIndex, c(0, 1.7), c(35, 38))
 #' TestIndHRV(AlphaIndex, c(0, 1.7), c(8, 9.5))

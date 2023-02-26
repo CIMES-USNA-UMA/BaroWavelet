@@ -41,7 +41,7 @@
 #'
 #' @examples
 #' Data <- InterpolateData(DataSimulation(), f = 1)
-#' AlphaIndex <- AlphaIndexDWT(Data, wv = "d8" error = 0.0005)
+#' AlphaIndex <- AlphaIndexDWT(Data, wv = "d8", error = 0.0005)
 
 AlphaIndexDWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04, 
                   wv = "d4", hrv = FALSE, error = 0.01, 

@@ -56,7 +56,7 @@ Also, the function allows to return the computed heart variability results by \h
 }
 \examples{
 Data <- InterpolateData(DataSimulation(), f = 1)
-AlphaIndex <- AlphaIndexDWT(Data, wv = "d8" error = 0.0005)
+AlphaIndex <- AlphaIndexDWT(Data, wv = "d8", error = 0.0005)
 }
 \references{
 Leandro Rodriguez-Linares, Xose Vila, Maria Jose Lado, Arturo Mendez, Abraham Otero and Constantino
