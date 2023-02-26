@@ -315,7 +315,7 @@ PlotAnalyzedBRS <- function(framework, locator, method = c("dwt", "cwt", "cwt.av
              return(im)
            } else if(method == "cwt.phase"){
              tf <- AssembleCwtBRS(framework, locator)
-             tf <- SplitByCoherence(tf, thr = thr, use.phase = TRUE)
+             tf <- SplitByCoherence(tf, thr = thr)
              tf$Time <- Data$Data[,1]
              im <- PlotDwtBRS(tf, time_flags, col = time_col, tem = tem, plotHF = plotHF,
                                       plotLF = plotLF)
@@ -1528,10 +1528,6 @@ SplitByCoherence <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL){
   LF <- fun$LF
   VLF <- fun$VLF
   fun <- GetBiwaveletObject(fun)
-  if(is.null(phase.rest) & use.phase){
-    fun$power <- fun$phase
-  } 
-  if(!is.null(phase.rest)) phase <- fun$phase
   if(is.null(time_flags)){
     select_time <- 1:NROW(fun$t)
   } else {

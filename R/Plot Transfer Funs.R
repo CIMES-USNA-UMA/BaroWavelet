@@ -39,7 +39,7 @@
 #' PlotAnalyzedBRS(Study, 1, "cwt)
 PlotBRS <- function(fun, avg = FALSE, time_col = "brown", HFcolor = "yellow",
     LFcolor = "green", time_flags = NULL, thr = 0.5,
-       use.thr = TRUE, nfreqs = 7, tem = FALSE, newPlot = TRUE, title, plotHF = TRUE,
+       use.thr = TRUE, nfreqs = 7, tem = FALSE, newPlot = TRUE, title = "data", plotHF = TRUE,
     plotLF = TRUE){
         #if(dev.cur() > 1) dev.off()
         if(newPlot) x11(title = paste("Transfer Function from", title))
