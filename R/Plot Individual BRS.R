@@ -76,7 +76,7 @@ PlotDwtBRS <- function(fun, time_flags = NULL, col = "brown", tem  =FALSE, plotH
     png(filename = im, width = 6, height = 6, units = "in", res = 400)
   }
   plottingData <- data.frame(Time = time, LF = LF, HF = HF)
-  if(plotHF & plotLF) stop("Please select only one frequency band") # Future implementation
+  if(plotHF & plotLF) plotHF <- FALSE # Future implementation
   if(plotHF){
     im <- ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = HF)) +
       ggplot2::geom_line()
