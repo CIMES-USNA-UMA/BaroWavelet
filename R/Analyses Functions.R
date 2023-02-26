@@ -479,8 +479,8 @@ AnalyzeBRSIndices <- function(framework, locator_a, locator_t, time_flags,
                       framework <- AddIndividualIndices(framework, locator_a, locator_t, time_flags,
                          method = method, use.name)
                    }
-                   #framework <- AddTimeValues(framework, locator_a, locator_t, time_flags,
-                   #    use.name)
+                   framework <- AddTimeValues(framework, locator_a, locator_t, time_flags,
+                       use.name)
                    if(method != "cwt") framework <- AddExpectedHRV(framework, locator_a, locator_t)
                    return(framework)
 }
@@ -695,15 +695,15 @@ PlotTimeValues <- function(framework, locator,
 #'
 #' @examples
 #' Data <- InterpolateData(DataSimulation(), f = 1)
-#' Study <- BuildStructure()
+#' Study <- BuildStructure(error = 0.01)
 #' Study <- AddAnalysis(Study, name = "Simulation 1")
 #' Study <- AddAnalysis(Study, name = "Simulation 2")
 #' Study <- AddAnalysis(Study, name = "Simulation 3")
 #' Study <- AddAnalysis(Study, name = "Simulation 4")
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], Data$Time[1:300])
-#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[501:800])
-#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1001:1300])
-#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1501:1800])
+#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 #' for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 #' for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
 #' 
@@ -712,6 +712,12 @@ PlotTimeValues <- function(framework, locator,
 #' 
 #' Study <- AnalyzeBRSIndices(Study, 1, 1, c(0, 2.5))
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(2.6, 3))
+#' Study <- AnalyzeBRSIndices(Study, 2, 1, c(0, 2.5))
+#' Study <- AnalyzeBRSIndices(Study, 2, 2, c(2.6, 3))
+#' Study <- AnalyzeBRSIndices(Study, 3, 1, c(0, 2.5))
+#' Study <- AnalyzeBRSIndices(Study, 3, 2, c(2.6, 3))
+#' Study <- AnalyzeBRSIndices(Study, 4, 1, c(0, 2.5))
+#' Study <- AnalyzeBRSIndices(Study, 4, 2, c(2.6, 3))
 #' 
 #' Study <- TestGroups(Study, 1, 2, "Example test")
 TestGroups <- function(framework, locator1, locator2, name = NULL, method = NULL,
@@ -842,15 +848,15 @@ TestGroups <- function(framework, locator1, locator2, name = NULL, method = NULL
 #'
 #' @examples
 #' Data <- InterpolateData(DataSimulation(), f = 1)
-#' Study <- BuildStructure()
+#' Study <- BuildStructure(error = 0.01)
 #' Study <- AddAnalysis(Study, name = "Simulation 1")
 #' Study <- AddAnalysis(Study, name = "Simulation 2")
 #' Study <- AddAnalysis(Study, name = "Simulation 3")
 #' Study <- AddAnalysis(Study, name = "Simulation 4")
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], Data$Time[1:300])
-#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[501:800])
-#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1001:1300])
-#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1501:1800])
+#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 #' for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 #' for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
 #' 
@@ -859,6 +865,12 @@ TestGroups <- function(framework, locator1, locator2, name = NULL, method = NULL
 #' 
 #' Study <- AnalyzeBRSIndices(Study, 1, 1, c(0, 2.5))
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(2.6, 3))
+#' Study <- AnalyzeBRSIndices(Study, 2, 1, c(0, 2.5))
+#' Study <- AnalyzeBRSIndices(Study, 2, 2, c(2.6, 3))
+#' Study <- AnalyzeBRSIndices(Study, 3, 1, c(0, 2.5))
+#' Study <- AnalyzeBRSIndices(Study, 3, 2, c(2.6, 3))
+#' Study <- AnalyzeBRSIndices(Study, 4, 1, c(0, 2.5))
+#' Study <- AnalyzeBRSIndices(Study, 4, 2, c(2.6, 3))
 #' 
 #' Study <- TestHRV(Study, 1, 2, "Example test")
 TestHRV <- function(framework, locator1, locator2, name = NULL, method = NULL,
@@ -1010,15 +1022,15 @@ TestHRV <- function(framework, locator1, locator2, name = NULL, method = NULL,
 #'
 #' @examples
 #' Data <- InterpolateData(DataSimulation(), f = 1)
-#' Study <- BuildStructure()
+#' Study <- BuildStructure(error = 0.01)
 #' Study <- AddAnalysis(Study, name = "Simulation 1")
 #' Study <- AddAnalysis(Study, name = "Simulation 2")
 #' Study <- AddAnalysis(Study, name = "Simulation 3")
 #' Study <- AddAnalysis(Study, name = "Simulation 4")
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], Data$Time[1:300])
-#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[501:800])
-#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1001:1300])
-#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1501:1800])
+#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 #' for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 #' for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
 #' 
@@ -1027,6 +1039,12 @@ TestHRV <- function(framework, locator1, locator2, name = NULL, method = NULL,
 #' 
 #' Study <- AnalyzeBRSIndices(Study, 1, 1, c(0, 2.5))
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(2.6, 3))
+#' Study <- AnalyzeBRSIndices(Study, 2, 1, c(0, 2.5))
+#' Study <- AnalyzeBRSIndices(Study, 2, 2, c(2.6, 3))
+#' Study <- AnalyzeBRSIndices(Study, 3, 1, c(0, 2.5))
+#' Study <- AnalyzeBRSIndices(Study, 3, 2, c(2.6, 3))
+#' Study <- AnalyzeBRSIndices(Study, 4, 1, c(0, 2.5))
+#' Study <- AnalyzeBRSIndices(Study, 4, 2, c(2.6, 3))
 #' 
 #' Study <- TestGroups(Study, 1, 2, "Example test")
 #' 
@@ -1099,15 +1117,15 @@ PlotTestResults <- function(framework, locator, tem = FALSE, newPlot = FALSE, dr
 #'
 #' @examples
 #' Data <- InterpolateData(DataSimulation(), f = 1)
-#' Study <- BuildStructure()
+#' Study <- BuildStructure(error = 0.01)
 #' Study <- AddAnalysis(Study, name = "Simulation 1")
 #' Study <- AddAnalysis(Study, name = "Simulation 2")
 #' Study <- AddAnalysis(Study, name = "Simulation 3")
 #' Study <- AddAnalysis(Study, name = "Simulation 4")
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], Data$Time[1:300])
-#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[501:800])
-#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1001:1300])
-#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1501:1800])
+#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 #' for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 #' for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
 #' 
@@ -1116,6 +1134,12 @@ PlotTestResults <- function(framework, locator, tem = FALSE, newPlot = FALSE, dr
 #' 
 #' Study <- AnalyzeBRSIndices(Study, 1, 1, c(0, 2.5))
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(2.6, 3))
+#' Study <- AnalyzeBRSIndices(Study, 2, 1, c(0, 2.5))
+#' Study <- AnalyzeBRSIndices(Study, 2, 2, c(2.6, 3))
+#' Study <- AnalyzeBRSIndices(Study, 3, 1, c(0, 2.5))
+#' Study <- AnalyzeBRSIndices(Study, 3, 2, c(2.6, 3))
+#' Study <- AnalyzeBRSIndices(Study, 4, 1, c(0, 2.5))
+#' Study <- AnalyzeBRSIndices(Study, 4, 2, c(2.6, 3))
 #' 
 #' Study <- TestHRV(Study, 1, 2, "Example test")
 #' 
@@ -1335,7 +1359,7 @@ AddIndividualIndices <- function(framework, locator_a, locator_t, time_flags,
                           N <- length(others)
                    }
                    indices <- IndividualIndices(tf, time_flags, use.coherence = interval$Threshold,
-                         thr <- Data$Coherence, method = Data$"Index Method")[1,]
+                         thr = Data$Coherence, method = Data$"Index Method")[1,]
                    if(N == 0){
                       results <- matrix(indices, nrow = 2, ncol  =1)
                       rownames(results) <- c("HF", "LF")

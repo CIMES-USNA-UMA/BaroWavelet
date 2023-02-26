@@ -43,15 +43,15 @@ Compares two groups of paired or umpared data to check for significant differenc
 }
 \examples{
 Data <- InterpolateData(DataSimulation(), f = 1)
-Study <- BuildStructure()
+Study <- BuildStructure(error = 0.01)
 Study <- AddAnalysis(Study, name = "Simulation 1")
 Study <- AddAnalysis(Study, name = "Simulation 2")
 Study <- AddAnalysis(Study, name = "Simulation 3")
 Study <- AddAnalysis(Study, name = "Simulation 4")
 Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], Data$Time[1:300])
-Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[501:800])
-Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1001:1300])
-Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1501:1800])
+Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[1:300])
+Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1:300])
+Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
 
@@ -60,6 +60,12 @@ Study <- AddTimeInterval(Study, "Second interval")
 
 Study <- AnalyzeBRSIndices(Study, 1, 1, c(0, 2.5))
 Study <- AnalyzeBRSIndices(Study, 1, 2, c(2.6, 3))
+Study <- AnalyzeBRSIndices(Study, 2, 1, c(0, 2.5))
+Study <- AnalyzeBRSIndices(Study, 2, 2, c(2.6, 3))
+Study <- AnalyzeBRSIndices(Study, 3, 1, c(0, 2.5))
+Study <- AnalyzeBRSIndices(Study, 3, 2, c(2.6, 3))
+Study <- AnalyzeBRSIndices(Study, 4, 1, c(0, 2.5))
+Study <- AnalyzeBRSIndices(Study, 4, 2, c(2.6, 3))
 
 Study <- TestGroups(Study, 1, 2, "Example test")
 }

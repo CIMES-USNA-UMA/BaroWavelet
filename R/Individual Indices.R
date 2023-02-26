@@ -176,22 +176,54 @@ ExpectedPhaseCWT <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL,
   return(output)
 }
 
-
-TimeDomainValues <- function(data, time_flags = NULL){
+#' Calculate time domain values
+#'
+#' Computes HR and BP time domain indices
+#' @param data matrix with 3 columns containing time values (first column), RR and SBP values (second
+#'             and third column), or a data frame containing these variables.
+#' @param time_flags A vector containing the minimum and maximum limits of a time interval, in minutes.
+#'                   Default is NULL.
+#' @param method Which method, either the mean or the median, should be used to obtain the indices
+#'
+#' @return A list with HR and BP levels
+#'
+#' @author Alvaro Chao-Ecija
+#'
+#'
+#' @export
+#'
+#' @examples
+#' Data <- InterpolateData(DataSimulation(), f = 1)
+#' 
+#' TimeDomainValues(Data, c(0, 100/60), "mean")
+TimeDomainValues <- function(data, time_flags = NULL, method = c("median", "mean")){
+                  if(!is.data.frame(data)) data <- as.data.frame(data)
+                  method <- match.arg(method)
                   if(is.null(time_flags)){
                      select_time <- 1:NROW(data[,1])
                   } else {
                      time_flags <- time_flags * 60
-                     select_time <- data[,1][(data[,1] >= time_flags[1]) &
-                        (data[,1] <= time_flags[2])]
-                     select_time <- match(select_time, data[,1])
+                     select_time <- data$Time[(data$Time >= time_flags[1]) &
+                        (data$Time <= time_flags[2])]
+                     select_time <- match(select_time, data$Time)
                   }
-                  HR <- SBP <- double(2)
-                  names(HR) <- names(SBP) <- c("Mean", "SD")
-                  HR[1] <- mean(60000/data[,2][select_time])
-                  HR[2] <- sd(60000/data[,2][select_time])
-                  SBP[1] <- mean(data[,3][select_time])
-                  SBP[2] <- sd(data[,3][select_time])
+                  if(method == "mean"){
+                    HR <- SBP <- double(2)
+                    names(HR) <- names(SBP) <- c("Mean", "SD")
+                    HR[1] <- mean(60000/data$RR[select_time])
+                    HR[2] <- sd(60000/data$RR[select_time])
+                    SBP[1] <- mean(data$SBP[select_time])
+                    SBP[2] <- sd(data$SBP[select_time])
+                  } else {
+                    HR <- SBP <- double(3)
+                    names(HR) <- names(SBP) <- c("Median", "P25", "P75")
+                    HR[1] <- median(60000/data$RR[select_time])
+                    HR[2] <- as.numeric(quantile(60000/data$RR[select_time], 0.25))
+                    HR[3] <- as.numeric(quantile(60000/data$RR[select_time], 0.75))
+                    SBP[1] <- median(data$SBP[select_time])
+                    SBP[2] <- as.numeric(quantile(data$SBP[select_time], 0.25))
+                    SBP[3] <- as.numeric(quantile(data$SBP[select_time], 0.75))
+                  }
                   return(list(HR = HR, SBP = SBP))
 }
 
