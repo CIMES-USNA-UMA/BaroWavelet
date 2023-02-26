@@ -16,7 +16,7 @@ PlotBRS(
   nfreqs = 7,
   tem = FALSE,
   newPlot = TRUE,
-  title,
+  title = "data",
   plotHF = TRUE,
   plotLF = TRUE
 )
@@ -46,7 +46,7 @@ Default is NULL.}
 
 \item{newPlot}{Boolean, generates a new plot without overwriting a previous plot. Default is TRUE}
 
-\item{title}{Title of the plot}
+\item{title}{Part of the title for the plot. Used to indicate the data source on the title. Default is "data"}
 
 \item{plotHF}{Boolean, plot results form the HF band. Default is TRUE}
 
@@ -67,9 +67,9 @@ Study <- AnalyzeBRS(Study, 1)
 Study <- GetAvgCwtData(Study, 1)
 
 
-PlotAnalyzedBRS(Study, 1, "dwt)
+PlotAnalyzedBRS(Study, 1, "dwt")
 
-PlotAnalyzedBRS(Study, 1, "cwt)
+PlotAnalyzedBRS(Study, 1, "cwt")
 }
 \author{
 Alvaro Chao-Ecija

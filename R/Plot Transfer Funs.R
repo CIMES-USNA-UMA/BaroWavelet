@@ -14,7 +14,7 @@
 #' @param nfreqs Number of frequencies to be used. Default is 7
 #' @param tem Boolean, creates a temporal file for the plot. Default is FALSE
 #' @param newPlot Boolean, generates a new plot without overwriting a previous plot. Default is TRUE
-#' @param title Title of the plot
+#' @param title Part of the title for the plot. Used to indicate the data source on the title. Default is "data"
 #' @param plotHF Boolean, plot results form the HF band. Default is TRUE
 #' @param plotLF Boolean, plot results from the LF band. Default is TRUE
 #'
@@ -34,9 +34,9 @@
 #' Study <- GetAvgCwtData(Study, 1)
 #' 
 #' 
-#' PlotAnalyzedBRS(Study, 1, "dwt)
+#' PlotAnalyzedBRS(Study, 1, "dwt")
 #' 
-#' PlotAnalyzedBRS(Study, 1, "cwt)
+#' PlotAnalyzedBRS(Study, 1, "cwt")
 PlotBRS <- function(fun, avg = FALSE, time_col = "brown", HFcolor = "yellow",
     LFcolor = "green", time_flags = NULL, thr = 0.5,
        use.thr = TRUE, nfreqs = 7, tem = FALSE, newPlot = TRUE, title = "data", plotHF = TRUE,
