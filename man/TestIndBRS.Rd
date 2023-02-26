@@ -26,7 +26,7 @@ Significant test to compare two time-domain segments from an individual BRS comp
 }
 \examples{
 Data <- InterpolateData(DataSimulation(), f = 1)
-AlphaIndex <- AlphaIndexDWT(Data, wv = "d8" error = 0.0005)
+AlphaIndex <- AlphaIndexDWT(Data, wv = "d8", error = 0.0005)
 
 TestIndBRS(AlphaIndex, c(0, 1.7), c(35, 38))
 TestIndBRS(AlphaIndex, c(0, 1.7), c(8, 9.5))

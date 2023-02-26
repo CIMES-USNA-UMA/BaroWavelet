@@ -22,8 +22,8 @@ Significant test to compare two time-domain segments in HR and BP recordings
 \examples{
 Data <- InterpolateData(DataSimulation(), f = 1)
 
-TestIndBRS(Data, c(0, 1.7), c(35, 38))
-TestIndBRS(Data, c(0, 1.7), c(8, 9.5))
+TestIndHRandBP(Data, c(0, 1.7), c(35, 38))
+TestIndHRandBP(Data, c(0, 1.7), c(8, 9.5))
 }
 \author{
 Alvaro Chao-Ecija

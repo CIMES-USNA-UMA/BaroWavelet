@@ -18,7 +18,7 @@
 #'
 #' @examples
 #' Data <- InterpolateData(DataSimulation(), f = 1)
-#' AlphaIndex <- AlphaIndexDWT(Data, wv = "d8" error = 0.0005)
+#' AlphaIndex <- AlphaIndexDWT(Data, wv = "d8", error = 0.0005)
 #' 
 #' TestIndBRS(AlphaIndex, c(0, 1.7), c(35, 38))
 #' TestIndBRS(AlphaIndex, c(0, 1.7), c(8, 9.5))
@@ -149,18 +149,20 @@ TestBRSCWT <- function(fun, time_flags1, time_flags2, thr = 0.5, use.thr = TRUE)
 #' @examples
 #' Data <- InterpolateData(DataSimulation(), f = 1)
 #' 
-#' TestIndBRS(Data, c(0, 1.7), c(35, 38))
-#' TestIndBRS(Data, c(0, 1.7), c(8, 9.5))
+#' TestIndHRandBP(Data, c(0, 1.7), c(35, 38))
+#' TestIndHRandBP(Data, c(0, 1.7), c(8, 9.5))
 TestIndHRandBP <- function(data, time_flags1, time_flags2){
-  data <- list(Time = data[,"Time"], HR = 60000/data[,"RR"], SBP = data[,"SBP"])
+  if (!is.data.frame(data)) data <- as.data.frame(data)
+  data$HR <- 60000/data$RR
+  #data <- list(Time = data[,"Time"], HR = 60000/data[,"RR"], SBP = data[,"SBP"])
   time_flags1 <- time_flags1 * 60
-  select_time1 <- fun$Time[(fun$Time >= as.integer(time_flags1[1])) &
-                             (fun$Time <= as.integer(time_flags1[2]))]
-  select_time1 <- match(select_time1, fun$Time)
+  select_time1 <- data$Time[(data$Time >= as.integer(time_flags1[1])) &
+                             (data$Time <= as.integer(time_flags1[2]))]
+  select_time1 <- match(select_time1, data$Time)
   time_flags2 <- time_flags2 * 60
-  select_time2 <- fun$Time[(fun$Time >= as.integer(time_flags2[1])) &
-                             (fun$Time <= as.integer(time_flags2[2]))]
-  select_time2 <- match(select_time2, fun$Time)
+  select_time2 <- data$Time[(data$Time >= as.integer(time_flags2[1])) &
+                             (data$Time <= as.integer(time_flags2[2]))]
+  select_time2 <- match(select_time2, data$Time)
   if((sum(select_time1 %in% select_time2)) != 0){
     if(((min(select_time1) - min(select_time2)) < 0) & 
        ((max(select_time1) - max(select_time2)) < 0)){
@@ -236,6 +238,8 @@ TestIndHRV <- function(fun, time_flags1, time_flags2){
       stop("Intervals are equal")
     }
   }
+  fun <- fun$HRV
+  if(is.null(fun)) stop("There is no HRV data to be tested!")
   HFtest <- ks.test(fun$HF[select_time1], fun$HF[select_time2])$p.value
   LFtest <- ks.test(fun$LF[select_time1], fun$LF[select_time2])$p.value
   LFHFtest <- ks.test(fun$LFHF[select_time1], fun$LFHF[select_time2])$p.value
