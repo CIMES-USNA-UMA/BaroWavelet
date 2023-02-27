@@ -52,9 +52,10 @@ IndividualIndicesDWT <- function(fun, time_flags = NULL, method = c("median", "m
     select_time <- 1:NROW(fun$Time)
   } else {
     time_flags <- time_flags * 60
-    select_time <- fun$Time[(fun$Time >= time_flags[1]) &
-                              (fun$Time <= time_flags[2])]
-    select_time <- match(select_time, fun$Time)
+    # The following step is done due to floating point precision issues
+    select_time <- match(min(abs(time_flags[1]-fun$Time)), 
+                          abs(time_flags[1]-fun$Time)):match(min(abs(time_flags[2]-fun$Time)), 
+                                                              abs(time_flags[2]-fun$Time))
   }
   results.HF <- method1(fun$HF[select_time], na.rm = TRUE)
   results.LF <- method1(fun$LF[select_time], na.rm = TRUE)
@@ -96,9 +97,10 @@ IndividualIndicesCWT <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NU
     select_time <- 1:NROW(fun$t)
   } else {
     time_flags <- time_flags * 60
-    select_time <- fun$t[(fun$t >= time_flags[1]) &
-                           (fun$t <= time_flags[2])]
-    select_time <- match(select_time, fun$t)
+    # The following step is done due to floating point precision issues
+    select_time <- match(min(abs(time_flags[1]-fun$Time)), 
+                         abs(time_flags[1]-fun$Time)):match(min(abs(time_flags[2]-fun$Time)), 
+                                                            abs(time_flags[2]-fun$Time))
   }
   freqs <- 1/fun$period
   sel_power <- fun$power
@@ -143,9 +145,10 @@ ExpectedPhaseCWT <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL,
     select_time <- 1:NROW(fun$t)
   } else {
     time_flags <- time_flags * 60
-    select_time <- fun$t[(fun$t >= time_flags[1]) &
-                           (fun$t <= time_flags[2])]
-    select_time <- match(select_time, fun$t)
+    # The following step is done due to floating point precision issues
+    select_time <- match(min(abs(time_flags[1]-fun$Time)), 
+                         abs(time_flags[1]-fun$Time)):match(min(abs(time_flags[2]-fun$Time)), 
+                                                            abs(time_flags[2]-fun$Time))
   }
   freqs <- 1/fun$period
   sel_phase <- fun$phase
@@ -203,9 +206,10 @@ TimeDomainValues <- function(data, time_flags = NULL, method = c("median", "mean
                      select_time <- 1:NROW(data[,1])
                   } else {
                      time_flags <- time_flags * 60
-                     select_time <- data$Time[(data$Time >= time_flags[1]) &
-                        (data$Time <= time_flags[2])]
-                     select_time <- match(select_time, data$Time)
+                     # The following step is done due to floating point precision issues
+                     select_time <- match(min(abs(time_flags[1]-fun$Time)), 
+                                          abs(time_flags[1]-fun$Time)):match(min(abs(time_flags[2]-fun$Time)), 
+                                                                             abs(time_flags[2]-fun$Time))
                   }
                   if(method == "mean"){
                     HR <- SBP <- double(2)
