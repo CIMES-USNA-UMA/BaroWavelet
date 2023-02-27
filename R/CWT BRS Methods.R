@@ -21,21 +21,21 @@
 #' \item{VLF}{The chosen maximum limit of the VLF band}
 #' \item{type}{A character string specifying which type of BRS has been computed}
 #'
-#' @details This function makes use of the Continuous Wavelet Transform methods 
+#' @details This function makes use of the Continuous Wavelet Transform methods
 #' provided by package \href{https://CRAN.R-project.org/package=biwavelet}{biwavelet} to
-#' compute the baroreflex sensitivity. It employs the functions \code{link[biwavelet]{wt}} 
+#' compute the baroreflex sensitivity. It employs the functions \code{link[biwavelet]{wt}}
 #' and \code{link[biwavelet]{smooth.wavelet}}. This last function is used in a smoothing routine
-#' based on the one that biwavelet function \code{link[biwavelet]{wtc}} uses to smooth 
+#' based on the one that biwavelet function \code{link[biwavelet]{wtc}} uses to smooth
 #' the wavelet transforms. Further information regarding this method of computation
 #' can be accessed through the references section.
-#' 
+#'
 #'
 #'
 #' @author Alvaro Chao-Ecija
 #'
-#' @references 
-#' Keissar K, Maestri R, Pinna GD, La Rovere MT, Gilad O. Non-invasive 
-#' baroreflex sensitivity assessment using wavelet transfer function-based 
+#' @references
+#' Keissar K, Maestri R, Pinna GD, La Rovere MT, Gilad O. Non-invasive
+#' baroreflex sensitivity assessment using wavelet transfer function-based
 #' time-frequency analysis. Physiol Meas. 2010 ;31(7):1021-36.
 #'
 #' @import biwavelet
@@ -44,43 +44,76 @@
 #' @examples
 #' Data <- InterpolateData(DataSimulation(), f = 1)
 #' TransferFun <- TransferFunCWT(Data)
-TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
-                           chosen.dj = 1/20, demean = TRUE, smooth = TRUE, alpha = FALSE){
-  if(!is.data.frame(data)) data <- as.data.frame(data)
-  if(demean){
-    for(n in 2:ncol(data)){
-      data[,n] <- data[,n] - mean(data[,n])
+TransferFunCWT <- function(data,
+                           HF = 0.4,
+                           LF = 0.15,
+                           VLF = 0.04,
+                           chosen.dj = 1 / 20,
+                           demean = TRUE,
+                           smooth = TRUE,
+                           alpha = FALSE) {
+  if (!is.data.frame(data))
+    data <- as.data.frame(data)
+  if (demean) {
+    for (n in 2:ncol(data)) {
+      data[, n] <- data[, n] - mean(data[, n])
     }
   }
-  time <- data[,1]
-  WTransform.x <- biwavelet::wt(cbind(time, data[,3]), dj = chosen.dj,
-                                s0 = 1/(HF + 0.1), max.scale = 1/(VLF - 0.01))
-  WTransform.y <- biwavelet::wt(cbind(time, data[,2]), dj = chosen.dj,
-                                s0 = 1/(HF + 0.1), max.scale = 1/(VLF - 0.01))
-  Smoothed <- SmoothTransforms(WTransform.x, WTransform.y, chosen.dj)
+  time <- data[, 1]
+  WTransform.x <-
+    biwavelet::wt(
+      cbind(time, data[, 3]),
+      dj = chosen.dj,
+      s0 = 1 / (HF + 0.1),
+      max.scale = 1 / (VLF - 0.01)
+    )
+  WTransform.y <-
+    biwavelet::wt(
+      cbind(time, data[, 2]),
+      dj = chosen.dj,
+      s0 = 1 / (HF + 0.1),
+      max.scale = 1 / (VLF - 0.01)
+    )
+  Smoothed <-
+    SmoothTransforms(WTransform.x, WTransform.y, chosen.dj)
   sm.WTransform.x <- Smoothed$sm.WTransform.x
   sm.WTransform.y <- Smoothed$sm.WTransform.y
   XWTransform <- Smoothed$XWTransform
   sm.XWTransform <- Smoothed$sm.XWTransform
-  Cospectrum <- Re(sm.XWTransform/ sqrt(sm.WTransform.x * sm.WTransform.y))
-  Quadrature <- Im(sm.XWTransform/ sqrt(sm.WTransform.x * sm.WTransform.y))
-  Coherence <- abs(sm.XWTransform)^2 / (sm.WTransform.x * sm.WTransform.y)
+  Cospectrum <-
+    Re(sm.XWTransform / sqrt(sm.WTransform.x * sm.WTransform.y))
+  Quadrature <-
+    Im(sm.XWTransform / sqrt(sm.WTransform.x * sm.WTransform.y))
+  Coherence <-
+    abs(sm.XWTransform) ^ 2 / (sm.WTransform.x * sm.WTransform.y)
   Phase <- atan2(Quadrature, Cospectrum)
-  if(!smooth){
-    sm.WTransform.x <- abs(WTransform.x$wave)^2
-    sm.WTransform.y <- abs(WTransform.y$wave)^2
+  if (!smooth) {
+    sm.WTransform.x <- abs(WTransform.x$wave) ^ 2
+    sm.WTransform.y <- abs(WTransform.y$wave) ^ 2
     sm.XWTransform <- XWTransform
   }
-  if(!alpha){
+  if (!alpha) {
     TransferFun <- sm.XWTransform / sm.WTransform.x
   } else {
     TransferFun <- sqrt(sm.WTransform.y / sm.WTransform.x)
   }
-  return(list(TransferFun = TransferFun, Coherence = Coherence,
-              Freqs = 1/WTransform.x$period, Cone = WTransform.x$coi, Time = data[,1],
-              HF = HF, LF = LF, VLF = VLF, type = "brs_cwt",
-              Cospectrum = Cospectrum, Quadrature = Quadrature, Phase = Phase,
-              Scales = WTransform.x$scale))
+  return(
+    list(
+      TransferFun = TransferFun,
+      Coherence = Coherence,
+      Freqs = 1 / WTransform.x$period,
+      Cone = WTransform.x$coi,
+      Time = data[, 1],
+      HF = HF,
+      LF = LF,
+      VLF = VLF,
+      type = "brs_cwt",
+      Cospectrum = Cospectrum,
+      Quadrature = Quadrature,
+      Phase = Phase,
+      Scales = WTransform.x$scale
+    )
+  )
 }
 
 
@@ -92,23 +125,29 @@ TransferFunCWT <- function(data, HF = 0.4, LF = 0.15, VLF = 0.04,
 
 
 
-# Private function to smooth the wavelet transforms for the computation of the BRS. 
-# This function is based on the routine that the biwavelet function wtc uses to 
-# calculate the wavelet coherence, using the biwavelet function smooth.wavelet. 
-# This function adapts this routine for the computation of the BRS (for more 
+# Private function to smooth the wavelet transforms for the computation of the BRS.
+# This function is based on the routine that the biwavelet function wtc uses to
+# calculate the wavelet coherence, using the biwavelet function smooth.wavelet.
+# This function adapts this routine for the computation of the BRS (for more
 # information, please check the references section at the top of this document)
-SmoothTransforms <- function(x, y, chosen.dj = 1/20){
+SmoothTransforms <- function(x, y, chosen.dj = 1 / 20) {
   N <- nrow(x$wave)
   M <- ncol(x$wave)
-  inverse_scales <- matrix(rep(1/t(x$scale), M), ncol = M, 
+  inverse_scales <- matrix(rep(1 / t(x$scale), M), ncol = M,
                            nrow = N)
   XWTransform <- (Conj(x$wave) * y$wave)
-  sm.WTransform.x <- biwavelet::smooth.wavelet(inverse_scales * 
-                                                 (abs(x$wave)^2), x$dt, chosen.dj, x$scale)
-  sm.WTransform.y <- biwavelet::smooth.wavelet(inverse_scales * 
-                                                 (abs(y$wave)^2), x$dt, chosen.dj, x$scale)
-  sm.XWTransform <- biwavelet::smooth.wavelet(inverse_scales * 
+  sm.WTransform.x <- biwavelet::smooth.wavelet(inverse_scales *
+                                                 (abs(x$wave) ^ 2), x$dt, chosen.dj, x$scale)
+  sm.WTransform.y <- biwavelet::smooth.wavelet(inverse_scales *
+                                                 (abs(y$wave) ^ 2), x$dt, chosen.dj, x$scale)
+  sm.XWTransform <- biwavelet::smooth.wavelet(inverse_scales *
                                                 XWTransform, x$dt, chosen.dj, x$scale)
-  return(list(sm.WTransform.x = sm.WTransform.x, sm.WTransform.y = sm.WTransform.y,
-              sm.XWTransform = sm.XWTransform, XWTransform = XWTransform ))
+  return(
+    list(
+      sm.WTransform.x = sm.WTransform.x,
+      sm.WTransform.y = sm.WTransform.y,
+      sm.XWTransform = sm.XWTransform,
+      XWTransform = XWTransform
+    )
+  )
 }

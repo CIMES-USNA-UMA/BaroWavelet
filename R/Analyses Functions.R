@@ -2,6 +2,7 @@
 
 
 
+
 #' Build analysis structure
 #'
 #' Generates a structure in which analyses can be performed and results can be stored
@@ -27,52 +28,71 @@
 #'
 #' @examples
 #' Study <- BuildStructure()
-#' 
-BuildStructure <- function(name = NULL, HF = 0.4, LF = 0.15, VLF = 0.04, wv = "d8",
-   coh = 0.5, dj = 1/20, cwt.type = c("tf", "alpha"), use.coherence = TRUE, error = 0.0005, 
-   error.type = c("absolute", "relative"), index.method = "median"){
-              Framework <- list()
-              if(is.null(name)) name <- "BRS Study"
-              Framework$Name <- name
-              Framework$Date <- date()
-              Framework$"General Data" <- list()
-              Framework$"General Data"$HF <- HF
-              Framework$"General Data"$LF <- LF
-              Framework$"General Data"$VLF <- VLF
-              Framework$"General Data"$Wavelet <- wv
-              Framework$"General Data"$Error <- error
-              Framework$"General Data"$"Error Type" <- match.arg(error.type)
-              Framework$"General Data"$"CWT Type" <- match.arg(cwt.type)
-              Framework$"General Data"$Coherence <- coh
-              Framework$"General Data"$dj <- dj
-              Framework$"General Data"$Threshold <- use.coherence
-              Framework$"General Data"$"Index Method" <- index.method
-              Framework$n <- 0
-              Framework$Analyses <- list()
-              Framework$Controls <- list()
-              Framework$BRS <- list()
-              Framework$IndividualIndices <- list()
-              Framework$Tests <- list()
-              Framework$TestsHRV <- list()
-              Framework$Clinical <- list()
-              class(Framework) <- "WaveletBRS"
-              return(Framework)
-}
+#'
+BuildStructure <-
+  function(name = NULL,
+           HF = 0.4,
+           LF = 0.15,
+           VLF = 0.04,
+           wv = "d8",
+           coh = 0.5,
+           dj = 1 / 20,
+           cwt.type = c("tf", "alpha"),
+           use.coherence = TRUE,
+           error = 0.0005,
+           error.type = c("absolute", "relative"),
+           index.method = "median") {
+    Framework <- list()
+    if (is.null(name))
+      name <- "BRS Study"
+    Framework$Name <- name
+    Framework$Date <- date()
+    Framework$"General Data" <- list()
+    Framework$"General Data"$HF <- HF
+    Framework$"General Data"$LF <- LF
+    Framework$"General Data"$VLF <- VLF
+    Framework$"General Data"$Wavelet <- wv
+    Framework$"General Data"$Error <- error
+    Framework$"General Data"$"Error Type" <-
+      match.arg(error.type)
+    Framework$"General Data"$"CWT Type" <-
+      match.arg(cwt.type)
+    Framework$"General Data"$Coherence <- coh
+    Framework$"General Data"$dj <- dj
+    Framework$"General Data"$Threshold <- use.coherence
+    Framework$"General Data"$"Index Method" <-
+      index.method
+    Framework$n <- 0
+    Framework$Analyses <- list()
+    Framework$Controls <- list()
+    Framework$BRS <- list()
+    Framework$IndividualIndices <- list()
+    Framework$Tests <- list()
+    Framework$TestsHRV <- list()
+    Framework$Clinical <- list()
+    class(Framework) <- "WaveletBRS"
+    return(Framework)
+  }
 
 
 
-SetAsControl <- function(framework, locator, remove  = TRUE, name = NULL){
-              N <- length(framework$Controls)
-              length(framework$Controls) <- N + 1
-              analysis <- framework$Analyses[[locator]]
-              framework$Controls[[N + 1]] <- analysis
-              if(!is.null(name)) framework$Controls[[N + 1]]$Name <- name
-              if(remove){
-                 framework$Analyses[[locator]] <- NULL
-                 framework$n <- framework$n - 1
-              }
-              return(framework)
-}
+SetAsControl <-
+  function(framework,
+           locator,
+           remove  = TRUE,
+           name = NULL) {
+    N <- length(framework$Controls)
+    length(framework$Controls) <- N + 1
+    analysis <- framework$Analyses[[locator]]
+    framework$Controls[[N + 1]] <- analysis
+    if (!is.null(name))
+      framework$Controls[[N + 1]]$Name <- name
+    if (remove) {
+      framework$Analyses[[locator]] <- NULL
+      framework$n <- framework$n - 1
+    }
+    return(framework)
+  }
 
 
 #' Add analysis
@@ -89,13 +109,14 @@ SetAsControl <- function(framework, locator, remove  = TRUE, name = NULL){
 #' @examples
 #' Study <- BuildStructure()
 #' Study <- AddAnalysis(Study, name = "Subject A")
-AddAnalysis <- function(framework, name = NULL){
+AddAnalysis <- function(framework, name = NULL) {
   N <- length(framework$Analyses)
   length(framework$Analyses) <- N + 1
   output <- list()
   output$Date <- date()
   output$locator <- N + 1
-  if(is.null(name)) name <- paste("Analysis", N + 1)
+  if (is.null(name))
+    name <- paste("Analysis", N + 1)
   output$Name <- name
   output$BRS <- output$HRV <- output$Data <- list()
   output$BRS$CWT <- output$BRS$DWT <- list()
@@ -122,28 +143,30 @@ AddAnalysis <- function(framework, name = NULL){
 #' ShowLocatorIndices(Study, "controls")
 #' ShowLocatorIndices(Study, "intervals")
 #' ShowLocatorIndices(Study, "tests")
-ShowLocatorIndices <- function(framework, type = c("analyses", "controls", "intervals", "tests")){
-              type <- match.arg(type)
-              if(type == "analyses"){
-                 data <- framework$Analyses
-              } else if(type == "controls"){
-                 data <- framework$Controls
-              } else if(type == "intervals"){
-                 data <- framework$IndividualIndices
-              } else if(type == "tests"){
-                  data <- framework$Tests
-              }
-              N <- length(data)
-              output <- matrix(0, ncol = N, nrow = 2)
-              for(n in 1:N){
-                  output[2,n] <- data[[n]]$Name
-              }
-              output[1,] <- 1:N
-              output <- data.frame(output)
-              rownames(output) <- c("locator", "Name")
-              colnames(output) <- rep("", N)
-              return(output)
-}
+ShowLocatorIndices <-
+  function(framework,
+           type = c("analyses", "controls", "intervals", "tests")) {
+    type <- match.arg(type)
+    if (type == "analyses") {
+      data <- framework$Analyses
+    } else if (type == "controls") {
+      data <- framework$Controls
+    } else if (type == "intervals") {
+      data <- framework$IndividualIndices
+    } else if (type == "tests") {
+      data <- framework$Tests
+    }
+    N <- length(data)
+    output <- matrix(0, ncol = N, nrow = 2)
+    for (n in 1:N) {
+      output[2, n] <- data[[n]]$Name
+    }
+    output[1, ] <- 1:N
+    output <- data.frame(output)
+    rownames(output) <- c("locator", "Name")
+    colnames(output) <- rep("", N)
+    return(output)
+  }
 
 
 
@@ -167,10 +190,10 @@ ShowLocatorIndices <- function(framework, type = c("analyses", "controls", "inte
 #' Study <- BuildStructure()
 #' Study <- AddAnalysis(Study, name = "Simulation")
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
-AddDataToAnalysis <- function(framework, locator, RR, SBP, time){
-           framework$Analyses[[locator]]$Data <- cbind(Time = time,
-             RR = RR, SBP = SBP)
-           return(framework)
+AddDataToAnalysis <- function(framework, locator, RR, SBP, time) {
+  framework$Analyses[[locator]]$Data <- cbind(Time = time,
+                                              RR = RR, SBP = SBP)
+  return(framework)
 }
 
 #' Analyze baroreflex sensitivity
@@ -192,27 +215,57 @@ AddDataToAnalysis <- function(framework, locator, RR, SBP, time){
 #' Study <- AddAnalysis(Study, name = "Simulation")
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
-AnalyzeBRS <- function(framework, locator, method = c("both", "dwt", "cwt")){
-           method <- match.arg(method)
-           Data <- ExtractDataFromAnalysis(framework, locator)
-           if(method == "dwt"){
-             a_dwt <- AlphaIndexDWT(Data$Data, Data$HF, Data$LF, Data$VLF,
-                                    wv = Data$Wavelet, hrv = TRUE, error = Data$Error, error.type = Data$"Error Type")
-              framework <- AddBRStoAnalysis(framework, tf, locator)
-           } else if(method == "cwt"){
-              tf <- TransferFunCWT(Data$Data, Data$HF, Data$LF, Data$VLF,
-                Data$dj, alpha = (Data$"CWT Type" == "alpha"))
-              framework <- AddBRStoAnalysis(framework, tf, locator)
-           } else if(method == "both"){
-              a_dwt <- AlphaIndexDWT(Data$Data, Data$HF, Data$LF, Data$VLF,
-                wv = Data$Wavelet, hrv = TRUE, error = Data$Error, error.type = Data$"Error Type")
-              tf_cwt <- TransferFunCWT(Data$Data, Data$HF, Data$LF, Data$VLF,
-                                       Data$dj, alpha = (Data$"CWT Type" == "alpha"))
-              framework <- AddBRStoAnalysis(framework, a_dwt, locator)
-              framework <- AddBRStoAnalysis(framework, tf_cwt, locator)
-           }
-           return(framework)
-}
+AnalyzeBRS <-
+  function(framework,
+           locator,
+           method = c("both", "dwt", "cwt")) {
+    method <- match.arg(method)
+    Data <- ExtractDataFromAnalysis(framework, locator)
+    if (method == "dwt") {
+      a_dwt <- AlphaIndexDWT(
+        Data$Data,
+        Data$HF,
+        Data$LF,
+        Data$VLF,
+        wv = Data$Wavelet,
+        hrv = TRUE,
+        error = Data$Error,
+        error.type = Data$"Error Type"
+      )
+      framework <- AddBRStoAnalysis(framework, tf, locator)
+    } else if (method == "cwt") {
+      tf <- TransferFunCWT(Data$Data,
+                           Data$HF,
+                           Data$LF,
+                           Data$VLF,
+                           Data$dj,
+                           alpha = (Data$"CWT Type" == "alpha"))
+      framework <- AddBRStoAnalysis(framework, tf, locator)
+    } else if (method == "both") {
+      a_dwt <- AlphaIndexDWT(
+        Data$Data,
+        Data$HF,
+        Data$LF,
+        Data$VLF,
+        wv = Data$Wavelet,
+        hrv = TRUE,
+        error = Data$Error,
+        error.type = Data$"Error Type"
+      )
+      tf_cwt <-
+        TransferFunCWT(Data$Data,
+                       Data$HF,
+                       Data$LF,
+                       Data$VLF,
+                       Data$dj,
+                       alpha = (Data$"CWT Type" == "alpha"))
+      framework <-
+        AddBRStoAnalysis(framework, a_dwt, locator)
+      framework <-
+        AddBRStoAnalysis(framework, tf_cwt, locator)
+    }
+    return(framework)
+  }
 
 #' Add averaged transfer function calculated from the CWT
 #'
@@ -233,7 +286,7 @@ AnalyzeBRS <- function(framework, locator, method = c("both", "dwt", "cwt")){
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
-AddAvgCwtData <- function(framework, locator){
+AddAvgCwtData <- function(framework, locator) {
   tf <- AssembleCwtTransferFun(framework, locator)
   framework$Analyses[[locator]]$BRS$AvgCWT <- list()
   framework$Analyses[[locator]]$BRS$AvgCWT <- GetAvgCwtBands(tf)
@@ -279,53 +332,89 @@ AddAvgCwtData <- function(framework, locator){
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
-#' 
-#' 
+#'
+#'
 #' PlotAnalyzedBRS(Study, 1, "dwt")
-#' 
+#'
 #' PlotAnalyzedBRS(Study, 1, "cwt")
-PlotAnalyzedBRS <- function(framework, locator, method = c("dwt", "cwt", "cwt.avg", "cwt.phase"),
-  time_col = "brown", HFcolor = "yellow",
-    LFcolor = "green", time_flags = NULL,
-       use.coherence = TRUE, nfreqs = 7, tem = FALSE, newPlot = TRUE, plotHF = TRUE, plotLF = TRUE,
-  thr = NULL){
-           if(newPlot) x11(title = paste("Transfer Function from",
-              framework$Analyses[[locator]]$Name))
-           #if(dev.cur() > 1) dev.off()
-           method <- match.arg(method)
-           Data <- ExtractDataFromAnalysis(framework, locator)
-           if(is.null(thr)) thr <- Data$Coh
-            if(method == "dwt"){
-              tf <- framework$Analyses[[locator]]$BRS$DWT
-              tf$Time <- Data$Data[,1]
-              im <- PlotDwtBRS(tf, time_flags, col = time_col, tem = tem, plotHF = plotHF,
-                                       plotLF = plotLF)
-              return(im)
-           } else if(method == "cwt"){
-              tf <- AssembleCwtBRS(framework, locator)
-              im <- PlotCwtBRS(tf, thr, use.coherence,
-               time_flags = time_flags, tem = tem)
-           } else if(method == "cwt.avg"){
-             #tf <- framework$Analyses[[locator]]$BRS$AvgCWT
-             tf <- AssembleCwtBRS(framework, locator)
-             tf <- SplitByCoherence(tf, thr = thr)
-             tf$Time <- Data$Data[,1]
-             im <- PlotDwtBRS(tf, time_flags, col = time_col, tem = tem, plotHF = plotHF,
-                                      plotLF = plotLF)
-             return(im)
-           } else if(method == "cwt.phase"){
-             tf <- AssembleCwtBRS(framework, locator)
-             tf <- SplitByCoherence(tf, thr = thr)
-             tf$Time <- Data$Data[,1]
-             im <- PlotDwtBRS(tf, time_flags, col = time_col, tem = tem, plotHF = plotHF,
-                                      plotLF = plotLF)
-             return(im)
-           }
-
-           if(tem){
-              return(im)
-           }
-}
+PlotAnalyzedBRS <-
+  function(framework,
+           locator,
+           method = c("dwt", "cwt", "cwt.avg", "cwt.phase"),
+           time_col = "brown",
+           HFcolor = "yellow",
+           LFcolor = "green",
+           time_flags = NULL,
+           use.coherence = TRUE,
+           nfreqs = 7,
+           tem = FALSE,
+           newPlot = TRUE,
+           plotHF = TRUE,
+           plotLF = TRUE,
+           thr = NULL) {
+    if (newPlot)
+      x11(title = paste("Transfer Function from",
+                        framework$Analyses[[locator]]$Name))
+    #if(dev.cur() > 1) dev.off()
+    method <- match.arg(method)
+    Data <- ExtractDataFromAnalysis(framework, locator)
+    if (is.null(thr))
+      thr <- Data$Coh
+    if (method == "dwt") {
+      tf <- framework$Analyses[[locator]]$BRS$DWT
+      tf$Time <- Data$Data[, 1]
+      im <-
+        PlotDwtBRS(
+          tf,
+          time_flags,
+          col = time_col,
+          tem = tem,
+          plotHF = plotHF,
+          plotLF = plotLF
+        )
+      return(im)
+    } else if (method == "cwt") {
+      tf <- AssembleCwtBRS(framework, locator)
+      im <- PlotCwtBRS(tf,
+                       thr,
+                       use.coherence,
+                       time_flags = time_flags,
+                       tem = tem)
+    } else if (method == "cwt.avg") {
+      #tf <- framework$Analyses[[locator]]$BRS$AvgCWT
+      tf <- AssembleCwtBRS(framework, locator)
+      tf <- SplitByCoherence(tf, thr = thr)
+      tf$Time <- Data$Data[, 1]
+      im <-
+        PlotDwtBRS(
+          tf,
+          time_flags,
+          col = time_col,
+          tem = tem,
+          plotHF = plotHF,
+          plotLF = plotLF
+        )
+      return(im)
+    } else if (method == "cwt.phase") {
+      tf <- AssembleCwtBRS(framework, locator)
+      tf <- SplitByCoherence(tf, thr = thr)
+      tf$Time <- Data$Data[, 1]
+      im <-
+        PlotDwtBRS(
+          tf,
+          time_flags,
+          col = time_col,
+          tem = tem,
+          plotHF = plotHF,
+          plotLF = plotLF
+        )
+      return(im)
+    }
+    
+    if (tem) {
+      return(im)
+    }
+  }
 
 #' Plot analyzed heart rate variability
 #'
@@ -356,23 +445,37 @@ PlotAnalyzedBRS <- function(framework, locator, method = c("dwt", "cwt", "cwt.av
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
-#' 
-#' 
+#'
+#'
 #' PlotAnalyzedHRV(Study, 1)
 
-PlotAnalyzedHRV <- function(framework, locator,
-                           time_col = "brown", HFcolor = "yellow",
-                           LFcolor = "green", time_flags = NULL,
-                          tem = FALSE, plotHF = TRUE, plotLF = TRUE, newPlot = TRUE){
-  if(newPlot) x11(title = paste("Transfer Function from",
-                                framework$Analyses[[locator]]$Name))
+PlotAnalyzedHRV <- function(framework,
+                            locator,
+                            time_col = "brown",
+                            HFcolor = "yellow",
+                            LFcolor = "green",
+                            time_flags = NULL,
+                            tem = FALSE,
+                            plotHF = TRUE,
+                            plotLF = TRUE,
+                            newPlot = TRUE) {
+  if (newPlot)
+    x11(title = paste("Transfer Function from",
+                      framework$Analyses[[locator]]$Name))
   #if(dev.cur() > 1) dev.off()
   Data <- ExtractDataFromAnalysis(framework, locator)
   hrv <- framework$Analyses[[locator]]$HRV
-  hrv$Time <- Data$Data[,1]
-  im <- PlotHRV(hrv, time_flags, col = time_col, tem = tem, plotHF = plotHF,
-                             plotLF = plotLF)
-    return(im)
+  hrv$Time <- Data$Data[, 1]
+  im <-
+    PlotHRV(
+      hrv,
+      time_flags,
+      col = time_col,
+      tem = tem,
+      plotHF = plotHF,
+      plotLF = plotLF
+    )
+  return(im)
 }
 
 
@@ -400,35 +503,41 @@ PlotAnalyzedHRV <- function(framework, locator,
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
-#' 
+#'
 #' Study <- AddTimeInterval(Study, "First interval")
 #' Study <- AddTimeInterval(Study, "Second interval")
 #' Study <- AddTimeInterval(Study, "Third interval")
-AddTimeInterval <- function(framework, name = NULL,
-   use.default = TRUE, use.coherence = TRUE){
-                            output <- list()
-                            N <- length(framework$IndividualIndices)
-                            length(framework$IndividualIndices) <- N + 1
-                            output$locator <- N + 1
-                            if(is.null(name)) name <- paste("Interval", N + 1)
-                            output$Name <- name
-                            if(use.default){
-                               output$Threshold <- framework$"General Data"$Threshold
-                            } else {
-                               output$Threshold <- use.coherence
-                            }
-                            output$Time_DWT <- list()
-                            output$Time_CWT <- list()
-                            output$HR <- list()
-                            output$SBP <- list()
-                            output$DWT <- list()
-                            output$CWT <- list()
-                            framework$IndividualIndices[[output$locator]] <- output
-                            if(length(framework$IndividualIndices) > 0){
-                              framework <- PrepareIntervalSlots(framework, "dwt")
-                              framework <- PrepareIntervalSlots(framework, "cwt")
-                            }
-                            return(framework)
+AddTimeInterval <- function(framework,
+                            name = NULL,
+                            use.default = TRUE,
+                            use.coherence = TRUE) {
+  output <- list()
+  N <- length(framework$IndividualIndices)
+  length(framework$IndividualIndices) <-
+    N + 1
+  output$locator <- N + 1
+  if (is.null(name))
+    name <- paste("Interval", N + 1)
+  output$Name <- name
+  if (use.default) {
+    output$Threshold <- framework$"General Data"$Threshold
+  } else {
+    output$Threshold <- use.coherence
+  }
+  output$Time_DWT <- list()
+  output$Time_CWT <- list()
+  output$HR <- list()
+  output$SBP <- list()
+  output$DWT <- list()
+  output$CWT <- list()
+  framework$IndividualIndices[[output$locator]] <-
+    output
+  if (length(framework$IndividualIndices) > 0) {
+    framework <- PrepareIntervalSlots(framework, "dwt")
+    framework <-
+      PrepareIntervalSlots(framework, "cwt")
+  }
+  return(framework)
 }
 
 
@@ -459,31 +568,53 @@ AddTimeInterval <- function(framework, name = NULL,
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
-#' 
+#'
 #' Study <- AddTimeInterval(Study, "First interval")
 #' Study <- AddTimeInterval(Study, "Second interval")
 #' Study <- AddTimeInterval(Study, "Third interval")
-#' 
+#'
 #' Study <- AnalyzeBRSIndices(Study, 1, 1, c(1.7, 3.3))
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(10, 11.7))
 #' Study <- AnalyzeBRSIndices(Study, 1, 3, c(35, 37))
-AnalyzeBRSIndices <- function(framework, locator_a, locator_t, time_flags,
-   method = c("both", "dwt", "cwt"), use.name = TRUE){
-                   method <- match.arg(method)
-                   if(method == "both"){
-                      framework <- AddIndividualIndices(framework, locator_a, locator_t, time_flags,
-                         method = "dwt", use.name)
-                      framework <- AddIndividualIndices(framework, locator_a, locator_t, time_flags,
-                         method = "cwt", use.name)
-                   } else {
-                      framework <- AddIndividualIndices(framework, locator_a, locator_t, time_flags,
-                         method = method, use.name)
-                   }
-                   framework <- AddTimeValues(framework, locator_a, locator_t, time_flags,
-                       use.name)
-                   if(method != "cwt") framework <- AddExpectedHRV(framework, locator_a, locator_t)
-                   return(framework)
-}
+AnalyzeBRSIndices <-
+  function(framework,
+           locator_a,
+           locator_t,
+           time_flags,
+           method = c("both", "dwt", "cwt"),
+           use.name = TRUE) {
+    method <- match.arg(method)
+    if (method == "both") {
+      framework <-
+        AddIndividualIndices(framework,
+                             locator_a,
+                             locator_t,
+                             time_flags,
+                             method = "dwt",
+                             use.name)
+      framework <-
+        AddIndividualIndices(framework,
+                             locator_a,
+                             locator_t,
+                             time_flags,
+                             method = "cwt",
+                             use.name)
+    } else {
+      framework <-
+        AddIndividualIndices(framework,
+                             locator_a,
+                             locator_t,
+                             time_flags,
+                             method = method,
+                             use.name)
+    }
+    framework <-
+      AddTimeValues(framework, locator_a, locator_t, time_flags,
+                    use.name)
+    if (method != "cwt")
+      framework <- AddExpectedHRV(framework, locator_a, locator_t)
+    return(framework)
+  }
 
 
 #' Plot indices from individual analyses
@@ -515,69 +646,93 @@ AnalyzeBRSIndices <- function(framework, locator_a, locator_t, time_flags,
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
-#' 
+#'
 #' Study <- AddTimeInterval(Study, "First interval")
 #' Study <- AddTimeInterval(Study, "Second interval")
 #' Study <- AddTimeInterval(Study, "Third interval")
-#' 
+#'
 #' Study <- AnalyzeBRSIndices(Study, 1, 1, c(1.7, 3.3))
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(10, 11.7))
 #' Study <- AnalyzeBRSIndices(Study, 1, 3, c(35, 37))
-#' 
+#'
 #' PlotIndicesFromAnalysis(Study, 1)
 #' @export
-PlotIndicesFromAnalysis <- function(framework, locator, method = c("dwt", "cwt"),
-            use.names = TRUE, HFcol = "black", LFcol = "grey", restrict = NULL,
-               output = FALSE, ymax = NULL, tem = FALSE, newPlot  = TRUE){
-                   if(newPlot) x11(title = paste("Estimates from",
-                      framework$Analyses[[locator]]$Name))
-                   #if(dev.cur() > 1) dev.off()
-                   intervals <- framework$IndividualIndices
-                   N <- length(intervals)
-                   locators <- 1:N
-                   if(!is.null(restrict)){
-                      locators <- restrict
-                   }
-                   results <- matrix(0, nrow = 2, ncol = NROW(locators))
-                   rownames(results) <- c("HF", "LF")
-                   colnames(results) <- locators
-                   method <- match.arg(method)
-                   for(n in locators){
-                         pos <- match(n, locators)
-                      if(method == "dwt"){
-                         results[,pos] <- intervals[[n]]$DWT[,locator]
-                         title <- "Transfer Function Gains by DWT"
-                      } else if(method == "cwt"){
-                         results[,pos] <- intervals[[n]]$CWT[,locator]
-                         title <- "Transfer Function Gains by CWT"
-                      }
-                      if(use.names & !is.null(intervals[[n]]$Name)){
-                         colnames(results)[pos] <- intervals[[n]]$Name
-                      } else {
-                         colnames(results)[pos] <- intervals[[n]]$locator
-                      }
-                   }
-                   if(is.null(ymax)){
-                      ylim <- NULL
-                   } else {
-                      ylim <- c(0, ymax)
-                   }
-                   if(tem){
-                     im <- tempfile(fileext = ".png")
-                     png(filename = im, width = 6, height = 6, units = "in", res = 400)
-                   }
-                   barplot(results, beside = TRUE, col = c(HFcol, LFcol),
-                     ylab = "Gain (ms/mmHg)", main = title, ylim = ylim)
-                   if(output & !tem){
-                     return(results)
-                   } else if(output & tem){
-                     dev.off()
-                     return(list(results = results, temp = im))
-                   } else if(tem){
-                     dev.off()
-                     return(im)
-                   }
-}
+PlotIndicesFromAnalysis <-
+  function(framework,
+           locator,
+           method = c("dwt", "cwt"),
+           use.names = TRUE,
+           HFcol = "black",
+           LFcol = "grey",
+           restrict = NULL,
+           output = FALSE,
+           ymax = NULL,
+           tem = FALSE,
+           newPlot  = TRUE) {
+    if (newPlot)
+      x11(title = paste("Estimates from",
+                        framework$Analyses[[locator]]$Name))
+    #if(dev.cur() > 1) dev.off()
+    intervals <- framework$IndividualIndices
+    N <- length(intervals)
+    locators <- 1:N
+    if (!is.null(restrict)) {
+      locators <- restrict
+    }
+    results <-
+      matrix(0, nrow = 2, ncol = NROW(locators))
+    rownames(results) <- c("HF", "LF")
+    colnames(results) <- locators
+    method <- match.arg(method)
+    for (n in locators) {
+      pos <- match(n, locators)
+      if (method == "dwt") {
+        results[, pos] <- intervals[[n]]$DWT[, locator]
+        title <- "Transfer Function Gains by DWT"
+      } else if (method == "cwt") {
+        results[, pos] <- intervals[[n]]$CWT[, locator]
+        title <- "Transfer Function Gains by CWT"
+      }
+      if (use.names &
+          !is.null(intervals[[n]]$Name)) {
+        colnames(results)[pos] <- intervals[[n]]$Name
+      } else {
+        colnames(results)[pos] <- intervals[[n]]$locator
+      }
+    }
+    if (is.null(ymax)) {
+      ylim <- NULL
+    } else {
+      ylim <- c(0, ymax)
+    }
+    if (tem) {
+      im <- tempfile(fileext = ".png")
+      png(
+        filename = im,
+        width = 6,
+        height = 6,
+        units = "in",
+        res = 400
+      )
+    }
+    barplot(
+      results,
+      beside = TRUE,
+      col = c(HFcol, LFcol),
+      ylab = "Gain (ms/mmHg)",
+      main = title,
+      ylim = ylim
+    )
+    if (output & !tem) {
+      return(results)
+    } else if (output & tem) {
+      dev.off()
+      return(list(results = results, temp = im))
+    } else if (tem) {
+      dev.off()
+      return(im)
+    }
+  }
 
 
 #' Plot heart rate and blood pressure levels
@@ -587,7 +742,7 @@ PlotIndicesFromAnalysis <- function(framework, locator, method = c("dwt", "cwt")
 #' @param locator A locator indicating which analysis slot needs to be used
 #' @param use.names Boolean, should the names of the subjects be used?
 #' @param HRcol Color to be used to represent the HR
-#' @param SBPcol Color to be used to represent the SBP 
+#' @param SBPcol Color to be used to represent the SBP
 #' @param restrict Vector used to restrict the plot to specific intervals. Default is NULL
 #' @param output Boolean. Should the indices for each interval be returned? Default is FALSE
 #' @param ymax Maximum level for the y axis. Default is NULL
@@ -608,66 +763,94 @@ PlotIndicesFromAnalysis <- function(framework, locator, method = c("dwt", "cwt")
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
-#' 
+#'
 #' Study <- AddTimeInterval(Study, "First interval")
 #' Study <- AddTimeInterval(Study, "Second interval")
 #' Study <- AddTimeInterval(Study, "Third interval")
-#' 
+#'
 #' Study <- AnalyzeBRSIndices(Study, 1, 1, c(1.7, 3.3))
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(10, 11.7))
 #' Study <- AnalyzeBRSIndices(Study, 1, 3, c(35, 37))
-#' 
+#'
 #' PlotTimeValues(Study, 1)
-PlotTimeValues <- function(framework, locator,
-            use.names = TRUE, HRcol = "grey20", SBPcol = "grey80", restrict = NULL,
-               output = FALSE, ymax = NULL, tem = FALSE, newPlot  = TRUE){
-                   if(newPlot) x11(title = paste("Time values from",
+PlotTimeValues <- function(framework,
+                           locator,
+                           use.names = TRUE,
+                           HRcol = "grey20",
+                           SBPcol = "grey80",
+                           restrict = NULL,
+                           output = FALSE,
+                           ymax = NULL,
+                           tem = FALSE,
+                           newPlot  = TRUE) {
+  if (newPlot)
+    x11(title = paste("Time values from",
                       framework$Analyses[[locator]]$Name))
-                   intervals <- framework$IndividualIndices
-                   N <- length(intervals)
-                   locators <- 1:N
-                   if(!is.null(restrict)){
-                      locators <- restrict
-                   }
-                   HR <- SBP <- double(NROW(locators))
-                   for(n in 1:NROW(locators)){
-                       HR[n] <- intervals[[locators[n]]]$HR[1,locator]
-                       SBP[n] <- intervals[[locators[n]]]$SBP[1,locator]
-                   }
-                   results <- cbind(HR = HR, SBP = SBP)
-                   rownames(results) <- double(NROW(locators))
-                   for(n in locators){
-                      pos <- match(n, locators)
-                      if(use.names & !is.null(intervals[[n]]$Name)){
-                         rownames(results)[pos] <- intervals[[n]]$Name
-                      } else {
-                         rownames(results)[pos] <- intervals[[n]]$locator
-                      }
-                   }
-                   if(is.null(ymax)){
-                      ylim <- NULL
-                   } else {
-                      ylim <- c(0, ymax)
-                   }
-                   if(tem){
-                     im <- tempfile(fileext = ".png")
-                     png(filename = im, width = 6, height = 3, units = "in", res = 400)
-                   }
-                   results <- t(results)
-                   par(mfrow = c(1,2))
-                   barplot(results[1,], beside = TRUE, col = HRcol,
-                      ylab = "HR (bpm)", main = "HR", ylim = ylim)
-                   barplot(results[2,], beside = TRUE, col = SBPcol,
-                      ylab = "SBP (mmHg)", main = "SBP", ylim = ylim)
-                   if(output & !tem){
-                     return(results)
-                   } else if(output & tem){
-                     dev.off()
-                     return(list(results = results, temp = im))
-                   } else if(tem){
-                     dev.off()
-                     return(im)
-                   }
+  intervals <- framework$IndividualIndices
+  N <- length(intervals)
+  locators <- 1:N
+  if (!is.null(restrict)) {
+    locators <- restrict
+  }
+  HR <- SBP <- double(NROW(locators))
+  for (n in 1:NROW(locators)) {
+    HR[n] <- intervals[[locators[n]]]$HR[1, locator]
+    SBP[n] <-
+      intervals[[locators[n]]]$SBP[1, locator]
+  }
+  results <- cbind(HR = HR, SBP = SBP)
+  rownames(results) <- double(NROW(locators))
+  for (n in locators) {
+    pos <- match(n, locators)
+    if (use.names &
+        !is.null(intervals[[n]]$Name)) {
+      rownames(results)[pos] <- intervals[[n]]$Name
+    } else {
+      rownames(results)[pos] <- intervals[[n]]$locator
+    }
+  }
+  if (is.null(ymax)) {
+    ylim <- NULL
+  } else {
+    ylim <- c(0, ymax)
+  }
+  if (tem) {
+    im <- tempfile(fileext = ".png")
+    png(
+      filename = im,
+      width = 6,
+      height = 3,
+      units = "in",
+      res = 400
+    )
+  }
+  results <- t(results)
+  par(mfrow = c(1, 2))
+  barplot(
+    results[1, ],
+    beside = TRUE,
+    col = HRcol,
+    ylab = "HR (bpm)",
+    main = "HR",
+    ylim = ylim
+  )
+  barplot(
+    results[2, ],
+    beside = TRUE,
+    col = SBPcol,
+    ylab = "SBP (mmHg)",
+    main = "SBP",
+    ylim = ylim
+  )
+  if (output & !tem) {
+    return(results)
+  } else if (output & tem) {
+    dev.off()
+    return(list(results = results, temp = im))
+  } else if (tem) {
+    dev.off()
+    return(im)
+  }
 }
 
 
@@ -684,8 +867,8 @@ PlotTimeValues <- function(framework, locator,
 #' @param type Specify which BRS estimates are to be compared
 #' @param use.names Boolean, should the names of the subjects be used?
 #' @param sig Value indicating the chosen alpha error for the comparison. Default is 0.05
-#' 
-#' 
+#'
+#'
 #' @return The original framework with the test results attached
 #'
 #' @author Alvaro Chao-Ecija
@@ -706,10 +889,10 @@ PlotTimeValues <- function(framework, locator,
 #' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 #' for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 #' for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
-#' 
+#'
 #' Study <- AddTimeInterval(Study, "First interval")
 #' Study <- AddTimeInterval(Study, "Second interval")
-#' 
+#'
 #' Study <- AnalyzeBRSIndices(Study, 1, 1, c(0, 2.5))
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(2.6, 3))
 #' Study <- AnalyzeBRSIndices(Study, 2, 1, c(0, 2.5))
@@ -718,110 +901,131 @@ PlotTimeValues <- function(framework, locator,
 #' Study <- AnalyzeBRSIndices(Study, 3, 2, c(2.6, 3))
 #' Study <- AnalyzeBRSIndices(Study, 4, 1, c(0, 2.5))
 #' Study <- AnalyzeBRSIndices(Study, 4, 2, c(2.6, 3))
-#' 
+#'
 #' Study <- TestGroups(Study, 1, 2, "Example test")
-TestGroups <- function(framework, locator1, locator2, name = NULL, method = NULL,
-   paired = NULL, type = c("dwt", "cwt"), use.names = TRUE, sig = 0.05){
-              N <- length(framework$Tests)
-              length(framework$Tests) <- N + 1
-              indices <- framework$IndividualIndices
-              Names <- double(2)
-              indices1 <- framework$IndividualIndices[[locator1]]
-              indices2 <- framework$IndividualIndices[[locator2]]
-              if(use.names & !is.null(indices1$Name)){
-                 Names[1] <- indices1$Name
-              } else {
-                 Names[1] <- indices1$locator
-              }
-              if(use.names & !is.null(indices2$Name)){
-                 Names[2] <- indices2$Name
-              } else {
-                 Names[2] <- indices2$locator
-              }
-              locators <- c(indices1$locator, indices2$locator)
-              type <- match.arg(type)
-              if(type == "dwt"){
-                 values1 <- indices1$DWT
-                 values2 <- indices2$DWT
-              } else if(type == "cwt"){
-                 values1 <- indices1$CWT
-                 values2 <- indices2$CWT
-              }
-              names1 <- colnames(values1)
-              names2 <- colnames(values2)
-              bool <- names1 == names2
-              if((FALSE %in% bool) & (TRUE %in% bool)){
-                 stop("Mixed data cannot be tested")
-              }
-              if(is.null(paired)){
-                 if(FALSE %in% bool){
-                    paired <- FALSE
-                 } else {
-                    paired <- TRUE
-                 }
-              }
-              gains_hf1 <- values1[1,]
-              gains_hf2 <- values2[1,]
-              gains_lf1 <- values1[2,]
-              gains_lf2 <- values2[2,]
-              se_hf1 <- sd(gains_hf1) / sqrt(NROW(gains_hf1))
-              se_hf2 <- sd(gains_hf2) / sqrt(NROW(gains_hf2))
-              se_lf1 <- sd(gains_lf1) / sqrt(NROW(gains_lf1))
-              se_lf2 <- sd(gains_lf2) / sqrt(NROW(gains_lf2))
-              HF <- data.frame(Group = c(rep(as.character(Names[1]), NROW(names1)),
-                 rep(as.character(Names[2]), NROW(names2))), Gain = c(gains_hf1,
-                     gains_hf2), Mean = c(rep(mean(gains_hf1), NROW(names1)), rep(mean(gains_hf2),NROW(names2))),
-                       SE = c(rep(se_hf1, NROW(names1)), rep(se_hf2,NROW(names2))))
-              LF <- data.frame(Group = c(rep(as.character(Names[1]), NROW(names1)),
-                 rep(as.character(Names[2]), NROW(names2))), Gain = c(gains_lf1,
-                     gains_lf2), Mean = c(rep(mean(gains_lf1), NROW(names1)), rep(mean(gains_lf2),NROW(names2))),
-                       SE = c(rep(se_lf1, NROW(names1)), rep(se_lf2,NROW(names2))))
-              if(is.null(method)){
-                 n_hf1 <- shapiro.test(gains_hf1)$p.value
-                 n_hf2 <- shapiro.test(gains_hf2)$p.value
-                 n_lf1 <- shapiro.test(gains_lf1)$p.value
-                 n_lf2 <- shapiro.test(gains_lf2)$p.value
-                 if((n_hf1 > sig) & (n_hf2 > sig)){
-                    m_hf <- "t.test"
-                 } else {
-                    m_hf <- "wilcox.test"
-                 }
-                 if((n_lf1 > sig) & (n_lf2 > sig)){
-                    m_lf <- "t.test"
-                 } else {
-                    m_lf <- "wilcox.test"
-                 }
-              } else {
-                 m_hf <- m_lf <- method
-              }
-              if(m_hf == "t.test"){
-                 hf_test <- t.test(gains_hf1, gains_hf2, paired = paired)$p.value
-              } else {
-                 hf_test <- wilcox.test(gains_hf1, gains_hf2, paired = paired)$p.value
-              }
-              if(m_lf == "t.test"){
-                 lf_test <- t.test(gains_lf1, gains_lf2, paired = paired)$p.value
-              } else {
-                 lf_test <- wilcox.test(gains_lf1, gains_lf2, paired = paired)$p.value
-              }
-              output <- list()
-              if(is.null(name)) name <- paste("Test", N + 1)
-              output$Name <- name
-              output$Test <- N + 1
-              output$Variables <- Names
-              output$Locators <- locators
-              output$Type <- type
-              output$Tables <- list()
-              output$Tables$HF <- HF
-              output$Tables$LF <- LF
-              output$Methods <- c(m_hf, m_lf)
-              output$Paired <- paired
-              output$Results <- list()
-              output$Results$HF <- hf_test
-              output$Results$LF <- lf_test
-              framework$Tests[[N + 1]] <- output
-              return(framework)
-}
+TestGroups <-
+  function(framework,
+           locator1,
+           locator2,
+           name = NULL,
+           method = NULL,
+           paired = NULL,
+           type = c("dwt", "cwt"),
+           use.names = TRUE,
+           sig = 0.05) {
+    N <- length(framework$Tests)
+    length(framework$Tests) <- N + 1
+    indices <- framework$IndividualIndices
+    Names <- double(2)
+    indices1 <- framework$IndividualIndices[[locator1]]
+    indices2 <- framework$IndividualIndices[[locator2]]
+    if (use.names & !is.null(indices1$Name)) {
+      Names[1] <- indices1$Name
+    } else {
+      Names[1] <- indices1$locator
+    }
+    if (use.names & !is.null(indices2$Name)) {
+      Names[2] <- indices2$Name
+    } else {
+      Names[2] <- indices2$locator
+    }
+    locators <- c(indices1$locator, indices2$locator)
+    type <- match.arg(type)
+    if (type == "dwt") {
+      values1 <- indices1$DWT
+      values2 <- indices2$DWT
+    } else if (type == "cwt") {
+      values1 <- indices1$CWT
+      values2 <- indices2$CWT
+    }
+    names1 <- colnames(values1)
+    names2 <- colnames(values2)
+    bool <- names1 == names2
+    if ((FALSE %in% bool) & (TRUE %in% bool)) {
+      stop("Mixed data cannot be tested")
+    }
+    if (is.null(paired)) {
+      if (FALSE %in% bool) {
+        paired <- FALSE
+      } else {
+        paired <- TRUE
+      }
+    }
+    gains_hf1 <- values1[1, ]
+    gains_hf2 <- values2[1, ]
+    gains_lf1 <- values1[2, ]
+    gains_lf2 <- values2[2, ]
+    se_hf1 <- sd(gains_hf1) / sqrt(NROW(gains_hf1))
+    se_hf2 <- sd(gains_hf2) / sqrt(NROW(gains_hf2))
+    se_lf1 <- sd(gains_lf1) / sqrt(NROW(gains_lf1))
+    se_lf2 <- sd(gains_lf2) / sqrt(NROW(gains_lf2))
+    HF <-
+      data.frame(
+        Group = c(rep(as.character(Names[1]), NROW(names1)),
+                  rep(as.character(Names[2]), NROW(names2))),
+        Gain = c(gains_hf1,
+                 gains_hf2),
+        Mean = c(rep(mean(gains_hf1), NROW(names1)), rep(mean(gains_hf2), NROW(names2))),
+        SE = c(rep(se_hf1, NROW(names1)), rep(se_hf2, NROW(names2)))
+      )
+    LF <-
+      data.frame(
+        Group = c(rep(as.character(Names[1]), NROW(names1)),
+                  rep(as.character(Names[2]), NROW(names2))),
+        Gain = c(gains_lf1,
+                 gains_lf2),
+        Mean = c(rep(mean(gains_lf1), NROW(names1)), rep(mean(gains_lf2), NROW(names2))),
+        SE = c(rep(se_lf1, NROW(names1)), rep(se_lf2, NROW(names2)))
+      )
+    if (is.null(method)) {
+      n_hf1 <- shapiro.test(gains_hf1)$p.value
+      n_hf2 <- shapiro.test(gains_hf2)$p.value
+      n_lf1 <- shapiro.test(gains_lf1)$p.value
+      n_lf2 <- shapiro.test(gains_lf2)$p.value
+      if ((n_hf1 > sig) & (n_hf2 > sig)) {
+        m_hf <- "t.test"
+      } else {
+        m_hf <- "wilcox.test"
+      }
+      if ((n_lf1 > sig) & (n_lf2 > sig)) {
+        m_lf <- "t.test"
+      } else {
+        m_lf <- "wilcox.test"
+      }
+    } else {
+      m_hf <- m_lf <- method
+    }
+    if (m_hf == "t.test") {
+      hf_test <- t.test(gains_hf1, gains_hf2, paired = paired)$p.value
+    } else {
+      hf_test <-
+        wilcox.test(gains_hf1, gains_hf2, paired = paired)$p.value
+    }
+    if (m_lf == "t.test") {
+      lf_test <- t.test(gains_lf1, gains_lf2, paired = paired)$p.value
+    } else {
+      lf_test <-
+        wilcox.test(gains_lf1, gains_lf2, paired = paired)$p.value
+    }
+    output <- list()
+    if (is.null(name))
+      name <- paste("Test", N + 1)
+    output$Name <- name
+    output$Test <- N + 1
+    output$Variables <- Names
+    output$Locators <- locators
+    output$Type <- type
+    output$Tables <- list()
+    output$Tables$HF <- HF
+    output$Tables$LF <- LF
+    output$Methods <- c(m_hf, m_lf)
+    output$Paired <- paired
+    output$Results <- list()
+    output$Results$HF <- hf_test
+    output$Results$LF <- lf_test
+    framework$Tests[[N + 1]] <- output
+    return(framework)
+  }
 
 
 
@@ -837,8 +1041,8 @@ TestGroups <- function(framework, locator1, locator2, name = NULL, method = NULL
 #' @param use.names Boolean, should the names of the subjects be used?
 #' @param sig Value indicating the chosen alpha error for the comparison. Default is 0.05
 #' @param normalize Boolean. Should the HRV be normalized before comparison? Default is FALSE
-#' 
-#' 
+#'
+#'
 #' @return The original framework with the test results attached
 #'
 #' @author Alvaro Chao-Ecija
@@ -859,10 +1063,10 @@ TestGroups <- function(framework, locator1, locator2, name = NULL, method = NULL
 #' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 #' for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 #' for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
-#' 
+#'
 #' Study <- AddTimeInterval(Study, "First interval")
 #' Study <- AddTimeInterval(Study, "Second interval")
-#' 
+#'
 #' Study <- AnalyzeBRSIndices(Study, 1, 1, c(0, 2.5))
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(2.6, 3))
 #' Study <- AnalyzeBRSIndices(Study, 2, 1, c(0, 2.5))
@@ -871,134 +1075,162 @@ TestGroups <- function(framework, locator1, locator2, name = NULL, method = NULL
 #' Study <- AnalyzeBRSIndices(Study, 3, 2, c(2.6, 3))
 #' Study <- AnalyzeBRSIndices(Study, 4, 1, c(0, 2.5))
 #' Study <- AnalyzeBRSIndices(Study, 4, 2, c(2.6, 3))
-#' 
+#'
 #' Study <- TestHRV(Study, 1, 2, "Example test")
-TestHRV <- function(framework, locator1, locator2, name = NULL, method = NULL,
-                       paired = NULL, use.names = TRUE, sig = 0.05, normalize = FALSE){
-  N <- length(framework$TestsHRV)
-  length(framework$TestsHRV) <- N + 1
-  indices <- framework$IndividualIndices
-  Names <- double(2)
-  indices1 <- framework$IndividualIndices[[locator1]]
-  indices2 <- framework$IndividualIndices[[locator2]]
-  if(use.names & !is.null(indices1$Name)){
-    Names[1] <- indices1$Name
-  } else {
-    Names[1] <- indices1$locator
-  }
-  if(use.names & !is.null(indices2$Name)){
-    Names[2] <- indices2$Name
-  } else {
-    Names[2] <- indices2$locator
-  }
-  locators <- c(indices1$locator, indices2$locator)
-  values1 <- indices1$HRV
-  values2 <- indices2$HRV
-  names1 <- colnames(values1)
-  names2 <- colnames(values2)
-  bool <- names1 == names2
-  if((FALSE %in% bool) & (TRUE %in% bool)){
-    stop("Mixed data cannot be tested")
-  }
-  if(is.null(paired)){
-    if(FALSE %in% bool){
-      paired <- FALSE
+TestHRV <-
+  function(framework,
+           locator1,
+           locator2,
+           name = NULL,
+           method = NULL,
+           paired = NULL,
+           use.names = TRUE,
+           sig = 0.05,
+           normalize = FALSE) {
+    N <- length(framework$TestsHRV)
+    length(framework$TestsHRV) <- N + 1
+    indices <- framework$IndividualIndices
+    Names <- double(2)
+    indices1 <- framework$IndividualIndices[[locator1]]
+    indices2 <- framework$IndividualIndices[[locator2]]
+    if (use.names & !is.null(indices1$Name)) {
+      Names[1] <- indices1$Name
     } else {
-      paired <- TRUE
+      Names[1] <- indices1$locator
     }
-  }
-  gains_hf1 <- values1[1,]
-  gains_hf2 <- values2[1,]
-  gains_lf1 <- values1[2,]
-  gains_lf2 <- values2[2,]
-  if(normalize){
-    gains1 <- gains_hf1 + gains_lf1
-    gains2 <- gains_hf2 + gains_lf2
-    gains_hf1 <- gains_hf1 * 100 / gains1
-    gains_lf1 <- gains_lf1 * 100 / gains1
-    gains_hf2 <- gains_hf2 * 100 / gains2
-    gains_lf2 <- gains_lf2 * 100 / gains2
-  }
-  gains_lfhf1 <- values1[3,]
-  gains_lfhf2 <- values2[3,]
-  se_hf1 <- sd(gains_hf1) / sqrt(NROW(gains_hf1))
-  se_hf2 <- sd(gains_hf2) / sqrt(NROW(gains_hf2))
-  se_lf1 <- sd(gains_lf1) / sqrt(NROW(gains_lf1))
-  se_lf2 <- sd(gains_lf2) / sqrt(NROW(gains_lf2))
-  se_lfhf1 <- sd(gains_lfhf1) / sqrt(NROW(gains_lfhf1))
-  se_lfhf2 <- sd(gains_lfhf2) / sqrt(NROW(gains_lfhf2))
-  HF <- data.frame(Group = c(rep(as.character(Names[1]), NROW(names1)),
-                             rep(as.character(Names[2]), NROW(names2))), Power = c(gains_hf1,
-                                                                                  gains_hf2), Mean = c(rep(mean(gains_hf1), NROW(names1)), rep(mean(gains_hf2),NROW(names2))),
-                   SE = c(rep(se_hf1, NROW(names1)), rep(se_hf2,NROW(names2))))
-  LF <- data.frame(Group = c(rep(as.character(Names[1]), NROW(names1)),
-                             rep(as.character(Names[2]), NROW(names2))), Power = c(gains_lf1,
-                                                                                  gains_lf2), Mean = c(rep(mean(gains_lf1), NROW(names1)), rep(mean(gains_lf2),NROW(names2))),
-                   SE = c(rep(se_lf1, NROW(names1)), rep(se_lf2,NROW(names2))))
-  LFHF <- data.frame(Group = c(rep(as.character(Names[1]), NROW(names1)),
-                               rep(as.character(Names[2]), NROW(names2))),Power = c(gains_lfhf1,
-                                                                                    gains_lfhf2), Mean = c(rep(mean(gains_lfhf1), NROW(names1)), rep(mean(gains_lfhf2),NROW(names2))),
-                     SE = c(rep(se_lfhf1, NROW(names1)), rep(se_lfhf2,NROW(names2))))
-  if(is.null(method)){
-    n_hf1 <- shapiro.test(gains_hf1)$p.value
-    n_hf2 <- shapiro.test(gains_hf2)$p.value
-    n_lf1 <- shapiro.test(gains_lf1)$p.value
-    n_lf2 <- shapiro.test(gains_lf2)$p.value
-    n_lfhf1 <- shapiro.test(gains_lfhf1)$p.value
-    n_lfhf2 <- shapiro.test(gains_lfhf2)$p.value
-    if((n_hf1 > sig) & (n_hf2 > sig)){
-      m_hf <- "t.test"
+    if (use.names & !is.null(indices2$Name)) {
+      Names[2] <- indices2$Name
     } else {
-      m_hf <- "wilcox.test"
+      Names[2] <- indices2$locator
     }
-    if((n_lf1 > sig) & (n_lf2 > sig)){
-      m_lf <- "t.test"
+    locators <- c(indices1$locator, indices2$locator)
+    values1 <- indices1$HRV
+    values2 <- indices2$HRV
+    names1 <- colnames(values1)
+    names2 <- colnames(values2)
+    bool <- names1 == names2
+    if ((FALSE %in% bool) & (TRUE %in% bool)) {
+      stop("Mixed data cannot be tested")
+    }
+    if (is.null(paired)) {
+      if (FALSE %in% bool) {
+        paired <- FALSE
+      } else {
+        paired <- TRUE
+      }
+    }
+    gains_hf1 <- values1[1, ]
+    gains_hf2 <- values2[1, ]
+    gains_lf1 <- values1[2, ]
+    gains_lf2 <- values2[2, ]
+    if (normalize) {
+      gains1 <- gains_hf1 + gains_lf1
+      gains2 <- gains_hf2 + gains_lf2
+      gains_hf1 <- gains_hf1 * 100 / gains1
+      gains_lf1 <- gains_lf1 * 100 / gains1
+      gains_hf2 <- gains_hf2 * 100 / gains2
+      gains_lf2 <- gains_lf2 * 100 / gains2
+    }
+    gains_lfhf1 <- values1[3, ]
+    gains_lfhf2 <- values2[3, ]
+    se_hf1 <- sd(gains_hf1) / sqrt(NROW(gains_hf1))
+    se_hf2 <- sd(gains_hf2) / sqrt(NROW(gains_hf2))
+    se_lf1 <- sd(gains_lf1) / sqrt(NROW(gains_lf1))
+    se_lf2 <- sd(gains_lf2) / sqrt(NROW(gains_lf2))
+    se_lfhf1 <- sd(gains_lfhf1) / sqrt(NROW(gains_lfhf1))
+    se_lfhf2 <- sd(gains_lfhf2) / sqrt(NROW(gains_lfhf2))
+    HF <-
+      data.frame(
+        Group = c(rep(as.character(Names[1]), NROW(names1)),
+                  rep(as.character(Names[2]), NROW(names2))),
+        Power = c(gains_hf1,
+                  gains_hf2),
+        Mean = c(rep(mean(gains_hf1), NROW(names1)), rep(mean(gains_hf2), NROW(names2))),
+        SE = c(rep(se_hf1, NROW(names1)), rep(se_hf2, NROW(names2)))
+      )
+    LF <-
+      data.frame(
+        Group = c(rep(as.character(Names[1]), NROW(names1)),
+                  rep(as.character(Names[2]), NROW(names2))),
+        Power = c(gains_lf1,
+                  gains_lf2),
+        Mean = c(rep(mean(gains_lf1), NROW(names1)), rep(mean(gains_lf2), NROW(names2))),
+        SE = c(rep(se_lf1, NROW(names1)), rep(se_lf2, NROW(names2)))
+      )
+    LFHF <-
+      data.frame(
+        Group = c(rep(as.character(Names[1]), NROW(names1)),
+                  rep(as.character(Names[2]), NROW(names2))),
+        Power = c(gains_lfhf1,
+                  gains_lfhf2),
+        Mean = c(rep(mean(gains_lfhf1), NROW(names1)), rep(mean(gains_lfhf2), NROW(names2))),
+        SE = c(rep(se_lfhf1, NROW(names1)), rep(se_lfhf2, NROW(names2)))
+      )
+    if (is.null(method)) {
+      n_hf1 <- shapiro.test(gains_hf1)$p.value
+      n_hf2 <- shapiro.test(gains_hf2)$p.value
+      n_lf1 <- shapiro.test(gains_lf1)$p.value
+      n_lf2 <- shapiro.test(gains_lf2)$p.value
+      n_lfhf1 <- shapiro.test(gains_lfhf1)$p.value
+      n_lfhf2 <- shapiro.test(gains_lfhf2)$p.value
+      if ((n_hf1 > sig) & (n_hf2 > sig)) {
+        m_hf <- "t.test"
+      } else {
+        m_hf <- "wilcox.test"
+      }
+      if ((n_lf1 > sig) & (n_lf2 > sig)) {
+        m_lf <- "t.test"
+      } else {
+        m_lf <- "wilcox.test"
+      }
+      if ((n_lfhf1 > sig) & (n_lfhf2 > sig)) {
+        m_lfhf <- "t.test"
+      } else {
+        m_lfhf <- "wilcox.test"
+      }
     } else {
-      m_lf <- "wilcox.test"
+      m_hf <- m_lf <- m_lfhf <- method
     }
-    if((n_lfhf1 > sig) & (n_lfhf2 > sig)){
-      m_lfhf <- "t.test"
+    if (m_hf == "t.test") {
+      hf_test <- t.test(gains_hf1, gains_hf2, paired = paired)$p.value
     } else {
-      m_lfhf <- "wilcox.test"
+      hf_test <-
+        wilcox.test(gains_hf1, gains_hf2, paired = paired)$p.value
     }
-  } else {
-    m_hf <- m_lf <- m_lfhf <- method
+    if (m_lf == "t.test") {
+      lf_test <- t.test(gains_lf1, gains_lf2, paired = paired)$p.value
+    } else {
+      lf_test <-
+        wilcox.test(gains_lf1, gains_lf2, paired = paired)$p.value
+    }
+    if (m_lfhf == "t.test") {
+      lfhf_test <-
+        t.test(gains_lfhf1, gains_lfhf2, paired = paired)$p.value
+    } else {
+      lfhf_test <-
+        wilcox.test(gains_lfhf1, gains_lfhf2, paired = paired)$p.value
+    }
+    output <- list()
+    if (is.null(name))
+      name <- paste("Test", N + 1)
+    output$Name <- name
+    output$locator <- N + 1
+    output$Variables <- Names
+    output$Locators <- locators
+    output$Tables <- list()
+    output$Tables$HF <- HF
+    output$Tables$LF <- LF
+    output$Tables$LFHF <- LFHF
+    output$Methods <- c(m_hf, m_lf, m_lfhf)
+    output$Paired <- paired
+    output$Results <- list()
+    output$Results$HF <- hf_test
+    output$Results$LF <- lf_test
+    output$Results$HF <- hf_test
+    output$Results$LFHF <- lfhf_test
+    framework$TestsHRV[[N + 1]] <- output
+    return(framework)
   }
-  if(m_hf == "t.test"){
-    hf_test <- t.test(gains_hf1, gains_hf2, paired = paired)$p.value
-  } else {
-    hf_test <- wilcox.test(gains_hf1, gains_hf2, paired = paired)$p.value
-  }
-  if(m_lf == "t.test"){
-    lf_test <- t.test(gains_lf1, gains_lf2, paired = paired)$p.value
-  } else {
-    lf_test <- wilcox.test(gains_lf1, gains_lf2, paired = paired)$p.value
-  }
-  if(m_lfhf == "t.test"){
-    lfhf_test <- t.test(gains_lfhf1, gains_lfhf2, paired = paired)$p.value
-  } else {
-    lfhf_test <- wilcox.test(gains_lfhf1, gains_lfhf2, paired = paired)$p.value
-  }
-  output <- list()
-  if(is.null(name)) name <- paste("Test", N + 1)
-  output$Name <- name
-  output$locator <- N + 1
-  output$Variables <- Names
-  output$Locators <- locators
-  output$Tables <- list()
-  output$Tables$HF <- HF
-  output$Tables$LF <- LF
-  output$Tables$LFHF <- LFHF
-  output$Methods <- c(m_hf, m_lf, m_lfhf)
-  output$Paired <- paired
-  output$Results <- list()
-  output$Results$HF <- hf_test
-  output$Results$LF <- lf_test
-  output$Results$HF <- hf_test
-  output$Results$LFHF <- lfhf_test
-  framework$TestsHRV[[N + 1]] <- output
-  return(framework)
-}
 
 
 
@@ -1012,7 +1244,7 @@ TestHRV <- function(framework, locator1, locator2, name = NULL, method = NULL,
 #' @param tem Boolean, creates a temporal file for the plot. Default is FALSE
 #' @param newPlot Boolean, generates a new plot without overwriting a previous plot. Default is TRUEhould the HRV be normalized before comparison? Default is FALSE
 #' @param draw_paired Boolean. If the groups are paired, draw lines connecting each couple of paired estimates. Default is FALSE
-#' 
+#'
 #' @return None
 #'
 #' @author Alvaro Chao-Ecija
@@ -1033,10 +1265,10 @@ TestHRV <- function(framework, locator1, locator2, name = NULL, method = NULL,
 #' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 #' for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 #' for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
-#' 
+#'
 #' Study <- AddTimeInterval(Study, "First interval")
 #' Study <- AddTimeInterval(Study, "Second interval")
-#' 
+#'
 #' Study <- AnalyzeBRSIndices(Study, 1, 1, c(0, 2.5))
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(2.6, 3))
 #' Study <- AnalyzeBRSIndices(Study, 2, 1, c(0, 2.5))
@@ -1045,58 +1277,93 @@ TestHRV <- function(framework, locator1, locator2, name = NULL, method = NULL,
 #' Study <- AnalyzeBRSIndices(Study, 3, 2, c(2.6, 3))
 #' Study <- AnalyzeBRSIndices(Study, 4, 1, c(0, 2.5))
 #' Study <- AnalyzeBRSIndices(Study, 4, 2, c(2.6, 3))
-#' 
+#'
 #' Study <- TestGroups(Study, 1, 2, "Example test")
-#' 
+#'
 #' PlotTestResults(Study, 1)
-PlotTestResults <- function(framework, locator, tem = FALSE, newPlot = FALSE, draw_paired = FALSE){
-  test <- framework$Tests[[locator]]
-  if(newPlot) x11(title = paste("Results from test",
-                                test$Name))
-  HF <- test$Tables$HF
-  LF <- test$Tables$LF
-  max_HF <- max(test$Tables$HF[,3]) + max(test$Tables$HF[,4])
-  max_LF <- max(test$Tables$LF[,3]) + max(test$Tables$LF[,4])
-  Max <- max(max_HF, max_LF)
-  paired <- test$Paired
-  methods <- test$Methods
-  type <- test$Type
-  if(type == "dwt"){
-    title <- "Transfer Function by DWT"
-  } else {
-    title <- "Transfer Function by CWT"
+PlotTestResults <-
+  function(framework,
+           locator,
+           tem = FALSE,
+           newPlot = FALSE,
+           draw_paired = FALSE) {
+    test <- framework$Tests[[locator]]
+    if (newPlot)
+      x11(title = paste("Results from test",
+                        test$Name))
+    HF <- test$Tables$HF
+    LF <- test$Tables$LF
+    max_HF <- max(test$Tables$HF[, 3]) + max(test$Tables$HF[, 4])
+    max_LF <- max(test$Tables$LF[, 3]) + max(test$Tables$LF[, 4])
+    Max <- max(max_HF, max_LF)
+    paired <- test$Paired
+    methods <- test$Methods
+    type <- test$Type
+    if (type == "dwt") {
+      title <- "Transfer Function by DWT"
+    } else {
+      title <- "Transfer Function by CWT"
+    }
+    comparisons <- list(test$Variables)
+    if (paired)
+      HF$id <- LF$id <- rep(1:framework$n, 2)
+    par(mfrow = c(1, 2))
+    if (tem) {
+      im <- tempfile(fileext = ".png")
+      png(
+        filename = im,
+        width = 6.2,
+        height = 6,
+        units = "in",
+        res = 400
+      )
+    }
+    plot1 <-
+      ggplot2::ggplot(HF, ggplot2::aes(Group, Gain, fill = Group)) +
+      ggplot2::geom_boxplot() +
+      ggplot2::theme_bw() +
+      ggpubr::stat_compare_means(
+        ggplot2::aes(Group, Gain),
+        comparisons = comparisons,
+        symnum.args = list(
+          cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+          symbols = c("****", "***", "**", "*", "NS")
+        ),
+        method = methods[1],
+        paired = paired,
+        label.y = max_HF
+      ) +
+      ggplot2::ggtitle(paste(title, "(HF)"))
+    if (paired &
+        draw_paired)
+      plot1 <-
+      plot1 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
+    plot2 <-
+      ggplot2::ggplot(LF, ggplot2::aes(Group, Gain, fill = Group)) +
+      ggplot2::geom_boxplot() +
+      ggplot2::theme_bw() +
+      ggpubr::stat_compare_means(
+        ggplot2::aes(Group, Gain),
+        comparisons = comparisons,
+        symnum.args = list(
+          cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+          symbols = c("****", "***", "**", "*", "NS")
+        ),
+        method = methods[2],
+        paired = paired,
+        label.y = max_LF
+      ) +
+      ggplot2::ggtitle(paste(title, "(LF)"))
+    if (paired &
+        draw_paired)
+      plot2 <-
+      plot2 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
+    gridExtra::grid.arrange(plot1, plot2, ncol = 2)
+    if (tem) {
+      dev.off()
+      return(im)
+    }
   }
-  comparisons <- list(test$Variables)
-  if(paired) HF$id <- LF$id <- rep(1:framework$n, 2)
-  par(mfrow = c(1,2))
-  if(tem){
-    im <- tempfile(fileext = ".png")
-    png(filename = im, width = 6.2, height = 6, units = "in", res = 400)
-  }
-  plot1 <- ggplot2::ggplot(HF, ggplot2::aes(Group, Gain, fill = Group)) +
-    ggplot2::geom_boxplot() +
-    ggplot2::theme_bw() +
-    ggpubr::stat_compare_means(ggplot2::aes(Group, Gain), comparisons = comparisons,
-                               symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
-                                                  symbols = c("****", "***", "**", "*", "NS")), method = methods[1],
-                               paired = paired, label.y = max_HF) +
-    ggplot2::ggtitle(paste(title, "(HF)"))
-  if(paired & draw_paired) plot1 <- plot1 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
-  plot2 <- ggplot2::ggplot(LF, ggplot2::aes(Group, Gain, fill = Group)) +
-    ggplot2::geom_boxplot() +
-    ggplot2::theme_bw() +
-    ggpubr::stat_compare_means(ggplot2::aes(Group, Gain), comparisons = comparisons,
-                               symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
-                                                  symbols = c("****", "***", "**", "*", "NS")), method = methods[2],
-                               paired = paired, label.y = max_LF) +
-    ggplot2::ggtitle(paste(title, "(LF)"))
-  if(paired & draw_paired) plot2 <- plot2 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
-  gridExtra::grid.arrange(plot1, plot2, ncol = 2)
-  if(tem){
-    dev.off()
-    return(im)
-  }
-}
 
 
 #' Plot results from group testing of HRV
@@ -1107,7 +1374,7 @@ PlotTestResults <- function(framework, locator, tem = FALSE, newPlot = FALSE, dr
 #' @param tem Boolean, creates a temporal file for the plot. Default is FALSE
 #' @param newPlot Boolean, generates a new plot without overwriting a previous plot. Default is TRUE
 #' @param draw_paired Boolean. If the groups are paired, draw lines connecting each couple of paired estimates. Default is FALSE
-#' 
+#'
 #' @return None
 #'
 #' @author Alvaro Chao-Ecija
@@ -1128,10 +1395,10 @@ PlotTestResults <- function(framework, locator, tem = FALSE, newPlot = FALSE, dr
 #' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 #' for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 #' for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
-#' 
+#'
 #' Study <- AddTimeInterval(Study, "First interval")
 #' Study <- AddTimeInterval(Study, "Second interval")
-#' 
+#'
 #' Study <- AnalyzeBRSIndices(Study, 1, 1, c(0, 2.5))
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(2.6, 3))
 #' Study <- AnalyzeBRSIndices(Study, 2, 1, c(0, 2.5))
@@ -1140,65 +1407,112 @@ PlotTestResults <- function(framework, locator, tem = FALSE, newPlot = FALSE, dr
 #' Study <- AnalyzeBRSIndices(Study, 3, 2, c(2.6, 3))
 #' Study <- AnalyzeBRSIndices(Study, 4, 1, c(0, 2.5))
 #' Study <- AnalyzeBRSIndices(Study, 4, 2, c(2.6, 3))
-#' 
+#'
 #' Study <- TestHRV(Study, 1, 2, "Example test")
-#' 
+#'
 #' PlotHRVTestResults(Study, 1)
-PlotHRVTestResults <- function(framework, locator, tem = FALSE, newPlot = FALSE, draw_paired = FALSE){
-  test <- framework$TestsHRV[[locator]]
-  if(newPlot) x11(title = paste("Results from test",
-                                test$Name))
-  HF <- test$Tables$HF
-  LF <- test$Tables$LF
-  LFHF <- test$Tables$LFHF
-  max_HF <- max(test$Tables$HF[,3]) + max(test$Tables$HF[,4])
-  max_LF <- max(test$Tables$LF[,3]) + max(test$Tables$LF[,4])
-  max_LFHF <- max(test$Tables$LFHF[,3]) + max(test$Tables$LFHF[,4])
-  min_LFHF <- min(min(test$Tables$LFHF[,3]), min(test$Tables$LFHF[,4]))
-  Max <- max(max_HF, max_LF)
-  paired <- test$Paired
-  methods <- test$Methods
-  title <- "HRV"
-  comparisons <- list(test$Variables)
-  if(paired) HF$id <- LF$id <- LFHF$id <- rep(1:framework$n, 2)
-  par(mfrow = c(1,3))
-  if(tem){
-    im <- tempfile(fileext = ".png")
-    png(filename = im, width = 6.2, height = 6, units = "in", res = 400)
+PlotHRVTestResults <-
+  function(framework,
+           locator,
+           tem = FALSE,
+           newPlot = FALSE,
+           draw_paired = FALSE) {
+    test <- framework$TestsHRV[[locator]]
+    if (newPlot)
+      x11(title = paste("Results from test",
+                        test$Name))
+    HF <- test$Tables$HF
+    LF <- test$Tables$LF
+    LFHF <- test$Tables$LFHF
+    max_HF <- max(test$Tables$HF[, 3]) + max(test$Tables$HF[, 4])
+    max_LF <- max(test$Tables$LF[, 3]) + max(test$Tables$LF[, 4])
+    max_LFHF <- max(test$Tables$LFHF[, 3]) + max(test$Tables$LFHF[, 4])
+    min_LFHF <-
+      min(min(test$Tables$LFHF[, 3]), min(test$Tables$LFHF[, 4]))
+    Max <- max(max_HF, max_LF)
+    paired <- test$Paired
+    methods <- test$Methods
+    title <- "HRV"
+    comparisons <- list(test$Variables)
+    if (paired)
+      HF$id <- LF$id <- LFHF$id <- rep(1:framework$n, 2)
+    par(mfrow = c(1, 3))
+    if (tem) {
+      im <- tempfile(fileext = ".png")
+      png(
+        filename = im,
+        width = 6.2,
+        height = 6,
+        units = "in",
+        res = 400
+      )
+    }
+    plot1 <-
+      ggplot2::ggplot(HF, ggplot2::aes(Group, Power, fill = Group)) +
+      ggplot2::geom_boxplot() +
+      ggplot2::theme_bw() +
+      ggpubr::stat_compare_means(
+        ggplot2::aes(Group, Power),
+        comparisons = comparisons,
+        symnum.args = list(
+          cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+          symbols = c("****", "***", "**", "*", "NS")
+        ),
+        method = methods[1],
+        paired = paired,
+        label.y = max_HF
+      ) +
+      ggplot2::ggtitle(paste(title, "(HF)"))
+    if (paired &
+        draw_paired)
+      plot1 <-
+      plot1 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
+    plot2 <-
+      ggplot2::ggplot(LF, ggplot2::aes(Group, Power, fill = Group)) +
+      ggplot2::geom_boxplot() +
+      ggplot2::theme_bw() +
+      ggpubr::stat_compare_means(
+        ggplot2::aes(Group, Power),
+        comparisons = comparisons,
+        symnum.args = list(
+          cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+          symbols = c("****", "***", "**", "*", "NS")
+        ),
+        method = methods[2],
+        paired = paired,
+        label.y = max_LF
+      ) +
+      ggplot2::ggtitle(paste(title, "(LF)"))
+    if (paired &
+        draw_paired)
+      plot2 <-
+      plot2 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
+    plot3 <-
+      ggplot2::ggplot(LFHF, ggplot2::aes(Group, Power, fill = Group)) +
+      ggplot2::geom_boxplot() +
+      ggplot2::theme_bw() +
+      ggpubr::stat_compare_means(
+        ggplot2::aes(Group, Power),
+        comparisons = comparisons,
+        symnum.args = list(
+          cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+          symbols = c("****", "***", "**", "*", "NS")
+        ),
+        method = methods[2],
+        paired = paired,
+        label.y = max_LF
+      ) +
+      ggplot2::ggtitle(paste(title, "(LF/HF)"))
+    if (paired &
+        draw_paired)
+      plot3 <-
+      plot3 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
+    gridExtra::grid.arrange(plot1, plot2, plot3, ncol = 3)
+    if (tem) {
+      dev.off()
+      return(im)
+    }
   }
-  plot1 <- ggplot2::ggplot(HF, ggplot2::aes(Group, Power, fill = Group)) +
-    ggplot2::geom_boxplot() +
-    ggplot2::theme_bw() +
-    ggpubr::stat_compare_means(ggplot2::aes(Group, Power), comparisons = comparisons,
-                               symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
-                                                  symbols = c("****", "***", "**", "*", "NS")), method = methods[1],
-                               paired = paired, label.y = max_HF) +
-    ggplot2::ggtitle(paste(title, "(HF)"))
-  if(paired & draw_paired) plot1 <- plot1 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
-  plot2 <- ggplot2::ggplot(LF, ggplot2::aes(Group, Power, fill = Group)) +
-    ggplot2::geom_boxplot() +
-    ggplot2::theme_bw() +
-    ggpubr::stat_compare_means(ggplot2::aes(Group, Power), comparisons = comparisons,
-                               symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
-                                                  symbols = c("****", "***", "**", "*", "NS")), method = methods[2],
-                               paired = paired, label.y = max_LF) +
-    ggplot2::ggtitle(paste(title, "(LF)"))
-  if(paired & draw_paired) plot2 <- plot2 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
-  plot3 <- ggplot2::ggplot(LFHF, ggplot2::aes(Group, Power, fill = Group)) +
-    ggplot2::geom_boxplot() +
-    ggplot2::theme_bw() +
-    ggpubr::stat_compare_means(ggplot2::aes(Group, Power), comparisons = comparisons,
-                               symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
-                                                  symbols = c("****", "***", "**", "*", "NS")), method = methods[2],
-                               paired = paired, label.y = max_LF) +
-    ggplot2::ggtitle(paste(title, "(LF/HF)"))
-  if(paired & draw_paired) plot3 <- plot3 + ggplot2::geom_point() + ggplot2::geom_line(ggplot2::aes(group = id))
-  gridExtra::grid.arrange(plot1, plot2, plot3, ncol = 3)
-  if(tem){
-    dev.off()
-    return(im)
-  }
-}
 
 #' Model clinical data
 #'
@@ -1209,7 +1523,7 @@ PlotHRVTestResults <- function(framework, locator, tem = FALSE, newPlot = FALSE,
 #' @param segment Indicates a specific time interval
 #' @param variable Indicates a specific clinical variable
 #' @param use.names Boolean, should the names of the subjects be used?
-#' 
+#'
 #' @return The results of a linear regression model with the chosen data
 #'
 #' @author Alvaro Chao-Ecija
@@ -1217,42 +1531,58 @@ PlotHRVTestResults <- function(framework, locator, tem = FALSE, newPlot = FALSE,
 #'
 #' @export
 #'
-ModelClinicalData <- function(framework, type = c("BRS", "HRV"), band = c("HF", "LF", "LFHF"), segment = 1, variable = 1, use.names = TRUE){
-  indices <- framework$IndividualIndices[[segment]]
-  type <- match.arg(type)
-  band <- match.arg(band)
-  if(use.names & !is.null(indices$Name)){
-    Names <- indices$Name
-  } else {
-    Names <- indices$locator
+ModelClinicalData <-
+  function(framework,
+           type = c("BRS", "HRV"),
+           band = c("HF", "LF", "LFHF"),
+           segment = 1,
+           variable = 1,
+           use.names = TRUE) {
+    indices <- framework$IndividualIndices[[segment]]
+    type <- match.arg(type)
+    band <- match.arg(band)
+    if (use.names & !is.null(indices$Name)) {
+      Names <- indices$Name
+    } else {
+      Names <- indices$locator
+    }
+    locators <- c(indices1$locator, indices2$locator)
+    if (type == "HRV") {
+      values <- indices$HRV
+      unit2 <- "ms2"
+    } else {
+      values <- indices$DWT
+      unit2 <- "ms/mmHg"
+    }
+    if (band == "HF")
+      values <- values[1, ]
+    if (band == "LF")
+      values <- values[2, ]
+    if (band == "LFHF" && type == "HRV")
+      values <- values[3, ]
+    clin <- framework$Clinical
+    clin <- clin[, variable + 1]
+    units <- clin[1]
+    clin <- as.numeric(clin[-1])
+    model <- lm(values ~ clin)
+    r <- summary(model)$r.squared
+    p <- summary(model)$coefficients[2, 4]
+    data <- data.frame(values = values, clinical = clin)
+    Plot <- ggplot2::ggplot(data, ggplot2::aes(clinical, values)) +
+      ggplot2::geom_point() + ggplot2::geom_smooth(method = "lm", color = "red") +
+      ggplot2::theme_minimal() + ggplot2::labs(
+        y = paste(type, " (", band, " band, ", unit2, ")", sep = ""),
+        x = paste(
+          names(framework$Clinical)[variable + 1],
+          " (",
+          framework$Clinical[1, variable + 1],
+          ")",
+          sep = ""
+        )
+      )
+    output <- list(r = r, p = p, Plot = Plot)
+    return(output)
   }
-  locators <- c(indices1$locator, indices2$locator)
-  if(type == "HRV"){
-    values <- indices$HRV
-    unit2 <- "ms2"
-  } else {
-    values <- indices$DWT
-    unit2 <- "ms/mmHg"
-  }
-  if(band == "HF") values <- values[1,]
-  if(band == "LF") values <- values[2,]
-  if(band == "LFHF" && type == "HRV") values <- values[3,]
-  clin <- framework$Clinical
-  clin <- clin[,variable + 1]
-  units <- clin[1]
-  clin <- as.numeric(clin[-1])
-  model <- lm(values ~ clin)
-  r <- summary(model)$r.squared
-  p <- summary(model)$coefficients[2,4]
-  data <- data.frame(values = values, clinical = clin)
-  Plot <- ggplot2::ggplot(data, ggplot2::aes(clinical, values)) +
-    ggplot2::geom_point() + ggplot2::geom_smooth(method = "lm", color = "red") +
-     ggplot2::theme_minimal() + ggplot2::labs(y = paste(type, " (", band, " band, ", unit2, ")", sep = ""),
-                                             x = paste(names(framework$Clinical)[variable + 1], " (",
-                                                       framework$Clinical[1, variable + 1], ")", sep = ""))
-  output <- list(r = r, p = p, Plot = Plot)
-  return(output)
-}
 
 
 
@@ -1265,7 +1595,7 @@ ModelClinicalData <- function(framework, type = c("BRS", "HRV"), band = c("HF", 
 #' Extracts relevant data from a particular analysis
 #' @param framework An analysis environment generated by \link[BaroWavelet]{BuildStructure}
 #' @param locator A locator indicating which analysis should be used
-#' 
+#'
 #' @return A list containg relevant data from a specific analysis
 #'
 #' @author Alvaro Chao-Ecija
@@ -1280,31 +1610,31 @@ ModelClinicalData <- function(framework, type = c("BRS", "HRV"), band = c("HF", 
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #'
 #' New_data <- ExtractDataFromAnalysis(Data, 1)
-ExtractDataFromAnalysis <- function(framework, locator){
-          Data <- framework$"General Data"
-          Data$Data <- framework$Analyses[[locator]]$Data
-          return(Data)
+ExtractDataFromAnalysis <- function(framework, locator) {
+  Data <- framework$"General Data"
+  Data$Data <- framework$Analyses[[locator]]$Data
+  return(Data)
 }
 
 
 
-AddBRStoAnalysis <- function(framework, tf, locator){
-           if(tf$type == "brs_dwt"){
-              tf$type <- NULL
-              tf$Time <- NULL
-              hrv <- tf$HRV
-              tf$HRV <- NULL
-              framework$Analyses[[locator]]$BRS$DWT <- tf
-              framework$Analyses[[locator]]$HRV <- hrv
-           } else if(tf$type == "brs_cwt"){
-              tf$type <- NULL
-              tf$VLF <- NULL
-              tf$LF <- NULL
-              tf$HF <- NULL
-              tf$Time <- NULL
-              framework$Analyses[[locator]]$BRS$CWT <- tf
-           }
-           return(framework)
+AddBRStoAnalysis <- function(framework, tf, locator) {
+  if (tf$type == "brs_dwt") {
+    tf$type <- NULL
+    tf$Time <- NULL
+    hrv <- tf$HRV
+    tf$HRV <- NULL
+    framework$Analyses[[locator]]$BRS$DWT <- tf
+    framework$Analyses[[locator]]$HRV <- hrv
+  } else if (tf$type == "brs_cwt") {
+    tf$type <- NULL
+    tf$VLF <- NULL
+    tf$LF <- NULL
+    tf$HF <- NULL
+    tf$Time <- NULL
+    framework$Analyses[[locator]]$BRS$CWT <- tf
+  }
+  return(framework)
 }
 
 #' Assemble BRS estimates computed with the CWT
@@ -1312,7 +1642,7 @@ AddBRStoAnalysis <- function(framework, tf, locator){
 #' Assembles a transfer function or alpha index computed with the CWT for further processing
 #' @param framework An analysis environment generated by \link[BaroWavelet]{BuildStructure}
 #' @param locator A locator indicating which analysis should be used
-#' 
+#'
 #' @return A list containing the assembled transfer function or alpha index
 #'
 #' @author Alvaro Chao-Ecija
@@ -1328,172 +1658,206 @@ AddBRStoAnalysis <- function(framework, tf, locator){
 #' Study <- AnalyzeBRS(Study, 1)
 #'
 #' TransferFun <- AssembleCwtTransferFun(Study, 1)
-AssembleCwtTransferFun <- function(framework, locator){
-                  Data <- framework$"General Data"
-                  TFun <- framework$Analyses[[locator]]$BRS$CWT
-                  TFun$HF <- Data$HF
-                  TFun$LF <- Data$LF
-                  TFun$VLF <- Data$VLF
-                  TFun$Time <- framework$Analyses[[locator]]$Data[,1]
-                  return(TFun)
-}
-
-AddIndividualIndices <- function(framework, locator_a, locator_t, time_flags,
-   method = c("dwt", "cwt"), use.name = TRUE){
-                   interval <- framework$IndividualIndices[[locator_t]]
-                   method <- match.arg(method)
-                   Data <- framework$"General Data"
-                   Analysis <- framework$Analyses[[locator_a]]
-                   if(method == "dwt"){
-                          tf <- Analysis$BRS$DWT
-                          tf$Time <- Analysis$Data[,1]
-                          tf$type <- "brs_dwt"
-                          others <- interval$DWT
-                          Time <- framework$IndividualIndices[[locator_t]]$Time_DWT
-                          N <- length(others)
-                   } else if(method == "cwt"){
-                          tf <- AssembleCwtTransferFun(framework, locator_a)
-                          tf$type <- "brs_cwt"
-                          others <- interval$CWT
-                          Time <- framework$IndividualIndices[[locator_t]]$Time_CWT
-                          N <- length(others)
-                   }
-                   indices <- IndividualIndices(tf, time_flags, use.coherence = interval$Threshold,
-                         thr = Data$Coherence, method = Data$"Index Method")[1,]
-                   if(N == 0){
-                      results <- matrix(indices, nrow = 2, ncol  =1)
-                      rownames(results) <- c("HF", "LF")
-                      n <- 1
-                      Time <- matrix(AdjustTime(tf, time_flags), nrow = 2, ncol  =1)
-                   } else if(locator_a <= ncol(others)){
-                     results <- others
-                     results[,locator_a] <- indices
-                     Time[,locator_a] <- AdjustTime(tf, time_flags)
-                   } else {
-                      results <- cbind(others, indices)
-                      n <- ncol(results)
-                      Time <- cbind(Time, AdjustTime(tf, time_flags))
-                   }
-                   if(use.name & !is.null(Analysis$Name)){
-                         colnames(results)[locator_a] <- Analysis$Name
-                   } else {
-                         colnames(results)[locator_a] <- Analysis$locator
-                   }
-                   if(method == "dwt"){
-                          framework$IndividualIndices[[locator_t]]$DWT <- results
-                          framework$IndividualIndices[[locator_t]]$Time_DWT <- Time
-                   } else if(method == "cwt"){
-                          framework$IndividualIndices[[locator_t]]$CWT <- results
-                          framework$IndividualIndices[[locator_t]]$Time_CWT <- Time
-                   }
-                   return(framework)
-}
-
-
-
-AddExpectedHRV <- function(framework, locator_a, locator_t, use.name = TRUE){
-  interval <- framework$IndividualIndices[[locator_t]]
-  others <- interval$HRV
-  Names <- colnames(interval$DWT)
-  N <- length(others)
+AssembleCwtTransferFun <- function(framework, locator) {
   Data <- framework$"General Data"
-  Analysis <- framework$Analyses[[locator_a]]
-  Time <- Analysis$Data[,1]
-  time_flags <- framework$IndividualIndices[[locator_t]]$Time_DWT
-  hrv <- Analysis$HRV
-  time_flags <- time_flags * 60
-  select_time <- Time[(Time >= time_flags[1]) &
-                            (Time <= time_flags[2])]
-  select_time <- match(select_time, Time)
-  method <- Data$"Index Method"
-  method <- ifelse(method == "mean", mean, median)
-  for(n in 1:length(hrv)) hrv[[n]] <- method(hrv[[n]][select_time])
-  hrv <- rbind(hrv[[1]], hrv[[2]], hrv[[3]])
-  if(N == 0){
-    rownames(hrv) <- c("HF", "LF", "LFHF")
-  } else if(locator_a <= ncol(others)){
-    results <- others
-    results[,locator_a] <- hrv
-    hrv <- results
-  } else {
-    hrv <- cbind(others, hrv)
-  }
-  if(use.name) colnames(hrv)[locator_a] <- Names[locator_a]
-  framework$IndividualIndices[[locator_t]]$HRV <- hrv
-  return(framework)
+  TFun <- framework$Analyses[[locator]]$BRS$CWT
+  TFun$HF <- Data$HF
+  TFun$LF <- Data$LF
+  TFun$VLF <- Data$VLF
+  TFun$Time <-
+    framework$Analyses[[locator]]$Data[, 1]
+  return(TFun)
 }
 
-
-PrepareIntervalSlots <- function(framework, method = c("dwt", "cwt")){
-  n <- framework$n
-  method <- match.arg(method)
-  for(m in 1:length(framework$IndividualIndices)){
-    if(method == "dwt"){
-      int <- framework$IndividualIndices[[m]]$DWT
-      Time <- framework$IndividualIndices[[m]]$Time_DWT
+AddIndividualIndices <-
+  function(framework,
+           locator_a,
+           locator_t,
+           time_flags,
+           method = c("dwt", "cwt"),
+           use.name = TRUE) {
+    interval <- framework$IndividualIndices[[locator_t]]
+    method <- match.arg(method)
+    Data <- framework$"General Data"
+    Analysis <- framework$Analyses[[locator_a]]
+    if (method == "dwt") {
+      tf <- Analysis$BRS$DWT
+      tf$Time <- Analysis$Data[, 1]
+      tf$type <- "brs_dwt"
+      others <- interval$DWT
+      Time <-
+        framework$IndividualIndices[[locator_t]]$Time_DWT
+      N <- length(others)
+    } else if (method == "cwt") {
+      tf <- AssembleCwtTransferFun(framework, locator_a)
+      tf$type <- "brs_cwt"
+      others <- interval$CWT
+      Time <-
+        framework$IndividualIndices[[locator_t]]$Time_CWT
+      N <- length(others)
+    }
+    indices <-
+      IndividualIndices(
+        tf,
+        time_flags,
+        use.coherence = interval$Threshold,
+        thr = Data$Coherence,
+        method = Data$"Index Method"
+      )[1, ]
+    if (N == 0) {
+      results <- matrix(indices, nrow = 2, ncol  = 1)
+      rownames(results) <- c("HF", "LF")
+      n <- 1
+      Time <-
+        matrix(AdjustTime(tf, time_flags),
+               nrow = 2,
+               ncol  = 1)
+    } else if (locator_a <= ncol(others)) {
+      results <- others
+      results[, locator_a] <- indices
+      Time[, locator_a] <- AdjustTime(tf, time_flags)
     } else {
-      int <- framework$IndividualIndices[[m]]$CWT
-      Time <- framework$IndividualIndices[[m]]$Time_CWT
+      results <- cbind(others, indices)
+      n <- ncol(results)
+      Time <-
+        cbind(Time, AdjustTime(tf, time_flags))
     }
-    if(length(int) == 0 || is.null(int[[1]])){
-      int <- Time <- matrix(NA, ncol = n, nrow = 2)
-      colnames(int) <- rep("Unnamed", n)
-    } else if(n > ncol(int)){
-      cols <- n - ncol(int)
-      names <- colnames(int)
-      support <- matrix(NA, ncol = cols, nrow = 2)
-      int <- cbind(int, support)
-      Time <- cbind(Time, support)
-      colnames(int) <- c(names, rep("Unnamed", cols))
-
-    }
-    if(method == "dwt"){
-      framework$IndividualIndices[[m]]$DWT <- int
-      framework$IndividualIndices[[m]]$Time_DWT <- Time
+    if (use.name & !is.null(Analysis$Name)) {
+      colnames(results)[locator_a] <- Analysis$Name
     } else {
-      framework$IndividualIndices[[m]]$CWT <- int
-      framework$IndividualIndices[[m]]$Time_CWT <- Time
+      colnames(results)[locator_a] <- Analysis$locator
     }
+    if (method == "dwt") {
+      framework$IndividualIndices[[locator_t]]$DWT <- results
+      framework$IndividualIndices[[locator_t]]$Time_DWT <-
+        Time
+    } else if (method == "cwt") {
+      framework$IndividualIndices[[locator_t]]$CWT <- results
+      framework$IndividualIndices[[locator_t]]$Time_CWT <-
+        Time
+    }
+    return(framework)
   }
-  return(framework)
-}
+
+
+
+AddExpectedHRV <-
+  function(framework,
+           locator_a,
+           locator_t,
+           use.name = TRUE) {
+    interval <- framework$IndividualIndices[[locator_t]]
+    others <- interval$HRV
+    Names <- colnames(interval$DWT)
+    N <- length(others)
+    Data <- framework$"General Data"
+    Analysis <- framework$Analyses[[locator_a]]
+    Time <- Analysis$Data[, 1]
+    time_flags <- framework$IndividualIndices[[locator_t]]$Time_DWT
+    hrv <- Analysis$HRV
+    time_flags <- time_flags * 60
+    select_time <- Time[(Time >= time_flags[1]) &
+                          (Time <= time_flags[2])]
+    select_time <- match(select_time, Time)
+    method <- Data$"Index Method"
+    method <- ifelse(method == "mean", mean, median)
+    for (n in 1:length(hrv))
+      hrv[[n]] <- method(hrv[[n]][select_time])
+    hrv <- rbind(hrv[[1]], hrv[[2]], hrv[[3]])
+    if (N == 0) {
+      rownames(hrv) <- c("HF", "LF", "LFHF")
+    } else if (locator_a <= ncol(others)) {
+      results <- others
+      results[, locator_a] <- hrv
+      hrv <- results
+    } else {
+      hrv <- cbind(others, hrv)
+    }
+    if (use.name)
+      colnames(hrv)[locator_a] <- Names[locator_a]
+    framework$IndividualIndices[[locator_t]]$HRV <- hrv
+    return(framework)
+  }
+
+
+PrepareIntervalSlots <-
+  function(framework, method = c("dwt", "cwt")) {
+    n <- framework$n
+    method <- match.arg(method)
+    for (m in 1:length(framework$IndividualIndices)) {
+      if (method == "dwt") {
+        int <- framework$IndividualIndices[[m]]$DWT
+        Time <- framework$IndividualIndices[[m]]$Time_DWT
+      } else {
+        int <- framework$IndividualIndices[[m]]$CWT
+        Time <- framework$IndividualIndices[[m]]$Time_CWT
+      }
+      if (length(int) == 0 || is.null(int[[1]])) {
+        int <- Time <- matrix(NA, ncol = n, nrow = 2)
+        colnames(int) <- rep("Unnamed", n)
+      } else if (n > ncol(int)) {
+        cols <- n - ncol(int)
+        names <- colnames(int)
+        support <- matrix(NA, ncol = cols, nrow = 2)
+        int <- cbind(int, support)
+        Time <- cbind(Time, support)
+        colnames(int) <- c(names, rep("Unnamed", cols))
+        
+      }
+      if (method == "dwt") {
+        framework$IndividualIndices[[m]]$DWT <- int
+        framework$IndividualIndices[[m]]$Time_DWT <- Time
+      } else {
+        framework$IndividualIndices[[m]]$CWT <- int
+        framework$IndividualIndices[[m]]$Time_CWT <- Time
+      }
+    }
+    return(framework)
+  }
 
 
 
 
-AddTimeValues <- function(framework, locator_a, locator_t, time_flags,
-  use.name = TRUE){
-                   interval <- framework$IndividualIndices[[locator_t]]
-                   Analysis <- framework$Analyses[[locator_a]]
-                   HR <- interval$HR
-                   SBP <- interval$SBP
-                   TimeValues <- TimeDomainValues(Analysis$Data, time_flags)
-                   n = length(HR)
-                   if(length(HR) == 0){
-                      HR <- matrix(TimeValues$HR, 2, 1)
-                      SBP <- matrix(TimeValues$SBP, 2, 1)
-                   } else if(locator_a <= ncol(HR)){
-                     HR[,locator_a] <- TimeValues$HR
-                     SBP[,locator_a] <- TimeValues$SBP
-                   } else {
-                      HR <- cbind(HR, TimeValues$HR)
-                      SBP <- cbind(SBP, TimeValues$SBP)
-                   }
-                   if(use.name & !is.null(Analysis$Name)){
-                         colnames(HR)[locator_a] <- Analysis$Name
-                         colnames(SBP)[locator_a] <- Analysis$Name
-                   } else {
-                         colnames(HR)[locator_a] <- Analysis$locator
-                         colnames(SBP)[locator_a] <- Analysis$locator
-                   }
-                   framework$IndividualIndices[[locator_t]]$HR <- HR
-                   framework$IndividualIndices[[locator_t]]$SBP <- SBP
-                   return(framework)
-}
+AddTimeValues <-
+  function(framework,
+           locator_a,
+           locator_t,
+           time_flags,
+           use.name = TRUE) {
+    interval <- framework$IndividualIndices[[locator_t]]
+    Analysis <- framework$Analyses[[locator_a]]
+    HR <- interval$HR
+    SBP <- interval$SBP
+    TimeValues <-
+      TimeDomainValues(Analysis$Data, time_flags)
+    n = length(HR)
+    if (length(HR) == 0) {
+      HR <- matrix(TimeValues$HR, 2, 1)
+      SBP <- matrix(TimeValues$SBP, 2, 1)
+    } else if (locator_a <= ncol(HR)) {
+      HR[, locator_a] <- TimeValues$HR
+      SBP[, locator_a] <- TimeValues$SBP
+    } else {
+      HR <- cbind(HR, TimeValues$HR)
+      SBP <- cbind(SBP, TimeValues$SBP)
+    }
+    if (use.name & !is.null(Analysis$Name)) {
+      colnames(HR)[locator_a] <- Analysis$Name
+      colnames(SBP)[locator_a] <- Analysis$Name
+    } else {
+      colnames(HR)[locator_a] <- Analysis$locator
+      colnames(SBP)[locator_a] <-
+        Analysis$locator
+    }
+    framework$IndividualIndices[[locator_t]]$HR <- HR
+    framework$IndividualIndices[[locator_t]]$SBP <-
+      SBP
+    return(framework)
+  }
 
 
-AdjustTime <- function(fun, time_flags = NULL){
-  if(is.null(time_flags)){
+AdjustTime <- function(fun, time_flags = NULL) {
+  if (is.null(time_flags)) {
     select_time <- 1:NROW(fun$Time)
   } else {
     time_flags <- time_flags * 60
@@ -1501,31 +1865,44 @@ AdjustTime <- function(fun, time_flags = NULL){
                               (fun$Time <= time_flags[2])]
     select_time <- match(select_time, fun$Time)
   }
-  return(c(min(fun$Time[select_time]/60), max(fun$Time[select_time]/60)))
+  return(c(min(fun$Time[select_time] / 60), max(fun$Time[select_time] /
+                                                  60)))
 }
 
 
 
-GetAvgCwtBands <- function(fun, thr = 0.5, use.thr = TRUE, scale = 1,
-         time_flags = NULL, len = 7, HFcolor = "yellow", LFcolor = "green",
-         Tcolor = "brown", tem  =FALSE){
-  HF <- fun$HF
-  LF <- fun$LF
-  VLF <- fun$VLF
-  fun <- GetBiwaveletObject(fun)
-  freqs <- 1/fun$period
-  sel_power <- fun$power
-  min_freqs <- min(freqs)
-  max_freqs <- max(freqs)
-  if(max_freqs > HF) max_freqs <- HF
-  if(min_freqs < VLF) min_freqs <- VLF
-  time_results.HF <- colMeans(fun$power[(freqs <= HF) & (freqs > LF),],
-                              na.rm = TRUE)
-  time_results.LF <- colMeans(fun$power[(freqs <= LF) & (freqs > VLF),],
-                              na.rm = TRUE)
-  return(list(HF = time_results.HF, LF = time_results.LF))
-
-}
+GetAvgCwtBands <-
+  function(fun,
+           thr = 0.5,
+           use.thr = TRUE,
+           scale = 1,
+           time_flags = NULL,
+           len = 7,
+           HFcolor = "yellow",
+           LFcolor = "green",
+           Tcolor = "brown",
+           tem  = FALSE) {
+    HF <- fun$HF
+    LF <- fun$LF
+    VLF <- fun$VLF
+    fun <- GetBiwaveletObject(fun)
+    freqs <- 1 / fun$period
+    sel_power <- fun$power
+    min_freqs <- min(freqs)
+    max_freqs <- max(freqs)
+    if (max_freqs > HF)
+      max_freqs <- HF
+    if (min_freqs < VLF)
+      min_freqs <- VLF
+    time_results.HF <-
+      colMeans(fun$power[(freqs <= HF) & (freqs > LF), ],
+               na.rm = TRUE)
+    time_results.LF <-
+      colMeans(fun$power[(freqs <= LF) & (freqs > VLF), ],
+               na.rm = TRUE)
+    return(list(HF = time_results.HF, LF = time_results.LF))
+    
+  }
 
 #' Split CWT BRS with coherence criteria
 #'
@@ -1535,7 +1912,7 @@ GetAvgCwtBands <- function(fun, thr = 0.5, use.thr = TRUE, scale = 1,
 #' @param use.thr Boolean, should a coherence threshold be used? Default is TRUE
 #' @param time_flags A vector containing the minimum and maximum limits of a time interval, in minutes.
 #'                   Default is NULL
-#' 
+#'
 #' @return A list containg the assembled transfer function or alpha index
 #'
 #' @author Alvaro Chao-Ecija
@@ -1547,34 +1924,38 @@ GetAvgCwtBands <- function(fun, thr = 0.5, use.thr = TRUE, scale = 1,
 #' Data <- InterpolateData(DataSimulation(), f = 1)
 #' BRS <- TransferFunCWT(Data)
 #' BRS <- SplitByCoherence(Data)
-SplitByCoherence <- function(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL){
-  HF <- fun$HF
-  LF <- fun$LF
-  VLF <- fun$VLF
-  fun <- GetBiwaveletObject(fun)
-  if(is.null(time_flags)){
-    select_time <- 1:NROW(fun$t)
-  } else {
-    time_flags <- time_flags * 60
-    select_time <- fun$t[(fun$t >= time_flags[1]) &
-                           (fun$t <= time_flags[2])]
-    select_time <- match(select_time, fun$t)
+SplitByCoherence <-
+  function(fun,
+           thr = 0.5,
+           use.thr = TRUE,
+           time_flags = NULL) {
+    HF <- fun$HF
+    LF <- fun$LF
+    VLF <- fun$VLF
+    fun <- GetBiwaveletObject(fun)
+    if (is.null(time_flags)) {
+      select_time <- 1:NROW(fun$t)
+    } else {
+      time_flags <- time_flags * 60
+      select_time <- fun$t[(fun$t >= time_flags[1]) &
+                             (fun$t <= time_flags[2])]
+      select_time <- match(select_time, fun$t)
+    }
+    freqs <- 1 / fun$period
+    sel_power <- fun$power
+    if (!use.thr)
+      thr <- 0
+    results.HF <- fun$power[(freqs <= HF) & (freqs > LF), select_time]
+    results.LF <-
+      fun$power[(freqs <= LF) & (freqs > VLF), select_time]
+    rsq.HF <- fun$rsq[(freqs <= HF) & (freqs > LF), select_time]
+    rsq.LF <- fun$rsq[(freqs <= LF) & (freqs > VLF), select_time]
+    if (use.thr) {
+      results.HF[which(rsq.HF < thr)] <- NA
+      results.LF[which(rsq.LF < thr)] <- NA
+    }
+    results.HF <- colMeans(results.HF, na.rm = TRUE)
+    results.LF <- colMeans(results.LF, na.rm = TRUE)
+    output <- list(HF = results.HF, LF = results.LF)
+    return(output)
   }
-  freqs <- 1/fun$period
-  sel_power <- fun$power
-  if(!use.thr) thr <- 0
-  results.HF <- fun$power[(freqs <= HF) & (freqs > LF), select_time]
-  results.LF <- fun$power[(freqs <= LF) & (freqs > VLF), select_time]
-  rsq.HF <- fun$rsq[(freqs <= HF) & (freqs > LF), select_time]
-  rsq.LF <- fun$rsq[(freqs <= LF) & (freqs > VLF), select_time]
-  if(use.thr){
-    results.HF[which(rsq.HF < thr)] <- NA
-    results.LF[which(rsq.LF < thr)] <- NA
-  }
-  results.HF <- colMeans(results.HF, na.rm = TRUE)
-  results.LF <- colMeans(results.LF, na.rm = TRUE)
-  output <- list(HF = results.HF, LF = results.LF)
-  return(output)
-}
-
-

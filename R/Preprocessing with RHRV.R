@@ -3,6 +3,7 @@
 
 
 
+
 #'Preprocess data with RHRV
 #'
 #'@param data Cardiovascular data to be processed
@@ -12,8 +13,8 @@
 #'@param maxbpm Maximum bpm allowed for HR
 #'@param use.RHRV Boolean. Should RHRV be used in the preprocessing step? Default is TRUE.
 #'
-#'@details 
-#' This function serves as a proposal for the preprocessing of raw data. It thresholds the 
+#'@details
+#' This function serves as a proposal for the preprocessing of raw data. It thresholds the
 #' data according to pressure levels that can be defined by the user, as well as heart rate levels.
 #' The heart rate threshold levels are based on the work of AUTHOR et al. (please check the reference
 #' section for more information). Alternatively, it can send data to RHRV so that the RHRV package
@@ -22,28 +23,37 @@
 #' RHRV functions \code{link[RHRV]{BuildNIHR}} and \code{link[RHRV]{FilterNIHR}}.
 #'
 #'@references
-#'Garcia Martinez CA, Otero Quintana A, Vila XA, Lado Tourino MJ, Rodriguez-Linares L, Rodriguez Presedo JM, Mendez Penin AJ. Heart Rate Variability Analysis with the R package RHRV. Springer Cham; 2017. 
+#'Garcia Martinez CA, Otero Quintana A, Vila XA, Lado Tourino MJ, Rodriguez-Linares L, Rodriguez Presedo JM, Mendez Penin AJ. Heart Rate Variability Analysis with the R package RHRV. Springer Cham; 2017.
 #'
-#'@author 
+#'@author
 #'Alvaro Chao-Ecija
 #'
 #' @import RHRV
 #'
 #' @export
-PreprocessData <- function(data, maxSBP = 300, minSBP = 30,
-                           minbpm = 25, maxbpm = 200, use.RHRV = TRUE){
+PreprocessData <- function(data,
+                           maxSBP = 300,
+                           minSBP = 30,
+                           minbpm = 25,
+                           maxbpm = 200,
+                           use.RHRV = TRUE) {
   Time <- data[[1]]
   SBP <- data$SBP
   DBP <- data$DBP
   N <- NROW(Time)
-  for(n in 2:N) if(Time[n]<Time[n-1]) break
-  if(!is.null(n)) Time[n:N] <- Time[n:N]*60
+  for (n in 2:N)
+    if (Time[n] < Time[n - 1])
+      break
+  if (!is.null(n))
+    Time[n:N] <- Time[n:N] * 60
   N <- NROW(Time)
-  for(m in 1:N) if(SBP[m] > maxSBP | SBP[m] < minSBP) Time[m] <- NA
+  for (m in 1:N)
+    if (SBP[m] > maxSBP | SBP[m] < minSBP)
+      Time[m] <- NA
   SBP <- SBP[!is.na(Time)]
   DBP <- DBP[!is.na(Time)]
   Time <- Time[!is.na(Time)]
-  if(use.RHRV){
+  if (use.RHRV) {
     # This function prepares the data to be processed by RHRV
     RHRV_object <- PrepareTachoForRHRV(Time)
     # Data is now filtered using RHRV
@@ -60,24 +70,32 @@ PreprocessData <- function(data, maxSBP = 300, minSBP = 30,
     RR[2:N] <- diff(Time * 1000)
     RR[1] <- RR[2]
     HR <- 60000 / RR
-    for(m in 1:N) if(HR[m] > maxbpm | HR[m] < minbpm) Time[m] <- NA
+    for (m in 1:N)
+      if (HR[m] > maxbpm | HR[m] < minbpm)
+        Time[m] <- NA
     RR <- RR[!is.na(Time)]
     SBP <- SBP[!is.na(Time)]
     DBP <- DBP[!is.na(Time)]
     Time <- Time[!is.na(Time)]
   }
-  return(list(Time = Time, RR = RR, SBP = SBP, DBP = DBP, PP = SBP - DBP, 
-              MAP = (2*SBP - DBP)/3))
+  return(list(
+    Time = Time,
+    RR = RR,
+    SBP = SBP,
+    DBP = DBP,
+    PP = SBP - DBP,
+    MAP = (2 * SBP - DBP) / 3
+  ))
 }
-  
-  
+
+
 
 
 
 # Private function: prepare tachogram for analysis with RHRV. Creates an object recognizable
 # by RHRV'algorithms (with a structure based on RHRV's CreateHRVData function) and fills it
-# with a defined time support, which RHRV will use to preprocess the data. 
-PrepareTachoForRHRV <- function(time){
+# with a defined time support, which RHRV will use to preprocess the data.
+PrepareTachoForRHRV <- function(time) {
   HRV <- list()
   HRV$Ext <- "hrv"
   HRV$FreqAnalysis <- list()
