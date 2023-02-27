@@ -28,9 +28,10 @@
 #' Also, the function allows to return the computed heart variability results by \href{https://CRAN.R-project.org/package=RHRV}{RHRV} package.
 #' @author Alvaro Chao-Ecija
 #' @references
-#'Leandro Rodriguez-Linares, Xose Vila, Maria Jose Lado, Arturo Mendez, Abraham Otero and Constantino
-#'Antonio Garcia (2020). RHRV: Heart Rate Variability Analysis of ECG Data. R package version 4.2.6.
-#'https://CRAN.R-project.org/package=RHRV
+#'Rodriguez-Linares L, Mendez AJ, Lado MJ, Olivieri DN, Vila XA, Gomez-Conde I. An open source tool for heart rate variability spectral analysis. Comput Methods Programs Biomed. 2011;103(1):39-50. 
+#'
+#'
+#'Garcia Martinez CA, Otero Quintana A, Vila XA, Lado Tourino MJ, Rodriguez-Linares L, Rodriguez Presedo JM, Mendez Penin AJ. Heart Rate Variability Analysis with the R package RHRV. Springer Cham; 2017. 
 #'
 #'
 #'Constantino A. García, Abraham Otero, Xosé Vila, David G. Márquez. A new algorithm for wavelet-based heart rate variability analysis,
