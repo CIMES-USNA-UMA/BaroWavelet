@@ -49,11 +49,11 @@ A list with the estimated components of the baroreflex transfer function in the 
 Computes barorreflex sensitivity as a transfer function using the Continuous Wavelet Transform
 }
 \details{
-This function makes use of the Continuous Wavelet Transform methods 
+This function makes use of the Continuous Wavelet Transform methods
 provided by package \href{https://CRAN.R-project.org/package=biwavelet}{biwavelet} to
-compute the baroreflex sensitivity. It employs the functions \code{link[biwavelet]{wt}} 
+compute the baroreflex sensitivity. It employs the functions \code{link[biwavelet]{wt}}
 and \code{link[biwavelet]{smooth.wavelet}}. This last function is used in a smoothing routine
-based on the one that biwavelet function \code{link[biwavelet]{wtc}} uses to smooth 
+based on the one that biwavelet function \code{link[biwavelet]{wtc}} uses to smooth
 the wavelet transforms. Further information regarding this method of computation
 can be accessed through the references section.
 }
@@ -62,8 +62,8 @@ Data <- InterpolateData(DataSimulation(), f = 1)
 TransferFun <- TransferFunCWT(Data)
 }
 \references{
-Keissar K, Maestri R, Pinna GD, La Rovere MT, Gilad O. Non-invasive 
-baroreflex sensitivity assessment using wavelet transfer function-based 
+Keissar K, Maestri R, Pinna GD, La Rovere MT, Gilad O. Non-invasive
+baroreflex sensitivity assessment using wavelet transfer function-based
 time-frequency analysis. Physiol Meas. 2010 ;31(7):1021-36.
 }
 \author{
