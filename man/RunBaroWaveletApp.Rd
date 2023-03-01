@@ -10,7 +10,9 @@ RunBaroWaveletApp()
 Launches BaroWaveletApp, BaroWavelet's ShinyApp
 }
 \examples{
+\dontrun{
 RunBaroWaveletApp()
+}
 
 }
 \author{

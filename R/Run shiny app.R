@@ -9,7 +9,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' RunBaroWaveletApp()
+#' }
 #'
 RunBaroWaveletApp <- function() {
   shiny::runGitHub(repo = "CIMES-USNA-UMA/BaroWaveletApp",
