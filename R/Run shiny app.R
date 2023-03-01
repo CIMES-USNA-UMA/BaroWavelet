@@ -5,8 +5,9 @@
 #'
 #' @author Alvaro Chao-Ecija
 #'
-#'
+#' @import shiny
 #' @export
+#'
 #'
 #' @examples
 #' \dontrun{
