@@ -17,12 +17,14 @@
 #' @param title Part of the title for the plot. Used to indicate the data source on the title. Default is "data"
 #' @param plotHF Boolean, plot results form the HF band. Default is TRUE
 #' @param plotLF Boolean, plot results from the LF band. Default is TRUE
+#' @param ylim Maximum y axis limit. Default is NULL
+#' @param use.ggplot Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE
 #'
 #' @return None
 #'
 #' @author Alvaro Chao-Ecija
 #'
-#'
+#' @import ggplot2
 #' @export
 #'
 #' @examples
@@ -52,22 +54,39 @@ PlotBRS <-
            newPlot = TRUE,
            title = "data",
            plotHF = FALSE,
-           plotLF = TRUE) {
+           plotLF = TRUE, 
+           ylim = NULL,
+           use.ggplot = TRUE) {
     #if(dev.cur() > 1)
     if (newPlot & !tem) {
       x11(title = paste("Transfer Function from", title))
     }
     if (fun$type == "brs_dwt") {
-      im <-
+      if (!tem & !use.ggplot) {
         PlotDwtBRS(
           fun,
           time_flags = time_flags,
           col = time_col,
           tem = tem,
           plotHF = plotHF,
-          plotLF = plotLF
+          plotLF = plotLF,
+          ylim = ylim,
+          use.ggplot = FALSE
         )
-      return(im)
+      } else {
+        im <-
+          PlotDwtBRS(
+            fun,
+            time_flags = time_flags,
+            col = time_col,
+            tem = tem,
+            plotHF = plotHF,
+            plotLF = plotLF, 
+            ylim = ylim,
+            use.ggplot = TRUE
+          )
+        return(im)
+      }
     } else if (fun$type == "brs_cwt") {
       if (avg) {
         im <- PlotAvgCwtBRS(
@@ -86,7 +105,7 @@ PlotBRS <-
                          tem = tem)
       }
     }
-    if (tem & !newPlot) {
+    if (tem & !newPlot & use.ggplot) {
       return(im)
     }
   }
@@ -100,45 +119,139 @@ PlotDwtBRS <-
            tem  = FALSE,
            plotHF = TRUE,
            plotLF = TRUE,
-           use.xlim = FALSE) {
+           use.xlim = FALSE,
+           ylim = NULL,
+           use.ggplot = TRUE) {
     time <- fun$Time
     HF <- fun$HF
     LF <- fun$LF
-    if (tem) {
-      im <- tempfile(fileext = ".png")
-      png(
-        filename = im,
-        width = 6,
-        height = 6,
-        units = "in",
-        res = 400
-      )
+    if (use.ggplot) {
+      if (tem) {
+        im <- tempfile(fileext = ".png")
+        png(
+          filename = im,
+          width = 6,
+          height = 6,
+          units = "in",
+          res = 400
+        )
+      }
+      plottingData <- data.frame(Time = time, LF = LF, HF = HF)
+      if (plotHF & plotLF)
+        plotHF <- FALSE # Future implementation
+      if (plotHF) {
+        im <-
+          ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = HF)) +
+          ggplot2::geom_line()
+        if (use.xlim)
+          im <-
+            im + ggplot2::xlim(time_flags[1] * 60, time_flags[2] * 60)
+        #return(im)
+      }
+      if (plotLF) {
+        im <-
+          ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = LF)) +
+          ggplot2::geom_line()
+        if (use.xlim)
+          im <-
+            im + ggplot2::xlim(time_flags[1] * 60, time_flags[2] * 60)
+        #return(im)
+      }
+      if (tem) {
+        dev.off()
+        #return(im)
+      }
+      return(im)
+      
+    } else {
+      if (plotHF & plotLF)
+        par(mfrow = c(1, 2))
+      if (plotHF) {
+        plot(
+          time,
+          HF,
+          type = "l",
+          xlab = "Time (s)",
+          ylab = "BRS (ms/mmHg)",
+          main = "HF band (0.4 - 0.15 Hz)",
+          ylim = if(!is.null(ylim)) c(0, ylim)
+        )
+        if ((class(time_flags) == "list") &&
+            !is.null(col) && (length(time_flags) >= NROW(col))) {
+          if (length(time_flags) > NROW(col))
+            col <-
+              c(col, rep ("black", length(time_flags) - NROW(col)))
+          for (ti in 1:length(time_flags)) {
+            time_lims <- time_flags[[ti]] * 60
+            ti_col <- col[ti]
+            limit1 <-
+              match(min(abs(time_lims[1] - time)), abs(time_lims[1] - time))
+            limit2 <-
+              match(min(abs(time_lims[2] - time)), abs(time_lims[2] -  time))
+            select_time <- limit1:limit2
+            band <- HF
+            band[-select_time] <- NA
+            lines(time, band, col = ti_col)
+          }
+          
+        } else if ((class(time_flags) == "numeric") &&
+                   (NROW(time_flags) == 2) &&
+                   !is.null(col) && (NROW(col) == 1)) {
+          time_flags <- time_flags * 60
+          limit1 <-
+            match(min(abs(time_flags[1] - time)), abs(time_flags[1] - time))
+          limit2 <-
+            match(min(abs(time_flags[2] - time)), abs(time_flags[2] -  time))
+          select_time <- limit1:limit2
+          band <- HF
+          band[-select_time] <- NA
+          lines(time, band, col = col)
+          time_flags <- time_flags / 60
+        }
+      }
+      if (plotLF) {
+        plot(
+          time,
+          LF,
+          type = "l",
+          xlab = "Time (s)",
+          ylab = "BRS (ms/mmHg)",
+          main = "LF band (0.15 - 0.04 Hz)",
+          ylim = if(!is.null(ylim)) c(0, ylim)
+        )
+        if ((class(time_flags) == "list") &&
+            !is.null(col) && (length(time_flags) >= NROW(col))) {
+          if (length(time_flags) > NROW(col))
+            col <-
+              c(col, rep ("black", length(time_flags) - NROW(col)))
+          for (ti in 1:length(time_flags)) {
+            time_lims <- time_flags[[ti]] * 60
+            ti_col <- col[ti]
+            limit1 <-
+              match(min(abs(time_lims[1] - time)), abs(time_lims[1] - time))
+            limit2 <-
+              match(min(abs(time_lims[2] - time)), abs(time_lims[2] -  time))
+            select_time <- limit1:limit2
+            band <- LF
+            band[-select_time] <- NA
+            lines(time, band, col = ti_col)
+          }
+          
+        } else if ((class(time_flags) == "numeric") &&
+                   (NROW(time_flags) == 2) &&
+                   !is.null(col) && (NROW(col) == 1)) {
+          time_flags = time_flags * 60
+          limit1 <-
+            match(min(abs(time_flags[1] - time)), abs(time_flags[1] - time))
+          limit2 <-
+            match(min(abs(time_flags[2] - time)), abs(time_flags[2] -  time))
+          select_time <- limit1:limit2
+          band <- LF
+          band[-select_time] <- NA
+          lines(time, band, col = col)
+        }
+      }
     }
-    plottingData <- data.frame(Time = time, LF = LF, HF = HF)
-    if (plotHF & plotLF)
-      plotHF <- FALSE # Future implementation
-    if (plotHF) {
-      im <-
-        ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = HF)) +
-        ggplot2::geom_line()
-      if (use.xlim)
-        im <- im + ggplot2::xlim(time_flags[1] * 60, time_flags[2] * 60)
-      #return(im)
-    }
-    if (plotLF) {
-      im <-
-        ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = LF)) +
-        ggplot2::geom_line()
-      if (use.xlim)
-        im <- im + ggplot2::xlim(time_flags[1] * 60, time_flags[2] * 60)
-      #return(im)
-    }
-    if (tem) {
-      dev.off()
-      #return(im)
-    }
-    return(im)
-    
   }
 
 PlotCwtBRS <-

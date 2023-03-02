@@ -18,7 +18,9 @@ PlotBRS(
   newPlot = TRUE,
   title = "data",
   plotHF = FALSE,
-  plotLF = TRUE
+  plotLF = TRUE,
+  ylim = NULL,
+  use.ggplot = TRUE
 )
 }
 \arguments{
@@ -51,6 +53,10 @@ Default is NULL.}
 \item{plotHF}{Boolean, plot results form the HF band. Default is TRUE}
 
 \item{plotLF}{Boolean, plot results from the LF band. Default is TRUE}
+
+\item{ylim}{Maximum y axis limit. Default is NULL}
+
+\item{use.ggplot}{Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE}
 }
 \value{
 None
