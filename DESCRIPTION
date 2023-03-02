@@ -14,7 +14,8 @@ Imports:
     RHRV (>= 4.2.6),
     biwavelet (>= 0.20.21),
     ggplot2 (>= 3.3.6),
-    ggpubr (>= 0.4.0)
+    ggpubr (>= 0.4.0),
+    gridExtra (>= 2.3)
 Depends: 
     R (>= 3.0.0)
 NeedsCompilation: no

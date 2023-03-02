@@ -24,7 +24,7 @@ There is a complementary shiny application available for this package. To access
 BaroWavelet::RunBaroWaveletApp()
 ```
 
-Alternatively, you can use the following code line (you may need to install *shiny*, *ggplot2*, *ggpubr* and *BaroWavelet*):
+Alternatively, you can use the following code line (you may need to install *shiny*, *ggplot2*, *ggpubr*, *gridExtra* and *BaroWavelet*):
 
 ```ruby
 shiny::runGitHub("BaroWaveletApp", "CIMES-USNA-UMA", launch.browser = TRUE)
