@@ -1249,6 +1249,9 @@ TestHRV <-
 #'
 #' @author Alvaro Chao-Ecija
 #'
+#' @import ggplot2
+#' @import ggpubr
+#' @import gridExtra
 #'
 #' @export
 #'
@@ -1379,6 +1382,9 @@ PlotTestResults <-
 #'
 #' @author Alvaro Chao-Ecija
 #'
+#' @import ggplot2
+#' @import ggpubr
+#' @import gridExtra
 #'
 #' @export
 #'
@@ -1527,7 +1533,8 @@ PlotHRVTestResults <-
 #' @return The results of a linear regression model with the chosen data
 #'
 #' @author Alvaro Chao-Ecija
-#'
+#' 
+#' @import ggplot2
 #'
 #' @export
 #'

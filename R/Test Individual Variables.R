@@ -126,7 +126,7 @@ TestBRSCWT <-
         stop("Intervals are equal")
       }
     }
-    fun <- BaroWavelet:::GetBiwaveletObject(fun)
+    fun <- GetBiwaveletObject(fun)
     freqs <- 1 / fun$period
     sel_power <- fun$power
     if (!use.thr)
