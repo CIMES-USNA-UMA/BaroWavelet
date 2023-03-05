@@ -1,51 +1,249 @@
+
+#' Plot individual HRV
+#'
+#' Plots HRV data computed by function \link[RHRV]{CalculatePowerBand} from package \href{https://CRAN.R-project.org/package=RHRV}{RHRV} 
+#' @param hrv HRV obtained either by RHRV function \link[RHRV]{CalculatePowerBand} or from \link[BaroWavelet]{AlphaIndexDWT}. If
+#'            the former method is used, it must be a list with variables named HF, LF and LFHF. If the latter method is
+#'            used, argument hrv must be set to TRUE.
+#' @param time Time values for the HRV data
+#' @param col Color used to highlight a specific time interval. Default is brown
+#' @param time_flags A vector containing the minimum and maximum limits of a time interval, in minutes.
+#'                   Default is NULL.
+#' @param use.xlim Boolean. Should the argument time_flags be used as limits of the x-axis? Default is FALSE.
+#' @param tem Boolean, creates a temporal file for the plot. Default is FALSE
+#' @param newPlot Boolean, generates a new plot without overwriting a previous plot. Default is TRUE
+#' @param title Part of the title for the plot. Used to indicate the data source on the title. Default is "data"
+#' @param plotHF Boolean, plot results form the HF band. Default is TRUE
+#' @param plotLF Boolean, plot results from the LF band. Default is TRUE
+#' @param ratio Boolean. Should the LF/HF ratio be plotted? Default is FALSE. Arguments plotHF and plotLF must also be
+#'              set to TRUE.
+#' @param ylim Maximum y axis limit. Default is NULL
+#' @param use.ggplot Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE
+#'
+#' @return None
+#'
+#' @author Alvaro Chao-Ecija
+#'
+#' @import ggplot2
+#' @export
+#'
+#' @examples
+#' Data <- InterpolateData(DataSimulation(), f = 1)
+#' AlphaIndex <- AlphaIndexDWT(Data, wv = "d8", error = 0.0005, hrv = TRUE)
+#'
+#'
+#' PlotHRV(AlphaIndex$HRV, AlphaIndex$Time, plotHF = TRUE, plotLF = FALSE)
+#'
+#' PlotHRV(AlphaIndex$HRV, AlphaIndex$Time, plotHF = FALSE, plotLF = TRUE)
+#'
+#' PlotHRV(AlphaIndex$HRV, AlphaIndex$Time)
+#'
+
 PlotHRV <-
   function(hrv,
+           time,
            time_flags = NULL,
            col = "brown",
+           use.xlim = FALSE,
            tem  = FALSE,
+           newPlot = TRUE,
+           title = "data",
            plotHF = TRUE,
-           plotLF = TRUE) {
-    Time <- hrv$Time
+           plotLF = TRUE,
+           ratio = TRUE,
+           ylim = NULL,
+           use.ggplot = TRUE) {
+    if (newPlot & !tem) {
+      x11(title = paste("Heart Rate Variability from", title))
+    }
     HF <- hrv$HF
     LF <- hrv$LF
     LFHF <- hrv$LFHF
-    if (tem) {
-      im <- tempfile(fileext = ".png")
-      png(
-        filename = im,
-        width = 6,
-        height = 6,
-        units = "in",
-        res = 400
-      )
-    }
-    plottingData <-
-      data.frame(
-        Time = Time,
-        LF = LF,
-        HF = HF,
-        LFHF = LFHF
-      )
-    if (plotHF & !plotLF) {
-      im <-
-        ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = HF)) +
-        ggplot2::geom_line()
-      return(im)
-    } else if (plotLF & !plotHF) {
-      im <-
-        ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = LF)) +
-        ggplot2::geom_line()
-      return(im)
-    } else if (plotLF & plotHF) {
-      im <-
-        ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = Time, y = LFHF)) +
-        ggplot2::geom_line()
-      return(im)
-    }
-    
-    if (tem) {
-      dev.off()
-      return(im)
+    if (use.ggplot) {
+      if (tem) {
+        im <- tempfile(fileext = ".png")
+        png(
+          filename = im,
+          width = 6,
+          height = 6,
+          units = "in",
+          res = 400
+        )
+      }
+      plottingData <-
+        data.frame(
+          time = time,
+          LF = LF,
+          HF = HF,
+          LFHF = LFHF
+        )
+      if (plotHF & !plotLF) {
+        im <-
+          ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = time, y = HF)) +
+          ggplot2::geom_line()
+        if (use.xlim)
+          im <-
+            im + ggplot2::xlim(time_flags[1] * 60, time_flags[2] * 60)
+        return(im)
+      } else if (plotLF & !plotHF) {
+        im <-
+          ggplot2::ggplot(data = plottingData, mapping = ggplot2::aes(x = time, y = LF)) +
+          ggplot2::geom_line()
+        if (use.xlim)
+          im <-
+            im + ggplot2::xlim(time_flags[1] * 60, time_flags[2] * 60)
+        return(im)
+      } else if (plotLF & plotHF & ratio) {
+        im <-
+          ggplot2::ggplot(data = plottingData,
+                          mapping = ggplot2::aes(x = time, y = LFHF)) +
+          ggplot2::geom_line()
+        if (use.xlim)
+          im <-
+            im + ggplot2::xlim(time_flags[1] * 60, time_flags[2] * 60)
+        return(im)
+      } else if (plotLF & plotHF) {
+        stop("Not yet implemented")
+      }
+      
+      if (tem) {
+        dev.off()
+        return(im)
+      }
+    } else {
+      if (plotHF & plotLF & !ratio)
+        par(mfrow = c(1, 2))
+      if (plotHF & plotLF & ratio) {
+        plot(
+          time,
+          LFHF,
+          type = "l",
+          xlab = "time (s)",
+          ylab = "LF/HF ratio",
+          main = "HRV: LF/HF ratio",
+          ylim = if (!is.null(ylim))
+            c(0, ylim)
+        )
+        if ((class(time_flags) == "list") &&
+            !is.null(col) && (length(time_flags) >= NROW(col))) {
+          if (length(time_flags) > NROW(col))
+            col <-
+              c(col, rep ("black", length(time_flags) - NROW(col)))
+          for (ti in 1:length(time_flags)) {
+            time_lims <- time_flags[[ti]] * 60
+            ti_col <- col[ti]
+            limit1 <-
+              match(min(abs(time_lims[1] - time)), abs(time_lims[1] - time))
+            limit2 <-
+              match(min(abs(time_lims[2] - time)), abs(time_lims[2] -  time))
+            select_time <- limit1:limit2
+            band <- LFHF
+            band[-select_time] <- NA
+            lines(time, band, col = ti_col)
+          }
+          
+        } else if ((class(time_flags) == "numeric") &&
+                   (NROW(time_flags) == 2) &&
+                   !is.null(col) && (NROW(col) == 1)) {
+          time_flags = time_flags * 60
+          limit1 <-
+            match(min(abs(time_flags[1] - time)), abs(time_flags[1] - time))
+          limit2 <-
+            match(min(abs(time_flags[2] - time)), abs(time_flags[2] -  time))
+          select_time <- limit1:limit2
+          band <- LF
+          band[-select_time] <- NA
+          lines(time, band, col = col)
+        }
+      } else {
+        if (plotHF) {
+          plot(
+            time,
+            HF,
+            type = "l",
+            xlab = "time (s)",
+            ylab = expression(HRV ~ ms^2),
+            main = "HRV: HF band (0.4 - 0.15 Hz)",
+            ylim = if (!is.null(ylim))
+              c(0, ylim)
+          )
+          if ((class(time_flags) == "list") &&
+              !is.null(col) && (length(time_flags) >= NROW(col))) {
+            if (length(time_flags) > NROW(col))
+              col <-
+                c(col, rep ("black", length(time_flags) - NROW(col)))
+            for (ti in 1:length(time_flags)) {
+              time_lims <- time_flags[[ti]] * 60
+              ti_col <- col[ti]
+              limit1 <-
+                match(min(abs(time_lims[1] - time)), abs(time_lims[1] - time))
+              limit2 <-
+                match(min(abs(time_lims[2] - time)), abs(time_lims[2] -  time))
+              select_time <- limit1:limit2
+              band <- HF
+              band[-select_time] <- NA
+              lines(time, band, col = ti_col)
+            }
+            
+          } else if ((class(time_flags) == "numeric") &&
+                     (NROW(time_flags) == 2) &&
+                     !is.null(col) && (NROW(col) == 1)) {
+            time_flags <- time_flags * 60
+            limit1 <-
+              match(min(abs(time_flags[1] - time)), abs(time_flags[1] - time))
+            limit2 <-
+              match(min(abs(time_flags[2] - time)), abs(time_flags[2] -  time))
+            select_time <- limit1:limit2
+            band <- HF
+            band[-select_time] <- NA
+            lines(time, band, col = col)
+            time_flags <- time_flags / 60
+          }
+        }
+        if (plotLF) {
+          plot(
+            time,
+            LF,
+            type = "l",
+            xlab = "time (s)",
+            ylab = expression(HRV ~ ms^2),
+            main = "HRV: LF band (0.15 - 0.04 Hz)",
+            ylim = if (!is.null(ylim))
+              c(0, ylim)
+          )
+          if ((class(time_flags) == "list") &&
+              !is.null(col) && (length(time_flags) >= NROW(col))) {
+            if (length(time_flags) > NROW(col))
+              col <-
+                c(col, rep ("black", length(time_flags) - NROW(col)))
+            for (ti in 1:length(time_flags)) {
+              time_lims <- time_flags[[ti]] * 60
+              ti_col <- col[ti]
+              limit1 <-
+                match(min(abs(time_lims[1] - time)), abs(time_lims[1] - time))
+              limit2 <-
+                match(min(abs(time_lims[2] - time)), abs(time_lims[2] -  time))
+              select_time <- limit1:limit2
+              band <- LF
+              band[-select_time] <- NA
+              lines(time, band, col = ti_col)
+            }
+            
+          } else if ((class(time_flags) == "numeric") &&
+                     (NROW(time_flags) == 2) &&
+                     !is.null(col) && (NROW(col) == 1)) {
+            time_flags = time_flags * 60
+            limit1 <-
+              match(min(abs(time_flags[1] - time)), abs(time_flags[1] - time))
+            limit2 <-
+              match(min(abs(time_flags[2] - time)), abs(time_flags[2] -  time))
+            select_time <- limit1:limit2
+            band <- LF
+            band[-select_time] <- NA
+            lines(time, band, col = col)
+          }
+        }
+      }
     }
     
   }
