@@ -337,7 +337,7 @@ AddAvgCwtData <- function(framework, locator) {
 #' PlotAnalyzedBRS(Study, 1, "dwt")
 #'
 #' PlotAnalyzedBRS(Study, 1, "cwt")
-PlotAnalyzedBRS <-
+PlotAnalyzedBRS2 <-
   function(framework,
            locator,
            method = c("dwt", "cwt", "cwt.avg", "cwt.phase"),
@@ -397,6 +397,7 @@ PlotAnalyzedBRS <-
       return(im)
     } else if (method == "cwt.phase") {
       tf <- AssembleCwtBRS(framework, locator)
+      tf[[1]] <- tf$Phase
       tf <- SplitByCoherence(tf, thr = thr)
       tf$Time <- Data$Data[, 1]
       im <-
