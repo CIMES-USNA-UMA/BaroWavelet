@@ -624,8 +624,8 @@ AnalyzeBRSIndices <-
 #' @param locator A locator indicating which analysis slot needs to be used
 #' @param method Which method was used to compute the BRS
 #' @param use.names Boolean, should the names of the subjects be used?
-#' @param HFcol Color to be used to represent the HF band
-#' @param LFcol Color to be used to represent the LF band
+#' @param HFcol Color to be used to represent the HF band 
+#' @param LFcol Color to be used to represent the LF band 
 #' @param restrict Vector used to restrict the plot to specific intervals. Default is NULL
 #' @param output Boolean. Should the indices for each interval be returned? Default is FALSE
 #' @param ymax Maximum level for the y axis. Default is NULL

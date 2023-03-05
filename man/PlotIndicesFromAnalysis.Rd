@@ -45,7 +45,7 @@ PlotIndicesFromAnalysis(
 None
 }
 \description{
-Plots HF and LF indices associated to a specific subject
+Plots BRS HF and LF indices associated to a specific subject
 }
 \examples{
 Data <- InterpolateData(DataSimulation(), f = 1)

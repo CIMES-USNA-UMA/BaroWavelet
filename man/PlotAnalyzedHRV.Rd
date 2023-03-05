@@ -14,6 +14,7 @@ PlotAnalyzedHRV(
   tem = FALSE,
   plotHF = TRUE,
   plotLF = TRUE,
+  ratio = TRUE,
   newPlot = TRUE
 )
 }

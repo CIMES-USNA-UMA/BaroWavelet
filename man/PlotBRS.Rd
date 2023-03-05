@@ -31,12 +31,12 @@ PlotBRS(
 
 \item{time_col}{Color used to highlight a specific time interval. Default is brown}
 
-\item{HFcolor}{Color to be used to highlight the HF band}
+\item{HFcolor}{Color to be used to highlight the HF band for the average CWT plot}
 
-\item{LFcolor}{Color to be used to highlight the LF band}
+\item{LFcolor}{Color to be used to highlight the LF band for the average CWT plot}
 
 \item{time_flags}{A vector containing the minimum and maximum limits of a time interval, in minutes.
-Default is NULL.}
+Default is NULL}
 
 \item{thr}{Coherence threshold to be used for the plot. Default is 0.5}
 

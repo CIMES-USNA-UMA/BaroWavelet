@@ -4,7 +4,13 @@
 \alias{SplitByCoherence}
 \title{Split CWT BRS with coherence criteria}
 \usage{
-SplitByCoherence(fun, thr = 0.5, use.thr = TRUE, time_flags = NULL)
+SplitByCoherence(
+  fun,
+  thr = 0.5,
+  use.thr = TRUE,
+  time_flags = NULL,
+  use.phase = FALSE
+)
 }
 \arguments{
 \item{fun}{BRS obtained from \link[BaroWavelet]{TransferFunCWT}}
