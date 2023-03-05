@@ -287,7 +287,7 @@ AnalyzeBRS <-
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
 AddAvgCwtData <- function(framework, locator) {
-  tf <- AssembleCwtTransferFun(framework, locator)
+  tf <- AssembleCwtBRS(framework, locator)
   framework$Analyses[[locator]]$BRS$AvgCWT <- list()
   framework$Analyses[[locator]]$BRS$AvgCWT <- GetAvgCwtBands(tf)
   return(framework)
@@ -1664,17 +1664,18 @@ AddBRStoAnalysis <- function(framework, tf, locator) {
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #'
-#' TransferFun <- AssembleCwtTransferFun(Study, 1)
-AssembleCwtTransferFun <- function(framework, locator) {
+#' TransferFun <- AssembleCwtBRS(Study, 1)
+AssembleCwtBRS <- function(framework, locator) {
   Data <- framework$"General Data"
-  TFun <- framework$Analyses[[locator]]$BRS$CWT
-  TFun$HF <- Data$HF
-  TFun$LF <- Data$LF
-  TFun$VLF <- Data$VLF
-  TFun$Time <-
+  brs <- framework$Analyses[[locator]]$BRS$CWT
+  brs$HF <- Data$HF
+  brs$LF <- Data$LF
+  brs$VLF <- Data$VLF
+  brs$Time <-
     framework$Analyses[[locator]]$Data[, 1]
-  return(TFun)
+  return(brs)
 }
+
 
 AddIndividualIndices <-
   function(framework,
@@ -1696,7 +1697,7 @@ AddIndividualIndices <-
         framework$IndividualIndices[[locator_t]]$Time_DWT
       N <- length(others)
     } else if (method == "cwt") {
-      tf <- AssembleCwtTransferFun(framework, locator_a)
+      tf <- AssembleCwtBRS(framework, locator_a)
       tf$type <- "brs_cwt"
       others <- interval$CWT
       Time <-
