@@ -465,10 +465,11 @@ PlotAnalyzedHRV <- function(framework,
   #if(dev.cur() > 1) dev.off()
   Data <- ExtractDataFromAnalysis(framework, locator)
   hrv <- framework$Analyses[[locator]]$HRV
-  hrv$Time <- Data$Data[, 1]
+  Time <- Data$Data[, 1]
   im <-
     PlotHRV(
-      hrv,
+      hrv, 
+      Time,
       time_flags,
       col = time_col,
       tem = tem,
