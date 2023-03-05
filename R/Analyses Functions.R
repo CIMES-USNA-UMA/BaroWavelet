@@ -306,8 +306,8 @@ AddAvgCwtData <- function(framework, locator) {
 #' @param locator A locator indicating which analysis slot needs to be used
 #' @param method Which method to be used to plot the transfer function.
 #' @param time_col Color used to highlight a specific time interval. Default is brown
-#' @param HFcolor Color to be used to highlight the HF band
-#' @param LFcolor Color to be used to highlight the LF band
+#' @param HFcolor Color to be used to highlight the HF band for the average CWT plot
+#' @param LFcolor Color to be used to highlight the LF band for the average CWT plot
 #' @param time_flags A vector containing the minimum and maximum limits of a time interval, in minutes.
 #'                   Default is NULL.
 #' @param use.coherence Boolean, should a coherence threshold be used in the analyses? Default is TRUE.
@@ -397,8 +397,7 @@ PlotAnalyzedBRS <-
       return(im)
     } else if (method == "cwt.phase") {
       tf <- AssembleCwtBRS(framework, locator)
-      tf[[1]] <- tf$Phase
-      tf <- SplitByCoherence(tf, thr = thr)
+      tf <- SplitByCoherence(tf, thr = thr, use.phase = TRUE)
       tf$Time <- Data$Data[, 1]
       im <-
         PlotDwtBRS(
@@ -1937,7 +1936,8 @@ SplitByCoherence <-
   function(fun,
            thr = 0.5,
            use.thr = TRUE,
-           time_flags = NULL) {
+           time_flags = NULL, 
+           use.phase = FALSE) {
     HF <- fun$HF
     LF <- fun$LF
     VLF <- fun$VLF
@@ -1946,17 +1946,24 @@ SplitByCoherence <-
       select_time <- 1:NROW(fun$t)
     } else {
       time_flags <- time_flags * 60
-      select_time <- fun$t[(fun$t >= time_flags[1]) &
-                             (fun$t <= time_flags[2])]
-      select_time <- match(select_time, fun$t)
+      limit1 <-
+        match(min(abs(time_flags[1] - fun$t)), abs(time_flags[1] - fun$t))
+      limit2 <-
+        match(min(abs(time_flags[2] - fun$t)), abs(time_flags[2] - fun$t))
+      select_time1 <- limit1:limit2
     }
     freqs <- 1 / fun$period
-    sel_power <- fun$power
     if (!use.thr)
       thr <- 0
+    if(!use.phase){
     results.HF <- fun$power[(freqs <= HF) & (freqs > LF), select_time]
     results.LF <-
       fun$power[(freqs <= LF) & (freqs > VLF), select_time]
+    } else {
+      results.HF <- fun$phase[(freqs <= HF) & (freqs > LF), select_time]
+      results.LF <-
+        fun$phase[(freqs <= LF) & (freqs > VLF), select_time]
+    }
     rsq.HF <- fun$rsq[(freqs <= HF) & (freqs > LF), select_time]
     rsq.LF <- fun$rsq[(freqs <= LF) & (freqs > VLF), select_time]
     if (use.thr) {

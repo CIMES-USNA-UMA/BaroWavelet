@@ -5,10 +5,10 @@
 #' \link[BaroWavelet]{TransferFunCWT}
 #' @param avg Boolean. Plot the scale-averaged CWT BRS? Default is FALSE
 #' @param time_col Color used to highlight a specific time interval. Default is brown
-#' @param HFcolor Color to be used to highlight the HF band
-#' @param LFcolor Color to be used to highlight the LF band
+#' @param HFcolor Color to be used to highlight the HF band for the average CWT plot
+#' @param LFcolor Color to be used to highlight the LF band for the average CWT plot
 #' @param time_flags A vector containing the minimum and maximum limits of a time interval, in minutes.
-#'                   Default is NULL.
+#'                   Default is NULL
 #' @param thr Coherence threshold to be used for the plot. Default is 0.5
 #' @param use.thr Boolean, should a coherence threshold be used in the analyses? Default is TRUE.
 #' @param nfreqs Number of frequencies to be used. Default is 7
