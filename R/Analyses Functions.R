@@ -1593,9 +1593,9 @@ ModelClinicalData <-
 
 
 
-
-
-# Auxiliary Functions:
+#########################################################
+# AUXILIARY FUNCTIONS                                   #
+#########################################################
 
 #' Extract data from a specific analysis
 #'

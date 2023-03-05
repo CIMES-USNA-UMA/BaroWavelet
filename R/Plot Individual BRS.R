@@ -470,6 +470,14 @@ PlotAvgCwtBRS <- function(fun,
   
 }
 
+#########################################################
+# OTHER AUXILIARY FUNCTIONS                             #
+#########################################################
+
+
+# Private function: generates an object of class "biwavelet" with a structure
+# compatible with the biwavelet package. This is done so that biwavelet methods
+# can be applied to the plots.
 GetBiwaveletObject <- function(data, use.thr = TRUE, thr = 0.5) {
   biwave_object <- list()
   biwave_object$type <- "wtc"
@@ -487,16 +495,4 @@ GetBiwaveletObject <- function(data, use.thr = TRUE, thr = 0.5) {
   }
   class(biwave_object) <- "biwavelet"
   return(biwave_object)
-}
-
-
-
-AssembleCwtBRS <- function(framework, index) {
-  Data <- framework$"General Data"
-  funun <- framework$Analyses[[index]]$BRS$CWT
-  funun$HF <- Data$HF
-  funun$LF <- Data$LF
-  funun$VLF <- Data$VLF
-  funun$Time <- framework$Analyses[[index]]$Data[, 1]
-  return(funun)
 }
