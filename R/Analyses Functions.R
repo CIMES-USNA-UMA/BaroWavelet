@@ -337,7 +337,7 @@ AddAvgCwtData <- function(framework, locator) {
 #' PlotAnalyzedBRS(Study, 1, "dwt")
 #'
 #' PlotAnalyzedBRS(Study, 1, "cwt")
-PlotAnalyzedBRS2 <-
+PlotAnalyzedBRS <-
   function(framework,
            locator,
            method = c("dwt", "cwt", "cwt.avg", "cwt.phase"),
