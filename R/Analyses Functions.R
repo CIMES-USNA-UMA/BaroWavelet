@@ -458,11 +458,8 @@ PlotAnalyzedHRV <- function(framework,
                             tem = FALSE,
                             plotHF = TRUE,
                             plotLF = TRUE,
+                            ratio = TRUE,
                             newPlot = TRUE) {
-  if (newPlot)
-    x11(title = paste("Transfer Function from",
-                      framework$Analyses[[locator]]$Name))
-  #if(dev.cur() > 1) dev.off()
   Data <- ExtractDataFromAnalysis(framework, locator)
   hrv <- framework$Analyses[[locator]]$HRV
   Time <- Data$Data[, 1]
@@ -474,7 +471,9 @@ PlotAnalyzedHRV <- function(framework,
       col = time_col,
       tem = tem,
       plotHF = plotHF,
-      plotLF = plotLF
+      plotLF = plotLF,
+      ratio = ratio,
+      newPlot = newPlot
     )
   return(im)
 }
