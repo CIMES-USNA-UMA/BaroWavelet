@@ -1624,7 +1624,7 @@ ExtractDataFromAnalysis <- function(framework, locator) {
 }
 
 
-
+# Private function: adds BRS data to a specific analysis
 AddBRStoAnalysis <- function(framework, tf, locator) {
   if (tf$type == "brs_dwt") {
     tf$type <- NULL
@@ -1676,7 +1676,7 @@ AssembleCwtBRS <- function(framework, locator) {
   return(brs)
 }
 
-
+# Private function: adds BRS indices from specific analyses to a certain time interval
 AddIndividualIndices <-
   function(framework,
            locator_a,
@@ -1748,7 +1748,7 @@ AddIndividualIndices <-
   }
 
 
-
+# Private function: adds HRV data from an analysis to a certain interval
 AddExpectedHRV <-
   function(framework,
            locator_a,
@@ -1787,7 +1787,7 @@ AddExpectedHRV <-
     return(framework)
   }
 
-
+# Private function: prepares spaces for interval data.
 PrepareIntervalSlots <-
   function(framework, method = c("dwt", "cwt")) {
     n <- framework$n
