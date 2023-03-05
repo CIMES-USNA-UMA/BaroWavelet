@@ -1,7 +1,8 @@
 
+
 #' Plot individual HRV
 #'
-#' Plots HRV data computed by function \link[RHRV]{CalculatePowerBand} from package \href{https://CRAN.R-project.org/package=RHRV}{RHRV} 
+#' Plots HRV data computed by function \link[RHRV]{CalculatePowerBand} from package \href{https://CRAN.R-project.org/package=RHRV}{RHRV}
 #' @param hrv HRV obtained either by RHRV function \link[RHRV]{CalculatePowerBand} or from \link[BaroWavelet]{AlphaIndexDWT}. If
 #'            the former method is used, it must be a list with variables named HF, LF and LFHF. If the latter method is
 #'            used, argument hrv must be set to TRUE.
@@ -162,7 +163,7 @@ PlotHRV <-
             HF,
             type = "l",
             xlab = "time (s)",
-            ylab = expression(HRV ~ ms^2),
+            ylab = expression(HRV ~ ms ^ 2),
             main = "HRV: HF band (0.4 - 0.15 Hz)",
             ylim = if (!is.null(ylim))
               c(0, ylim)
@@ -206,7 +207,7 @@ PlotHRV <-
             LF,
             type = "l",
             xlab = "time (s)",
-            ylab = expression(HRV ~ ms^2),
+            ylab = expression(HRV ~ ms ^ 2),
             main = "HRV: LF band (0.15 - 0.04 Hz)",
             ylim = if (!is.null(ylim))
               c(0, ylim)
