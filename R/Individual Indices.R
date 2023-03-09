@@ -8,6 +8,7 @@
 #' @param thr Coherence threshold to ensure the reliability of the estimates. Default is 0.5
 #' @param use.coherence Boolean, should a coherence threshold be used? Default is TRUE
 #' @param method Which method, either the mean or the median, should be used to obtain the indices
+#' @param use.phase Boolean, should indices be computed from CWT phase difference estimates? Default is FALSE
 #'
 #' @return A matrix containing data (either medians and IQRs, or means and standard deviations)
 #' identifying indices at the HF and LF bands for the specific subjects.
@@ -28,10 +29,12 @@ IndividualIndices <- function(fun,
                               time_flags = NULL,
                               thr = 0.5,
                               use.coherence = TRUE,
-                              method = c("median", "mean")) {
+                              method = c("median", "mean"),
+                              use.phase = FALSE) {
   if (fun$type == "brs_dwt") {
     index <- IndividualIndicesDWT(fun, time_flags, method = method)
   } else if (fun$type == "brs_cwt") {
+    if(!use.phase){
     index <- IndividualIndicesCWT(
       fun,
       time_flags = time_flags,
@@ -39,6 +42,15 @@ IndividualIndices <- function(fun,
       use.thr = use.coherence,
       method = method
     )
+    } else {
+      index <- IndividualIndicesPhaseCWT(
+        fun,
+        time_flags = time_flags,
+        thr = thr,
+        use.thr = use.coherence,
+        method = method
+      )
+    }
   }
   return(index)
 }
@@ -129,13 +141,12 @@ IndividualIndicesCWT <-
       time_flags <- time_flags * 60
       # The following step is done due to floating point precision issues
       limit1 <-
-        match(min(abs(time_flags[1] - fun$Time)), abs(time_flags[1] - fun$Time))
+        match(min(abs(time_flags[1] - fun$t)), abs(time_flags[1] - fun$t))
       limit2 <-
-        match(min(abs(time_flags[2] - fun$Time)), abs(time_flags[2] - fun$Time))
+        match(min(abs(time_flags[2] - fun$t)), abs(time_flags[2] - fun$t))
       select_time <- limit1:limit2
     }
     freqs <- 1 / fun$period
-    sel_power <- fun$power
     if (!use.thr)
       thr <- 0
     results.HF <- fun$power[(freqs <= HF) & (freqs > LF), ]
@@ -148,8 +159,8 @@ IndividualIndicesCWT <-
     }
     results.HF <- colMeans(results.HF, na.rm = TRUE)
     results.LF <- colMeans(results.LF, na.rm = TRUE)
-    results.HF <- method1(results.HF[select_time], na.rm = TRUE)
-    results.LF <- method1(results.LF[select_time], na.rm = TRUE)
+    result.HF <- method1(results.HF[select_time], na.rm = TRUE)
+    result.LF <- method1(results.LF[select_time], na.rm = TRUE)
     results2.HF <-
       ifelse(method == "mean",
              method2(results.HF[select_time], na.rm = TRUE),
@@ -160,11 +171,11 @@ IndividualIndicesCWT <-
              as.numeric(method2(results.LF[select_time], na.rm = TRUE, 0.25)))
     if (method == "mean") {
       output <-
-        rbind(c(results.HF, results.LF), c(results2.HF, results2.LF))
+        rbind(c(result.HF, result.LF), c(results2.HF, results2.LF))
     } else {
       output <-
         rbind(
-          c(results.HF, results.LF),
+          c(result.HF, result.LF),
           c(results2.HF[1], results2.LF[1]),
           c(as.numeric(
             method2(results.HF[select_time], na.rm = TRUE, 0.75)
@@ -181,12 +192,23 @@ IndividualIndicesCWT <-
 
 
 
-ExpectedPhaseCWT <-
+IndividualIndicesPhaseCWT <-
   function(fun,
            thr = 0.5,
            use.thr = TRUE,
            time_flags = NULL,
-           weight = TRUE) {
+           method = c("median", "mean")) {
+    method <- match.arg(method)
+    if (method == "mean") {
+      method1 <- mean
+      method2 <- sd
+      output_rnames <- c("mean", "sd")
+      
+    } else if (method == "median") {
+      method1 <- median
+      method2 <- quantile
+      output_rnames <- c("median", "P25", "P75")
+    }
     HF <- fun$HF
     LF <- fun$LF
     VLF <- fun$VLF
@@ -197,40 +219,52 @@ ExpectedPhaseCWT <-
       time_flags <- time_flags * 60
       # The following step is done due to floating point precision issues
       limit1 <-
-        match(min(abs(time_flags[1] - fun$Time)), abs(time_flags[1] - fun$Time))
+        match(min(abs(time_flags[1] - fun$t)), abs(time_flags[1] - fun$t))
       limit2 <-
-        match(min(abs(time_flags[2] - fun$Time)), abs(time_flags[2] - fun$Time))
+        match(min(abs(time_flags[2] - fun$t)), abs(time_flags[2] - fun$t))
       select_time <- limit1:limit2
     }
     freqs <- 1 / fun$period
-    sel_phase <- fun$phase
     if (!use.thr)
       thr <- 0
-    results.HF <-
-      fun$phase[(freqs <= HF) & (freqs > LF), select_time]
-    results.LF <-
-      fun$phase[(freqs <= LF) & (freqs > VLF), select_time]
-    rsq.HF <- fun$rsq[(freqs <= HF) & (freqs > LF), select_time]
-    rsq.LF <- fun$rsq[(freqs <= LF) & (freqs > VLF), select_time]
+    results.HF <- fun$phase[(freqs <= HF) & (freqs > LF), ]
+    results.LF <- fun$phase[(freqs <= LF) & (freqs > VLF), ]
+    rsq.HF <- fun$rsq[(freqs <= HF) & (freqs > LF), ]
+    rsq.LF <- fun$rsq[(freqs <= LF) & (freqs > VLF), ]
     if (use.thr) {
       results.HF[which(rsq.HF < thr)] <- NA
       results.LF[which(rsq.LF < thr)] <- NA
     }
     results.HF <- colMeans(results.HF, na.rm = TRUE)
     results.LF <- colMeans(results.LF, na.rm = TRUE)
-    if (weight) {
-      tLF <- 1:NROW(results.LF)
-      tHF <- 1:NROW(results.HF)
-      wLF <- exp(-((tLF - mean(tLF)) ^ 2) / (2 * var(tLF)))
-      wHF <- exp(-((tHF - mean(tHF)) ^ 2) / (2 * var(tHF)))
+    result.HF <- method1(results.HF[select_time], na.rm = TRUE)
+    result.LF <- method1(results.LF[select_time], na.rm = TRUE)
+    results2.HF <-
+      ifelse(method == "mean",
+             method2(results.HF[select_time], na.rm = TRUE),
+             as.numeric(method2(results.HF[select_time], na.rm = TRUE, 0.25)))
+    results2.LF <-
+      ifelse(method == "mean",
+             method2(results.LF[select_time], na.rm = TRUE),
+             as.numeric(method2(results.LF[select_time], na.rm = TRUE, 0.25)))
+    if (method == "mean") {
+      output <-
+        rbind(c(result.HF, result.LF), c(results2.HF, results2.LF))
     } else {
-      wHF <- rep(1, NROW(results.HF))
-      wLF <- rep(1, NROW(results.LF))
+      output <-
+        rbind(
+          c(result.HF, result.LF),
+          c(results2.HF[1], results2.LF[1]),
+          c(as.numeric(
+            method2(results.HF[select_time], na.rm = TRUE, 0.75)
+          ),
+          as.numeric(
+            method2(results.LF[select_time], na.rm = TRUE, 0.75)
+          ))
+        )
     }
-    results.HF <- weighted.mean(results.HF, wHF, na.rm = TRUE)
-    results.LF <- weighted.mean(results.LF, wLF, na.rm = TRUE)
-    output <- c(results.HF, results.LF)
-    names(output) <- c("HF", "LF")
+    colnames(output) <- c("HF", "LF")
+    rownames(output) <- output_rnames
     return(output)
   }
 
@@ -262,14 +296,14 @@ TimeDomainValues <-
       data <- as.data.frame(data)
     method <- match.arg(method)
     if (is.null(time_flags)) {
-      select_time <- 1:NROW(data[, 1])
+      select_time <- 1:NROW(data$Time)
     } else {
       time_flags <- time_flags * 60
       # The following step is done due to floating point precision issues
       limit1 <-
-        match(min(abs(time_flags[1] - fun$Time)), abs(time_flags[1] - fun$Time))
+        match(min(abs(time_flags[1] - data$Time)), abs(time_flags[1] - data$Time))
       limit2 <-
-        match(min(abs(time_flags[2] - fun$Time)), abs(time_flags[2] - fun$Time))
+        match(min(abs(time_flags[2] - data$Time)), abs(time_flags[2] - data$Time))
       select_time <- limit1:limit2
     }
     if (method == "mean") {
