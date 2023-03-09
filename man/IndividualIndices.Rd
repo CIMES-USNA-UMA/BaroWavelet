@@ -9,7 +9,8 @@ IndividualIndices(
   time_flags = NULL,
   thr = 0.5,
   use.coherence = TRUE,
-  method = c("median", "mean")
+  method = c("median", "mean"),
+  use.phase = FALSE
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ Default is NULL.}
 \item{use.coherence}{Boolean, should a coherence threshold be used? Default is TRUE}
 
 \item{method}{Which method, either the mean or the median, should be used to obtain the indices}
+
+\item{use.phase}{Boolean, should indices be computed from CWT phase difference estimates? Default is FALSE}
 }
 \value{
 A matrix containing data (either medians and IQRs, or means and standard deviations)
