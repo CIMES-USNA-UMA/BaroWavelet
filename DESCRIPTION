@@ -1,12 +1,13 @@
 Package: BaroWavelet
 Type: Package
-Title: BaroWavelet
+Title: Baroreflex Sensitivity Assessment with Wavelet Transforms
 Version: 0.0.0.9000
-Author: Alvaro Chao Ecija [aut, cre] ([https://orcid.org/0000-0002-2691-6936]), 
-        Marc Stefan Dawid Milner [ths]
-Maintainer: Alvaro Chao Ecija <alvarochaoecija.rprojects@gmail.com>
+Author: Alvaro Chao-Ecija <alvarochaoecija.rprojects@gmail.com> [aut, cre] (<https://orcid.org/0000-0002-2691-6936>), 
+        Marc Stefan Dawid-Milner [ths]
+Maintainer: Alvaro Chao-Ecija <alvarochaoecija.rprojects@gmail.com>
 Description: This package allows autonomic evaluation and baroreflex sensitivity assessment
-             using Wavelet Transforms. 
+             of interbeat intervals and blood pressure recordings using wavelet transforms. It includes different
+             analysis techniques based on the continuous and discrete wavelet transforms. 
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
@@ -20,3 +21,6 @@ Depends:
     R (>= 3.0.0)
 NeedsCompilation: no
 RoxygenNote: 7.2.2
+URL: https://github.com/CIMES-USNA-UMA/BaroWavelet
+BugReports: https://github.com/CIMES-USNA-UMA/BaroWavelet/issues
+
