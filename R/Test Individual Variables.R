@@ -182,14 +182,14 @@ TestIndHRandBP <- function(data, time_flags1, time_flags2) {
   time_flags2 <- time_flags2 * 60
   # The following steps are done due to floating point precision issues
   limit1 <-
-    match(min(abs(time_flags1[1] - fun$Time)), abs(time_flags1[1] - fun$Time))
+    match(min(abs(time_flags1[1] - data$Time)), abs(time_flags1[1] - data$Time))
   limit2 <-
-    match(min(abs(time_flags1[2] - fun$Time)), abs(time_flags1[2] - fun$Time))
+    match(min(abs(time_flags1[2] - data$Time)), abs(time_flags1[2] - data$Time))
   select_time1 <- limit1:limit2
   limit3 <-
-    match(min(abs(time_flags2[1] - fun$Time)), abs(time_flags2[1] - fun$Time))
+    match(min(abs(time_flags2[1] - data$Time)), abs(time_flags2[1] - data$Time))
   limit4 <-
-    match(min(abs(time_flags2[2] - fun$Time)), abs(time_flags2[2] - fun$Time))
+    match(min(abs(time_flags2[2] - data$Time)), abs(time_flags2[2] - data$Time))
   select_time2 <- limit3:limit4
   if ((sum(select_time1 %in% select_time2)) != 0) {
     if (((min(select_time1) - min(select_time2)) < 0) &
