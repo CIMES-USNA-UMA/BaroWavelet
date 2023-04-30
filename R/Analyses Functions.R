@@ -1,8 +1,4 @@
 
-
-
-
-
 #' Build analysis structure
 #'
 #' Generates a structure in which analyses can be performed and results can be stored
@@ -122,6 +118,11 @@ AddAnalysis <- function(framework, name = NULL) {
   output$BRS$CWT <- output$BRS$DWT <- list()
   framework$Analyses[[N + 1]] <- output
   framework$n <- framework$n + 1
+  if (length(framework$IndividualIndices) > 0) {
+    framework <- PrepareIntervalSlots(framework, "dwt")
+    framework <-
+      PrepareIntervalSlots(framework, "cwt")
+  }
   return(framework)
 }
 
@@ -157,14 +158,18 @@ ShowLocatorIndices <-
       data <- framework$Tests
     }
     N <- length(data)
-    output <- matrix(0, ncol = N, nrow = 2)
-    for (n in 1:N) {
-      output[2, n] <- data[[n]]$Name
+    if (N == 0) {
+      output <- NULL
+    } else {
+      output <- matrix(0, ncol = N, nrow = 2)
+      for (n in 1:N) {
+        output[2, n] <- data[[n]]$Name
+      }
+      output[1,] <- 1:N
+      output <- data.frame(output)
+      rownames(output) <- c("locator", "Name")
+      colnames(output) <- rep("", N)
     }
-    output[1, ] <- 1:N
-    output <- data.frame(output)
-    rownames(output) <- c("locator", "Name")
-    colnames(output) <- rep("", N)
     return(output)
   }
 
@@ -465,7 +470,7 @@ PlotAnalyzedHRV <- function(framework,
   Time <- Data$Data[, 1]
   im <-
     PlotHRV(
-      hrv, 
+      hrv,
       Time,
       time_flags,
       col = time_col,
@@ -624,8 +629,8 @@ AnalyzeBRSIndices <-
 #' @param locator A locator indicating which analysis slot needs to be used
 #' @param method Which method was used to compute the BRS
 #' @param use.names Boolean, should the names of the subjects be used?
-#' @param HFcol Color to be used to represent the HF band 
-#' @param LFcol Color to be used to represent the LF band 
+#' @param HFcol Color to be used to represent the HF band
+#' @param LFcol Color to be used to represent the LF band
 #' @param restrict Vector used to restrict the plot to specific intervals. Default is NULL
 #' @param output Boolean. Should the indices for each interval be returned? Default is FALSE
 #' @param ymax Maximum level for the y axis. Default is NULL
@@ -827,7 +832,7 @@ PlotTimeValues <- function(framework,
   results <- t(results)
   par(mfrow = c(1, 2))
   barplot(
-    results[1, ],
+    results[1,],
     beside = TRUE,
     col = HRcol,
     ylab = "HR (bpm)",
@@ -835,7 +840,7 @@ PlotTimeValues <- function(framework,
     ylim = ylim
   )
   barplot(
-    results[2, ],
+    results[2,],
     beside = TRUE,
     col = SBPcol,
     ylab = "SBP (mmHg)",
@@ -867,6 +872,7 @@ PlotTimeValues <- function(framework,
 #' @param type Specify which BRS estimates are to be compared
 #' @param use.names Boolean, should the names of the subjects be used?
 #' @param sig Value indicating the chosen alpha error for the comparison. Default is 0.05
+#' @param showerror Boolean. Should the function be stopped and an error message be shown if an error is detected?
 #'
 #'
 #' @return The original framework with the test results attached
@@ -912,7 +918,9 @@ TestGroups <-
            paired = NULL,
            type = c("dwt", "cwt"),
            use.names = TRUE,
-           sig = 0.05) {
+           sig = 0.05,
+           showerror = TRUE) {
+    i_framework <- framework
     N <- length(framework$Tests)
     length(framework$Tests) <- N + 1
     indices <- framework$IndividualIndices
@@ -942,89 +950,106 @@ TestGroups <-
     names2 <- colnames(values2)
     bool <- names1 == names2
     if ((FALSE %in% bool) & (TRUE %in% bool)) {
-      stop("Mixed data cannot be tested")
-    }
-    if (is.null(paired)) {
-      if (FALSE %in% bool) {
-        paired <- FALSE
+      if (showerror) {
+        stop("Mixed data cannot be tested")
       } else {
-        paired <- TRUE
-      }
-    }
-    gains_hf1 <- values1[1, ]
-    gains_hf2 <- values2[1, ]
-    gains_lf1 <- values1[2, ]
-    gains_lf2 <- values2[2, ]
-    se_hf1 <- sd(gains_hf1) / sqrt(NROW(gains_hf1))
-    se_hf2 <- sd(gains_hf2) / sqrt(NROW(gains_hf2))
-    se_lf1 <- sd(gains_lf1) / sqrt(NROW(gains_lf1))
-    se_lf2 <- sd(gains_lf2) / sqrt(NROW(gains_lf2))
-    HF <-
-      data.frame(
-        Group = c(rep(as.character(Names[1]), NROW(names1)),
-                  rep(as.character(Names[2]), NROW(names2))),
-        Gain = c(gains_hf1,
-                 gains_hf2),
-        Mean = c(rep(mean(gains_hf1), NROW(names1)), rep(mean(gains_hf2), NROW(names2))),
-        SE = c(rep(se_hf1, NROW(names1)), rep(se_hf2, NROW(names2)))
-      )
-    LF <-
-      data.frame(
-        Group = c(rep(as.character(Names[1]), NROW(names1)),
-                  rep(as.character(Names[2]), NROW(names2))),
-        Gain = c(gains_lf1,
-                 gains_lf2),
-        Mean = c(rep(mean(gains_lf1), NROW(names1)), rep(mean(gains_lf2), NROW(names2))),
-        SE = c(rep(se_lf1, NROW(names1)), rep(se_lf2, NROW(names2)))
-      )
-    if (is.null(method)) {
-      n_hf1 <- shapiro.test(gains_hf1)$p.value
-      n_hf2 <- shapiro.test(gains_hf2)$p.value
-      n_lf1 <- shapiro.test(gains_lf1)$p.value
-      n_lf2 <- shapiro.test(gains_lf2)$p.value
-      if ((n_hf1 > sig) & (n_hf2 > sig)) {
-        m_hf <- "t.test"
-      } else {
-        m_hf <- "wilcox.test"
-      }
-      if ((n_lf1 > sig) & (n_lf2 > sig)) {
-        m_lf <- "t.test"
-      } else {
-        m_lf <- "wilcox.test"
+        return(i_framework)
       }
     } else {
-      m_hf <- m_lf <- method
+      if (is.null(paired)) {
+        if (FALSE %in% bool) {
+          paired <- FALSE
+        } else {
+          paired <- TRUE
+        }
+      }
+      gains_hf1 <- values1[1,]
+      gains_hf2 <- values2[1,]
+      gains_lf1 <- values1[2,]
+      gains_lf2 <- values2[2,]
+      se_hf1 <-
+        sd(gains_hf1, na.rm = TRUE) / sqrt(sum(!is.na(gains_hf1)))
+      se_hf2 <-
+        sd(gains_hf2, na.rm = TRUE) / sqrt(sum(!is.na(gains_hf2)))
+      se_lf1 <-
+        sd(gains_lf1, na.rm = TRUE) / sqrt(sum(!is.na(gains_lf1)))
+      se_lf2 <-
+        sd(gains_lf2, na.rm = TRUE) / sqrt(sum(!is.na(gains_lf2)))
+      HF <-
+        data.frame(
+          Group = c(rep(as.character(Names[1]), NROW(names1)),
+                    rep(as.character(Names[2]), NROW(names2))),
+          Gain = c(gains_hf1,
+                   gains_hf2),
+          Mean = c(rep(
+            mean(gains_hf1, na.rm = TRUE), NROW(names1)
+          ), rep(
+            mean(gains_hf2, na.rm = TRUE), NROW(names2)
+          )),
+          SE = c(rep(se_hf1, NROW(names1)), rep(se_hf2, NROW(names2)))
+        )
+      LF <-
+        data.frame(
+          Group = c(rep(as.character(Names[1]), NROW(names1)),
+                    rep(as.character(Names[2]), NROW(names2))),
+          Gain = c(gains_lf1,
+                   gains_lf2),
+          Mean = c(rep(
+            mean(gains_lf1, na.rm = TRUE), NROW(names1)
+          ), rep(
+            mean(gains_lf2, na.rm = TRUE), NROW(names2)
+          )),
+          SE = c(rep(se_lf1, NROW(names1)), rep(se_lf2, NROW(names2)))
+        )
+      if (is.null(method)) {
+        n_hf1 <- shapiro.test(gains_hf1)$p.value
+        n_hf2 <- shapiro.test(gains_hf2)$p.value
+        n_lf1 <- shapiro.test(gains_lf1)$p.value
+        n_lf2 <- shapiro.test(gains_lf2)$p.value
+        if ((n_hf1 > sig) & (n_hf2 > sig)) {
+          m_hf <- "t.test"
+        } else {
+          m_hf <- "wilcox.test"
+        }
+        if ((n_lf1 > sig) & (n_lf2 > sig)) {
+          m_lf <- "t.test"
+        } else {
+          m_lf <- "wilcox.test"
+        }
+      } else {
+        m_hf <- m_lf <- method
+      }
+      if (m_hf == "t.test") {
+        hf_test <- t.test(gains_hf1, gains_hf2, paired = paired)$p.value
+      } else {
+        hf_test <-
+          wilcox.test(gains_hf1, gains_hf2, paired = paired)$p.value
+      }
+      if (m_lf == "t.test") {
+        lf_test <- t.test(gains_lf1, gains_lf2, paired = paired)$p.value
+      } else {
+        lf_test <-
+          wilcox.test(gains_lf1, gains_lf2, paired = paired)$p.value
+      }
+      output <- list()
+      if (is.null(name))
+        name <- paste("Test", N + 1)
+      output$Name <- name
+      output$Test <- N + 1
+      output$Variables <- Names
+      output$Locators <- locators
+      output$Type <- type
+      output$Tables <- list()
+      output$Tables$HF <- HF
+      output$Tables$LF <- LF
+      output$Methods <- c(m_hf, m_lf)
+      output$Paired <- paired
+      output$Results <- list()
+      output$Results$HF <- hf_test
+      output$Results$LF <- lf_test
+      framework$Tests[[N + 1]] <- output
+      return(framework)
     }
-    if (m_hf == "t.test") {
-      hf_test <- t.test(gains_hf1, gains_hf2, paired = paired)$p.value
-    } else {
-      hf_test <-
-        wilcox.test(gains_hf1, gains_hf2, paired = paired)$p.value
-    }
-    if (m_lf == "t.test") {
-      lf_test <- t.test(gains_lf1, gains_lf2, paired = paired)$p.value
-    } else {
-      lf_test <-
-        wilcox.test(gains_lf1, gains_lf2, paired = paired)$p.value
-    }
-    output <- list()
-    if (is.null(name))
-      name <- paste("Test", N + 1)
-    output$Name <- name
-    output$Test <- N + 1
-    output$Variables <- Names
-    output$Locators <- locators
-    output$Type <- type
-    output$Tables <- list()
-    output$Tables$HF <- HF
-    output$Tables$LF <- LF
-    output$Methods <- c(m_hf, m_lf)
-    output$Paired <- paired
-    output$Results <- list()
-    output$Results$HF <- hf_test
-    output$Results$LF <- lf_test
-    framework$Tests[[N + 1]] <- output
-    return(framework)
   }
 
 
@@ -1041,6 +1066,8 @@ TestGroups <-
 #' @param use.names Boolean, should the names of the subjects be used?
 #' @param sig Value indicating the chosen alpha error for the comparison. Default is 0.05
 #' @param normalize Boolean. Should the HRV be normalized before comparison? Default is FALSE
+#' @param showerror Boolean. Should the function be stopped and an error message be shown if an error is detected?
+#'
 #'
 #'
 #' @return The original framework with the test results attached
@@ -1086,7 +1113,9 @@ TestHRV <-
            paired = NULL,
            use.names = TRUE,
            sig = 0.05,
-           normalize = FALSE) {
+           normalize = FALSE,
+           showerror = TRUE) {
+    i_framework <- framework
     N <- length(framework$TestsHRV)
     length(framework$TestsHRV) <- N + 1
     indices <- framework$IndividualIndices
@@ -1110,126 +1139,149 @@ TestHRV <-
     names2 <- colnames(values2)
     bool <- names1 == names2
     if ((FALSE %in% bool) & (TRUE %in% bool)) {
-      stop("Mixed data cannot be tested")
-    }
-    if (is.null(paired)) {
-      if (FALSE %in% bool) {
-        paired <- FALSE
+      if (showerror) {
+        stop("Mixed data cannot be tested")
       } else {
-        paired <- TRUE
-      }
-    }
-    gains_hf1 <- values1[1, ]
-    gains_hf2 <- values2[1, ]
-    gains_lf1 <- values1[2, ]
-    gains_lf2 <- values2[2, ]
-    if (normalize) {
-      gains1 <- gains_hf1 + gains_lf1
-      gains2 <- gains_hf2 + gains_lf2
-      gains_hf1 <- gains_hf1 * 100 / gains1
-      gains_lf1 <- gains_lf1 * 100 / gains1
-      gains_hf2 <- gains_hf2 * 100 / gains2
-      gains_lf2 <- gains_lf2 * 100 / gains2
-    }
-    gains_lfhf1 <- values1[3, ]
-    gains_lfhf2 <- values2[3, ]
-    se_hf1 <- sd(gains_hf1) / sqrt(NROW(gains_hf1))
-    se_hf2 <- sd(gains_hf2) / sqrt(NROW(gains_hf2))
-    se_lf1 <- sd(gains_lf1) / sqrt(NROW(gains_lf1))
-    se_lf2 <- sd(gains_lf2) / sqrt(NROW(gains_lf2))
-    se_lfhf1 <- sd(gains_lfhf1) / sqrt(NROW(gains_lfhf1))
-    se_lfhf2 <- sd(gains_lfhf2) / sqrt(NROW(gains_lfhf2))
-    HF <-
-      data.frame(
-        Group = c(rep(as.character(Names[1]), NROW(names1)),
-                  rep(as.character(Names[2]), NROW(names2))),
-        Power = c(gains_hf1,
-                  gains_hf2),
-        Mean = c(rep(mean(gains_hf1), NROW(names1)), rep(mean(gains_hf2), NROW(names2))),
-        SE = c(rep(se_hf1, NROW(names1)), rep(se_hf2, NROW(names2)))
-      )
-    LF <-
-      data.frame(
-        Group = c(rep(as.character(Names[1]), NROW(names1)),
-                  rep(as.character(Names[2]), NROW(names2))),
-        Power = c(gains_lf1,
-                  gains_lf2),
-        Mean = c(rep(mean(gains_lf1), NROW(names1)), rep(mean(gains_lf2), NROW(names2))),
-        SE = c(rep(se_lf1, NROW(names1)), rep(se_lf2, NROW(names2)))
-      )
-    LFHF <-
-      data.frame(
-        Group = c(rep(as.character(Names[1]), NROW(names1)),
-                  rep(as.character(Names[2]), NROW(names2))),
-        Power = c(gains_lfhf1,
-                  gains_lfhf2),
-        Mean = c(rep(mean(gains_lfhf1), NROW(names1)), rep(mean(gains_lfhf2), NROW(names2))),
-        SE = c(rep(se_lfhf1, NROW(names1)), rep(se_lfhf2, NROW(names2)))
-      )
-    if (is.null(method)) {
-      n_hf1 <- shapiro.test(gains_hf1)$p.value
-      n_hf2 <- shapiro.test(gains_hf2)$p.value
-      n_lf1 <- shapiro.test(gains_lf1)$p.value
-      n_lf2 <- shapiro.test(gains_lf2)$p.value
-      n_lfhf1 <- shapiro.test(gains_lfhf1)$p.value
-      n_lfhf2 <- shapiro.test(gains_lfhf2)$p.value
-      if ((n_hf1 > sig) & (n_hf2 > sig)) {
-        m_hf <- "t.test"
-      } else {
-        m_hf <- "wilcox.test"
-      }
-      if ((n_lf1 > sig) & (n_lf2 > sig)) {
-        m_lf <- "t.test"
-      } else {
-        m_lf <- "wilcox.test"
-      }
-      if ((n_lfhf1 > sig) & (n_lfhf2 > sig)) {
-        m_lfhf <- "t.test"
-      } else {
-        m_lfhf <- "wilcox.test"
+        return(i_framework)
       }
     } else {
-      m_hf <- m_lf <- m_lfhf <- method
+      if (is.null(paired)) {
+        if (FALSE %in% bool) {
+          paired <- FALSE
+        } else {
+          paired <- TRUE
+        }
+      }
+      gains_hf1 <- values1[1,]
+      gains_hf2 <- values2[1,]
+      gains_lf1 <- values1[2,]
+      gains_lf2 <- values2[2,]
+      if (normalize) {
+        gains1 <- gains_hf1 + gains_lf1
+        gains2 <- gains_hf2 + gains_lf2
+        gains_hf1 <- gains_hf1 * 100 / gains1
+        gains_lf1 <- gains_lf1 * 100 / gains1
+        gains_hf2 <- gains_hf2 * 100 / gains2
+        gains_lf2 <- gains_lf2 * 100 / gains2
+      }
+      gains_lfhf1 <- values1[3,]
+      gains_lfhf2 <- values2[3,]
+      se_hf1 <-
+        sd(gains_hf1, na.rm = TRUE) / sqrt(sum(!is.na(gains_hf1)))
+      se_hf2 <-
+        sd(gains_hf2, na.rm = TRUE) / sqrt(sum(!is.na(gains_hf2)))
+      se_lf1 <-
+        sd(gains_lf1, na.rm = TRUE) / sqrt(sum(!is.na(gains_lf1)))
+      se_lf2 <-
+        sd(gains_lf2, na.rm = TRUE) / sqrt(sum(!is.na(gains_lf2)))
+      se_lfhf1 <-
+        sd(gains_lfhf1, na.rm = TRUE) / sqrt(sum(!is.na(gains_lfhf1)))
+      se_lfhf2 <-
+        sd(gains_lfhf2, na.rm = TRUE) / sqrt(sum(!is.na(gains_lfhf2)))
+      HF <-
+        data.frame(
+          Group = c(rep(as.character(Names[1]), NROW(names1)),
+                    rep(as.character(Names[2]), NROW(names2))),
+          Power = c(gains_hf1,
+                    gains_hf2),
+          Mean = c(rep(
+            mean(gains_hf1, na.rm = TRUE), NROW(names1)
+          ), rep(
+            mean(gains_hf2, na.rm = TRUE), NROW(names2)
+          )),
+          SE = c(rep(se_hf1, NROW(names1)), rep(se_hf2, NROW(names2)))
+        )
+      LF <-
+        data.frame(
+          Group = c(rep(as.character(Names[1]), NROW(names1)),
+                    rep(as.character(Names[2]), NROW(names2))),
+          Power = c(gains_lf1,
+                    gains_lf2),
+          Mean = c(rep(
+            mean(gains_lf1, na.rm = TRUE), NROW(names1)
+          ), rep(
+            mean(gains_lf2, na.rm = TRUE), NROW(names2)
+          )),
+          SE = c(rep(se_lf1, NROW(names1)), rep(se_lf2, NROW(names2)))
+        )
+      LFHF <-
+        data.frame(
+          Group = c(rep(as.character(Names[1]), NROW(names1)),
+                    rep(as.character(Names[2]), NROW(names2))),
+          Power = c(gains_lfhf1,
+                    gains_lfhf2),
+          Mean = c(rep(
+            mean(gains_lfhf1, na.rm = TRUE), NROW(names1)
+          ), rep(
+            mean(gains_lfhf2, na.rm = TRUE), NROW(names2)
+          )),
+          SE = c(rep(se_lfhf1, NROW(names1)), rep(se_lfhf2, NROW(names2)))
+        )
+      if (is.null(method)) {
+        n_hf1 <- shapiro.test(gains_hf1)$p.value
+        n_hf2 <- shapiro.test(gains_hf2)$p.value
+        n_lf1 <- shapiro.test(gains_lf1)$p.value
+        n_lf2 <- shapiro.test(gains_lf2)$p.value
+        n_lfhf1 <- shapiro.test(gains_lfhf1)$p.value
+        n_lfhf2 <- shapiro.test(gains_lfhf2)$p.value
+        if ((n_hf1 > sig) & (n_hf2 > sig)) {
+          m_hf <- "t.test"
+        } else {
+          m_hf <- "wilcox.test"
+        }
+        if ((n_lf1 > sig) & (n_lf2 > sig)) {
+          m_lf <- "t.test"
+        } else {
+          m_lf <- "wilcox.test"
+        }
+        if ((n_lfhf1 > sig) & (n_lfhf2 > sig)) {
+          m_lfhf <- "t.test"
+        } else {
+          m_lfhf <- "wilcox.test"
+        }
+      } else {
+        m_hf <- m_lf <- m_lfhf <- method
+      }
+      if (m_hf == "t.test") {
+        hf_test <- t.test(gains_hf1, gains_hf2, paired = paired)$p.value
+      } else {
+        hf_test <-
+          wilcox.test(gains_hf1, gains_hf2, paired = paired)$p.value
+      }
+      if (m_lf == "t.test") {
+        lf_test <- t.test(gains_lf1, gains_lf2, paired = paired)$p.value
+      } else {
+        lf_test <-
+          wilcox.test(gains_lf1, gains_lf2, paired = paired)$p.value
+      }
+      if (m_lfhf == "t.test") {
+        lfhf_test <-
+          t.test(gains_lfhf1, gains_lfhf2, paired = paired)$p.value
+      } else {
+        lfhf_test <-
+          wilcox.test(gains_lfhf1, gains_lfhf2, paired = paired)$p.value
+      }
+      output <- list()
+      if (is.null(name))
+        name <- paste("Test", N + 1)
+      output$Name <- name
+      output$locator <- N + 1
+      output$Variables <- Names
+      output$Locators <- locators
+      output$Tables <- list()
+      output$Tables$HF <- HF
+      output$Tables$LF <- LF
+      output$Tables$LFHF <- LFHF
+      output$Methods <- c(m_hf, m_lf, m_lfhf)
+      output$Paired <- paired
+      output$Results <- list()
+      output$Results$HF <- hf_test
+      output$Results$LF <- lf_test
+      output$Results$HF <- hf_test
+      output$Results$LFHF <- lfhf_test
+      framework$TestsHRV[[N + 1]] <- output
+      return(framework)
     }
-    if (m_hf == "t.test") {
-      hf_test <- t.test(gains_hf1, gains_hf2, paired = paired)$p.value
-    } else {
-      hf_test <-
-        wilcox.test(gains_hf1, gains_hf2, paired = paired)$p.value
-    }
-    if (m_lf == "t.test") {
-      lf_test <- t.test(gains_lf1, gains_lf2, paired = paired)$p.value
-    } else {
-      lf_test <-
-        wilcox.test(gains_lf1, gains_lf2, paired = paired)$p.value
-    }
-    if (m_lfhf == "t.test") {
-      lfhf_test <-
-        t.test(gains_lfhf1, gains_lfhf2, paired = paired)$p.value
-    } else {
-      lfhf_test <-
-        wilcox.test(gains_lfhf1, gains_lfhf2, paired = paired)$p.value
-    }
-    output <- list()
-    if (is.null(name))
-      name <- paste("Test", N + 1)
-    output$Name <- name
-    output$locator <- N + 1
-    output$Variables <- Names
-    output$Locators <- locators
-    output$Tables <- list()
-    output$Tables$HF <- HF
-    output$Tables$LF <- LF
-    output$Tables$LFHF <- LFHF
-    output$Methods <- c(m_hf, m_lf, m_lfhf)
-    output$Paired <- paired
-    output$Results <- list()
-    output$Results$HF <- hf_test
-    output$Results$LF <- lf_test
-    output$Results$HF <- hf_test
-    output$Results$LFHF <- lfhf_test
-    framework$TestsHRV[[N + 1]] <- output
-    return(framework)
   }
 
 
@@ -1432,7 +1484,8 @@ PlotHRVTestResults <-
     LFHF <- test$Tables$LFHF
     max_HF <- max(test$Tables$HF[, 3]) + max(test$Tables$HF[, 4])
     max_LF <- max(test$Tables$LF[, 3]) + max(test$Tables$LF[, 4])
-    max_LFHF <- max(test$Tables$LFHF[, 3]) + max(test$Tables$LFHF[, 4])
+    max_LFHF <-
+      max(test$Tables$LFHF[, 3]) + max(test$Tables$LFHF[, 4])
     min_LFHF <-
       min(min(test$Tables$LFHF[, 3]), min(test$Tables$LFHF[, 4]))
     Max <- max(max_HF, max_LF)
@@ -1533,7 +1586,7 @@ PlotHRVTestResults <-
 #' @return The results of a linear regression model with the chosen data
 #'
 #' @author Alvaro Chao-Ecija
-#' 
+#'
 #' @import ggplot2
 #'
 #' @export
@@ -1553,7 +1606,6 @@ ModelClinicalData <-
     } else {
       Names <- indices$locator
     }
-    locators <- c(indices1$locator, indices2$locator)
     if (type == "HRV") {
       values <- indices$HRV
       unit2 <- "ms2"
@@ -1562,11 +1614,11 @@ ModelClinicalData <-
       unit2 <- "ms/mmHg"
     }
     if (band == "HF")
-      values <- values[1, ]
+      values <- values[1,]
     if (band == "LF")
-      values <- values[2, ]
+      values <- values[2,]
     if (band == "LFHF" && type == "HRV")
-      values <- values[3, ]
+      values <- values[3,]
     clin <- framework$Clinical
     clin <- clin[, variable + 1]
     units <- clin[1]
@@ -1711,7 +1763,7 @@ AddIndividualIndices <-
         use.coherence = interval$Threshold,
         thr = Data$Coherence,
         method = Data$"Index Method"
-      )[1, ]
+      )[1,]
     if (N == 0) {
       results <- matrix(indices, nrow = 2, ncol  = 1)
       rownames(results) <- c("HF", "LF")
@@ -1793,31 +1845,76 @@ PrepareIntervalSlots <-
     n <- framework$n
     method <- match.arg(method)
     for (m in 1:length(framework$IndividualIndices)) {
+      HR <- framework$IndividualIndices[[m]]$HR
+      SBP <- framework$IndividualIndices[[m]]$SBP
+      method_2 <- framework$"General Data"$"Index Method"
+      if (method_2 == "median") {
+        k <- 3
+      } else {
+        k <- 2
+      }
       if (method == "dwt") {
         int <- framework$IndividualIndices[[m]]$DWT
         Time <- framework$IndividualIndices[[m]]$Time_DWT
+        int2 <- framework$IndividualIndices[[m]]$HRV
       } else {
         int <- framework$IndividualIndices[[m]]$CWT
         Time <- framework$IndividualIndices[[m]]$Time_CWT
+        int2 <- int
+      }
+      AddHRSBP <- FALSE
+      if (length(HR) == 0 || is.null(HR[[1]])) {
+        HR <- SBP <- matrix(NA, ncol = n, nrow = k)
+        AddHRSBP <- TRUE
+        colnames(HR) <- colnames(SBP) <-  rep("Unnamed", n)
+      } else if (n > ncol(HR)) {
+        names <- colnames(HR)
+        cols <- n - ncol(HR)
+        k2 <- nrow(HR)
+        if (k2 > k) {
+          HR <- HR[-k2, ]
+          SBP <- SBP[-k2, ]
+        } else if (k2 < k) {
+          HR <- rbind(HR, rep(NA, ncol(HR)))
+          SBP <- rbind(SBP, rep(NA, ncol(HR)))
+        }
+        # ELABORATE ON THIS LAST BIT
+        support3 <- matrix(NA, ncol = cols, nrow = nrow(HR))
+        HR <- cbind(HR, support3)
+        SBP <- cbind(SBP, support3)
+        AddHRSBP <- TRUE
+        colnames(HR) <-
+          colnames(SBP) <- c(names, rep("Unnamed", cols))
       }
       if (length(int) == 0 || is.null(int[[1]])) {
         int <- Time <- matrix(NA, ncol = n, nrow = 2)
-        colnames(int) <- rep("Unnamed", n)
+        int2 <- matrix(NA, ncol = n, nrow = 3)
+        #HR <- SBP <- matrix(NA, ncol = n, nrow = k)
+        colnames(int) <- colnames(int2) <-  rep("Unnamed", n)
       } else if (n > ncol(int)) {
         cols <- n - ncol(int)
         names <- colnames(int)
         support <- matrix(NA, ncol = cols, nrow = 2)
+        support2 <- matrix(NA, ncol = cols, nrow = nrow(int2))
+        
         int <- cbind(int, support)
         Time <- cbind(Time, support)
-        colnames(int) <- c(names, rep("Unnamed", cols))
+        int2 <- cbind(int2, support2)
+        colnames(int) <-
+          colnames(int2) <- c(names, rep("Unnamed", cols))
         
       }
       if (method == "dwt") {
         framework$IndividualIndices[[m]]$DWT <- int
         framework$IndividualIndices[[m]]$Time_DWT <- Time
+        framework$IndividualIndices[[m]]$HRV <- int2
       } else {
         framework$IndividualIndices[[m]]$CWT <- int
         framework$IndividualIndices[[m]]$Time_CWT <- Time
+      }
+      if (AddHRSBP) {
+        framework$IndividualIndices[[m]]$HR <- HR
+        framework$IndividualIndices[[m]]$SBP <- SBP
       }
     }
     return(framework)
@@ -1832,16 +1929,22 @@ AddTimeValues <-
            locator_t,
            time_flags,
            use.name = TRUE) {
+    method <- framework$"General Data"$"Index Method"
+    if (method == "median") {
+      k <- 3
+    } else {
+      k <- 2
+    }
     interval <- framework$IndividualIndices[[locator_t]]
     Analysis <- framework$Analyses[[locator_a]]
     HR <- interval$HR
     SBP <- interval$SBP
     TimeValues <-
-      TimeDomainValues(Analysis$Data, time_flags)
+      TimeDomainValues(Analysis$Data, time_flags, method = method)
     n = length(HR)
     if (length(HR) == 0) {
-      HR <- matrix(TimeValues$HR, 2, 1)
-      SBP <- matrix(TimeValues$SBP, 2, 1)
+      HR <- matrix(TimeValues$HR, k, 1)
+      SBP <- matrix(TimeValues$SBP, k, 1)
     } else if (locator_a <= ncol(HR)) {
       HR[, locator_a] <- TimeValues$HR
       SBP[, locator_a] <- TimeValues$SBP
@@ -1903,10 +2006,10 @@ GetAvgCwtBands <-
     if (min_freqs < VLF)
       min_freqs <- VLF
     time_results.HF <-
-      colMeans(fun$power[(freqs <= HF) & (freqs > LF), ],
+      colMeans(fun$power[(freqs <= HF) & (freqs > LF),],
                na.rm = TRUE)
     time_results.LF <-
-      colMeans(fun$power[(freqs <= LF) & (freqs > VLF), ],
+      colMeans(fun$power[(freqs <= LF) & (freqs > VLF),],
                na.rm = TRUE)
     return(list(HF = time_results.HF, LF = time_results.LF))
     
@@ -1936,7 +2039,7 @@ SplitByCoherence <-
   function(fun,
            thr = 0.5,
            use.thr = TRUE,
-           time_flags = NULL, 
+           time_flags = NULL,
            use.phase = FALSE) {
     HF <- fun$HF
     LF <- fun$LF
@@ -1955,10 +2058,10 @@ SplitByCoherence <-
     freqs <- 1 / fun$period
     if (!use.thr)
       thr <- 0
-    if(!use.phase){
-    results.HF <- fun$power[(freqs <= HF) & (freqs > LF), select_time]
-    results.LF <-
-      fun$power[(freqs <= LF) & (freqs > VLF), select_time]
+    if (!use.phase) {
+      results.HF <- fun$power[(freqs <= HF) & (freqs > LF), select_time]
+      results.LF <-
+        fun$power[(freqs <= LF) & (freqs > VLF), select_time]
     } else {
       results.HF <- fun$phase[(freqs <= HF) & (freqs > LF), select_time]
       results.LF <-
