@@ -6,7 +6,7 @@
 #' @param HF Maximum limit of the HF band to be used in the analyses. Default is 0.4 Hz
 #' @param LF Maximum limit of the LF band to be used in the analyses. Default is 0.15 Hz
 #' @param VLF Maximum limit of the VLF band to be used in the analyses. Default is 0.04 Hz
-#' @param wv A wavelet to be used for the analyses. Default is d4
+#' @param wavelet A wavelet to be used for the analyses. Default is d4
 #' @param coh A coherence threshold to be used for the analyses. Default is 0.5
 #' @param dj A frequency resolution to be used for the analyses. Default is 1/20
 #' @param cwt.type Type of BRS estimation (either "tf" for transfer function or "alpha" for alpha index)
@@ -30,7 +30,7 @@ BuildStructure <-
            HF = 0.4,
            LF = 0.15,
            VLF = 0.04,
-           wv = "d8",
+           wavelet = "d8",
            coh = 0.5,
            dj = 1 / 20,
            cwt.type = c("tf", "alpha"),
@@ -47,7 +47,7 @@ BuildStructure <-
     Framework$"General Data"$HF <- HF
     Framework$"General Data"$LF <- LF
     Framework$"General Data"$VLF <- VLF
-    Framework$"General Data"$Wavelet <- wv
+    Framework$"General Data"$Wavelet <- wavelet
     Framework$"General Data"$Error <- error
     Framework$"General Data"$"Error Type" <-
       match.arg(error.type)
@@ -1878,7 +1878,6 @@ PrepareIntervalSlots <-
           HR <- rbind(HR, rep(NA, ncol(HR)))
           SBP <- rbind(SBP, rep(NA, ncol(HR)))
         }
-        # ELABORATE ON THIS LAST BIT
         support3 <- matrix(NA, ncol = cols, nrow = nrow(HR))
         HR <- cbind(HR, support3)
         SBP <- cbind(SBP, support3)
