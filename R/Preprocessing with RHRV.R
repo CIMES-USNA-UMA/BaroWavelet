@@ -37,7 +37,7 @@ PreprocessData <- function(data,
                            minbpm = 25,
                            maxbpm = 200,
                            use.RHRV = TRUE) {
-  Time <- data[[1]]
+  Time <- data$Time
   SBP <- data$SBP
   DBP <- data$DBP
   N <- NROW(Time)
