@@ -358,7 +358,7 @@ PlotAnalyzedBRS <-
            plotLF = TRUE,
            thr = NULL) {
     if (newPlot)
-      x11(title = paste("Transfer Function from",
+      x11(title = paste("BRS from",
                         framework$Analyses[[locator]]$Name))
     #if(dev.cur() > 1) dev.off()
     method <- match.arg(method)

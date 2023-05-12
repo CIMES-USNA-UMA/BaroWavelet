@@ -59,7 +59,7 @@ PlotBRS <-
            use.ggplot = TRUE) {
     #if(dev.cur() > 1)
     if (newPlot & !tem) {
-      x11(title = paste("Transfer Function from", title))
+      x11(title = paste("BRS from", title))
     }
     if (fun$type == "brs_dwt") {
       if (!tem & !use.ggplot) {
@@ -266,6 +266,7 @@ PlotCwtBRS <-
     HF <- fun$HF
     LF <- fun$LF
     VLF <- fun$VLF
+    isAlpha <- fun$Alpha
     if (use.thr) {
       mask <- plot.contour <- TRUE
     } else {
@@ -312,7 +313,7 @@ PlotCwtBRS <-
       plot.cb = TRUE,
       arrow.cutoff = thr,
       plot.coi = show.coi,
-      main = "Transfer Function by CWT (ms/mmHg)",
+      main = ifelse(isAlpha, "Alpha Index by CWT (ms/mmHg)","Transfer Function by CWT (ms/mmHg)"),
       ylim = c(1 / HF, 1 / VLF),
       xlim = xlim,
       fill.cols = col,
@@ -361,6 +362,7 @@ PlotAvgCwtBRS <- function(fun,
   HF <- fun$HF
   LF <- fun$LF
   VLF <- fun$VLF
+  isAlpha <- fun$Alpha
   fun <- GetBiwaveletObject(fun)
   freqs <- 1 / fun$period
   sel_power <- fun$power
@@ -408,7 +410,7 @@ PlotAvgCwtBRS <- function(fun,
     "l",
     xlab = "Frequency",
     ylab = "BRS (ms/mmHg)",
-    main = "Frequency Domain Transfer Function",
+    main = ifelse(isAlpha, "Frequency Domain Alpha Index","Frequency Domain Transfer Function"),
     ylim =
       c(0, max(freq_results)),
     xaxt = "n"
@@ -437,7 +439,7 @@ PlotAvgCwtBRS <- function(fun,
     "l",
     xlab = "Time",
     ylab = "BRS (ms/mmHg)",
-    main = "Time Domain Transfer Function (HF band)"
+    main = ifelse(isAlpha, "Time Domain Alpha Index (HF band)","Time Domain Transfer Function (HF band)")
   )
   if (!is.null(time_flags)) {
     polygon(
@@ -453,7 +455,7 @@ PlotAvgCwtBRS <- function(fun,
     "l",
     xlab = "Time",
     ylab = "BRS (ms/mmHg)",
-    main = "Time Domain Transfer Function (LF band)"
+    main = ifelse(isAlpha, "Time Domain Alpha Index (LF band)","Time Domain Transfer Function (LF band)")
   )
   if (!is.null(time_flags)) {
     polygon(

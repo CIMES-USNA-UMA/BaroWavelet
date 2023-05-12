@@ -20,6 +20,11 @@
 #' \item{LF}{The chosen maximum limit of the LF band}
 #' \item{VLF}{The chosen maximum limit of the VLF band}
 #' \item{type}{A character string specifying which type of BRS has been computed}
+#' \item{Cospectrum}{Computed cospectrum}
+#' \item{Quadrature}{Computed quadrature}
+#' \item{Phase}{Computed phase difference}
+#' \item{Scales}{Vector of scales used in the transform}
+#' \item{Alpha}{Boolean value indicating if the computed BRS is an alpha index}
 #'
 #' @details This function makes use of the Continuous Wavelet Transform methods
 #' provided by package \href{https://CRAN.R-project.org/package=biwavelet}{biwavelet} to
@@ -111,7 +116,8 @@ TransferFunCWT <- function(data,
       Cospectrum = Cospectrum,
       Quadrature = Quadrature,
       Phase = Phase,
-      Scales = WTransform.x$scale
+      Scales = WTransform.x$scale,
+      Alpha = alpha
     )
   )
 }
