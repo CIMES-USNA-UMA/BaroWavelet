@@ -13,7 +13,8 @@ TestHRV(
   paired = NULL,
   use.names = TRUE,
   sig = 0.05,
-  normalize = FALSE
+  normalize = FALSE,
+  showerror = TRUE
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ TestHRV(
 \item{sig}{Value indicating the chosen alpha error for the comparison. Default is 0.05}
 
 \item{normalize}{Boolean. Should the HRV be normalized before comparison? Default is FALSE}
+
+\item{showerror}{Boolean. Should the function be stopped and an error message be shown if an error is detected?}
 }
 \value{
 The original framework with the test results attached

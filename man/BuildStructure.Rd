@@ -9,7 +9,7 @@ BuildStructure(
   HF = 0.4,
   LF = 0.15,
   VLF = 0.04,
-  wv = "d8",
+  wavelet = "d8",
   coh = 0.5,
   dj = 1/20,
   cwt.type = c("tf", "alpha"),
@@ -28,7 +28,7 @@ BuildStructure(
 
 \item{VLF}{Maximum limit of the VLF band to be used in the analyses. Default is 0.04 Hz}
 
-\item{wv}{A wavelet to be used for the analyses. Default is d4}
+\item{wavelet}{A wavelet to be used for the analyses. Default is d4}
 
 \item{coh}{A coherence threshold to be used for the analyses. Default is 0.5}
 

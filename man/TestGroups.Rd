@@ -13,7 +13,8 @@ TestGroups(
   paired = NULL,
   type = c("dwt", "cwt"),
   use.names = TRUE,
-  sig = 0.05
+  sig = 0.05,
+  showerror = TRUE
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ TestGroups(
 \item{use.names}{Boolean, should the names of the subjects be used?}
 
 \item{sig}{Value indicating the chosen alpha error for the comparison. Default is 0.05}
+
+\item{showerror}{Boolean. Should the function be stopped and an error message be shown if an error is detected?}
 }
 \value{
 The original framework with the test results attached

@@ -44,6 +44,11 @@ A list with the estimated components of the baroreflex transfer function in the 
 \item{LF}{The chosen maximum limit of the LF band}
 \item{VLF}{The chosen maximum limit of the VLF band}
 \item{type}{A character string specifying which type of BRS has been computed}
+\item{Cospectrum}{Computed cospectrum}
+\item{Quadrature}{Computed quadrature}
+\item{Phase}{Computed phase difference}
+\item{Scales}{Vector of scales used in the transform}
+\item{Alpha}{Boolean value indicating if the computed BRS is an alpha index}
 }
 \description{
 Computes barorreflex sensitivity as a transfer function using the Continuous Wavelet Transform
