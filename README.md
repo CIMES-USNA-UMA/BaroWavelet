@@ -2,7 +2,7 @@
 
 ## Description
 
-Developed by Alvaro Chao-Ecija (intern student at the 
+Developed by Alvaro Chao-Ecija (Collaboration Scholarship at the 
 Department of Physiology and the Autonomic Nervous System Unit at CIMES, University of
 Malaga), constituting part of my Final Degree Project, under the supervision of 
 MD-PhD. Marc Stefan Dawid Milner.
