@@ -304,6 +304,7 @@ AddAvgCwtData <- function(framework, locator) {
 
 
 
+
 #' Plot analyzed baroreflex sensitivity
 #'
 #' Plots an already computed transfer function from a specific analysis in an analysis environment.
@@ -381,7 +382,10 @@ PlotAnalyzedBRS <-
           plotHF = plotHF,
           plotLF = plotLF,
           ylim = ylim,
-          use.ggplot = use.ggplot
+          use.ggplot = use.ggplot,
+          fHF = Data$HF,
+          fLF = Data$LF,
+          fVLF = Data$VLF,
         )
       return(im)
     } else if (method == "cwt") {
@@ -408,7 +412,10 @@ PlotAnalyzedBRS <-
           plotHF = plotHF,
           plotLF = plotLF,
           ylim = ylim,
-          use.ggplot = use.ggplot
+          use.ggplot = use.ggplot,
+          fHF = Data$HF,
+          fLF = Data$LF,
+          fVLF = Data$VLF,
         )
       return(im)
     } else if (method == "cwt.phase") {
@@ -424,7 +431,10 @@ PlotAnalyzedBRS <-
           plotHF = plotHF,
           plotLF = plotLF,
           ylim = ylim,
-          use.ggplot = use.ggplot
+          use.ggplot = use.ggplot,
+          fHF = Data$HF,
+          fLF = Data$LF,
+          fVLF = Data$VLF,
         )
       return(im)
     }
@@ -448,6 +458,10 @@ PlotAnalyzedBRS <-
 #' @param newPlot Boolean, generates a new plot without overwriting a previous plot. Default is TRUE
 #' @param plotHF Boolean, plot results form the HF band. Default is TRUE
 #' @param plotLF Boolean, plot results from the LF band. Default is TRUE
+#' @param ratio Boolean. Should the LF/HF ratio be plotted? Default is FALSE. Arguments plotHF and plotLF must also be
+#'              set to TRUE.
+#' @param ylim Maximum y axis limit. Default is NULL
+#' @param use.ggplot Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE
 #'
 #' @return None
 #'
@@ -477,7 +491,9 @@ PlotAnalyzedHRV <- function(framework,
                             plotHF = TRUE,
                             plotLF = TRUE,
                             ratio = TRUE,
-                            newPlot = TRUE) {
+                            newPlot = TRUE,
+                            ylim = NULL,
+                            use.ggplot = TRUE) {
   Data <- ExtractDataFromAnalysis(framework, locator)
   hrv <- framework$Analyses[[locator]]$HRV
   Time <- Data$Data[, 1]
@@ -491,7 +507,12 @@ PlotAnalyzedHRV <- function(framework,
       plotHF = plotHF,
       plotLF = plotLF,
       ratio = ratio,
-      newPlot = newPlot
+      newPlot = newPlot,
+      ylim = ylim,
+      use.ggplot = use.ggplot,
+      fHF = Data$HF,
+      fLF = Data$LF,
+      fVLF = Data$VLF
     )
   return(im)
 }

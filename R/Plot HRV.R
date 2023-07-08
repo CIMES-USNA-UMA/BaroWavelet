@@ -20,6 +20,10 @@
 #'              set to TRUE.
 #' @param ylim Maximum y axis limit. Default is NULL
 #' @param use.ggplot Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE
+#' @param fHF Maximum limit of the HF band, shown at the plot title. Default is 0.4 Hz
+#' @param fLF Maximum limit of the LF band, shown at the plot title. Default is 0.15 Hz
+#' @param fVLF Maximum limit of the VLF band, shown at the plot title. Default is 0.04 Hz
+#'
 #'
 #' @return None
 #'
@@ -53,7 +57,10 @@ PlotHRV <-
            plotLF = TRUE,
            ratio = TRUE,
            ylim = NULL,
-           use.ggplot = TRUE) {
+           use.ggplot = TRUE,
+           fHF = 0.4,
+           fLF = 0.15,
+           fVLF = 0.04) {
     if (newPlot & !tem) {
       x11(title = paste("Heart Rate Variability from", title))
     }
@@ -164,7 +171,7 @@ PlotHRV <-
             type = "l",
             xlab = "time (s)",
             ylab = expression(HRV ~ ms ^ 2),
-            main = "HRV: HF band (0.4 - 0.15 Hz)",
+            main = paste("HF band (", fHF, " - ", fLF, " Hz)", sep = ""),
             ylim = if (!is.null(ylim))
               c(0, ylim)
           )
@@ -208,7 +215,7 @@ PlotHRV <-
             type = "l",
             xlab = "time (s)",
             ylab = expression(HRV ~ ms ^ 2),
-            main = "HRV: LF band (0.15 - 0.04 Hz)",
+            main = paste("LF band (", fLF, " - ", fVLF, " Hz)", sep = ""),
             ylim = if (!is.null(ylim))
               c(0, ylim)
           )

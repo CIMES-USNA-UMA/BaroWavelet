@@ -17,7 +17,10 @@ PlotHRV(
   plotLF = TRUE,
   ratio = TRUE,
   ylim = NULL,
-  use.ggplot = TRUE
+  use.ggplot = TRUE,
+  fHF = 0.4,
+  fLF = 0.15,
+  fVLF = 0.04
 )
 }
 \arguments{
@@ -50,6 +53,12 @@ set to TRUE.}
 \item{ylim}{Maximum y axis limit. Default is NULL}
 
 \item{use.ggplot}{Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE}
+
+\item{fHF}{Maximum limit of the HF band, shown at the plot title. Default is 0.4 Hz}
+
+\item{fLF}{Maximum limit of the LF band, shown at the plot title. Default is 0.15 Hz}
+
+\item{fVLF}{Maximum limit of the VLF band, shown at the plot title. Default is 0.04 Hz}
 }
 \value{
 None

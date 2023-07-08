@@ -19,6 +19,10 @@
 #' @param plotLF Boolean, plot results from the LF band. Default is TRUE
 #' @param ylim Maximum y axis limit. Default is NULL
 #' @param use.ggplot Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE
+#' @param HF Maximum limit of the HF band, shown at the plot title. Default is 0.4 Hz
+#' @param LF Maximum limit of the LF band, shown at the plot title. Default is 0.15 Hz
+#' @param VLF Maximum limit of the VLF band, shown at the plot title. Default is 0.04 Hz
+#'
 #'
 #' @return None
 #'
@@ -54,9 +58,12 @@ PlotBRS <-
            newPlot = TRUE,
            title = "data",
            plotHF = FALSE,
-           plotLF = TRUE, 
+           plotLF = TRUE,
            ylim = NULL,
-           use.ggplot = TRUE) {
+           use.ggplot = TRUE,
+           HF = 0.4,
+           LF = 0.15,
+           VLF = 0.04) {
     #if(dev.cur() > 1)
     if (newPlot & !tem) {
       x11(title = paste("BRS from", title))
@@ -71,7 +78,10 @@ PlotBRS <-
           plotHF = plotHF,
           plotLF = plotLF,
           ylim = ylim,
-          use.ggplot = FALSE
+          use.ggplot = FALSE,
+          fHF = HF,
+          fLF = LF,
+          fVLF = VLF
         )
       } else {
         im <-
@@ -81,9 +91,12 @@ PlotBRS <-
             col = time_col,
             tem = tem,
             plotHF = plotHF,
-            plotLF = plotLF, 
+            plotLF = plotLF,
             ylim = ylim,
-            use.ggplot = TRUE
+            use.ggplot = TRUE,
+            fHF = HF,
+            fLF = LF,
+            fVLF = VLF
           )
         return(im)
       }
@@ -121,7 +134,10 @@ PlotDwtBRS <-
            plotLF = TRUE,
            use.xlim = FALSE,
            ylim = NULL,
-           use.ggplot = TRUE) {
+           use.ggplot = TRUE,
+           fHF = 0.4,
+           fLF = 0.15,
+           fVLF = 0.04) {
     time <- fun$Time
     HF <- fun$HF
     LF <- fun$LF
@@ -162,7 +178,6 @@ PlotDwtBRS <-
         #return(im)
       }
       if (tem) {
-        
         dev.off()
         #return(im)
       }
@@ -178,8 +193,9 @@ PlotDwtBRS <-
           type = "l",
           xlab = "Time (s)",
           ylab = "BRS (ms/mmHg)",
-          main = "HF band (0.4 - 0.15 Hz)",
-          ylim = if(!is.null(ylim)) c(0, ylim)
+          main = paste("HF band (", fHF, " - ", fLF, " Hz)", sep = ""),
+          ylim = if (!is.null(ylim))
+            c(0, ylim)
         )
         if ((class(time_flags) == "list") &&
             !is.null(col) && (length(time_flags) >= NROW(col))) {
@@ -221,8 +237,9 @@ PlotDwtBRS <-
           type = "l",
           xlab = "Time (s)",
           ylab = "BRS (ms/mmHg)",
-          main = "LF band (0.15 - 0.04 Hz)",
-          ylim = if(!is.null(ylim)) c(0, ylim)
+          main = paste("LF band (", fLF, " - ", fVLF, " Hz)", sep = ""),
+          ylim = if (!is.null(ylim))
+            c(0, ylim)
         )
         if ((class(time_flags) == "list") &&
             !is.null(col) && (length(time_flags) >= NROW(col))) {
@@ -318,7 +335,11 @@ PlotCwtBRS <-
       plot.cb = TRUE,
       arrow.cutoff = thr,
       plot.coi = show.coi,
-      main = ifelse(isAlpha, "Alpha Index by CWT (ms/mmHg)","Transfer Function by CWT (ms/mmHg)"),
+      main = ifelse(
+        isAlpha,
+        "Alpha Index by CWT (ms/mmHg)",
+        "Transfer Function by CWT (ms/mmHg)"
+      ),
       ylim = c(1 / HF, 1 / VLF),
       xlim = xlim,
       fill.cols = col,
@@ -401,10 +422,10 @@ PlotAvgCwtBRS <- function(fun,
     freq_results <- rowMeans(fun$power, na.rm = TRUE)
   }
   time_results.HF <-
-    colMeans(fun$power[(freqs <= HF) & (freqs > LF), ],
+    colMeans(fun$power[(freqs <= HF) & (freqs > LF),],
              na.rm = TRUE)
   time_results.LF <-
-    colMeans(fun$power[(freqs <= LF) & (freqs > VLF), ],
+    colMeans(fun$power[(freqs <= LF) & (freqs > VLF),],
              na.rm = TRUE)
   freq_results[is.na(freq_results)] <- 0
   time_results.HF[is.na(time_results.HF)] <- 0
@@ -415,7 +436,11 @@ PlotAvgCwtBRS <- function(fun,
     "l",
     xlab = "Frequency",
     ylab = "BRS (ms/mmHg)",
-    main = ifelse(isAlpha, "Frequency Domain Alpha Index","Frequency Domain Transfer Function"),
+    main = ifelse(
+      isAlpha,
+      "Frequency Domain Alpha Index",
+      "Frequency Domain Transfer Function"
+    ),
     ylim =
       c(0, max(freq_results)),
     xaxt = "n"
@@ -444,7 +469,11 @@ PlotAvgCwtBRS <- function(fun,
     "l",
     xlab = "Time",
     ylab = "BRS (ms/mmHg)",
-    main = ifelse(isAlpha, "Time Domain Alpha Index (HF band)","Time Domain Transfer Function (HF band)")
+    main = ifelse(
+      isAlpha,
+      "Time Domain Alpha Index (HF band)",
+      "Time Domain Transfer Function (HF band)"
+    )
   )
   if (!is.null(time_flags)) {
     polygon(
@@ -460,7 +489,11 @@ PlotAvgCwtBRS <- function(fun,
     "l",
     xlab = "Time",
     ylab = "BRS (ms/mmHg)",
-    main = ifelse(isAlpha, "Time Domain Alpha Index (LF band)","Time Domain Transfer Function (LF band)")
+    main = ifelse(
+      isAlpha,
+      "Time Domain Alpha Index (LF band)",
+      "Time Domain Transfer Function (LF band)"
+    )
   )
   if (!is.null(time_flags)) {
     polygon(

@@ -15,7 +15,9 @@ PlotAnalyzedHRV(
   plotHF = TRUE,
   plotLF = TRUE,
   ratio = TRUE,
-  newPlot = TRUE
+  newPlot = TRUE,
+  ylim = NULL,
+  use.ggplot = TRUE
 )
 }
 \arguments{
@@ -38,7 +40,14 @@ Default is NULL.}
 
 \item{plotLF}{Boolean, plot results from the LF band. Default is TRUE}
 
+\item{ratio}{Boolean. Should the LF/HF ratio be plotted? Default is FALSE. Arguments plotHF and plotLF must also be
+set to TRUE.}
+
 \item{newPlot}{Boolean, generates a new plot without overwriting a previous plot. Default is TRUE}
+
+\item{ylim}{Maximum y axis limit. Default is NULL}
+
+\item{use.ggplot}{Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE}
 }
 \value{
 None
