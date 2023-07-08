@@ -18,7 +18,9 @@ PlotAnalyzedBRS(
   newPlot = TRUE,
   plotHF = TRUE,
   plotLF = TRUE,
-  thr = NULL
+  thr = NULL,
+  ylim = NULL,
+  use.ggplot = TRUE
 )
 }
 \arguments{
@@ -50,6 +52,10 @@ Default is NULL.}
 \item{plotLF}{Boolean, plot results from the LF band. Default is TRUE}
 
 \item{thr}{Coherence threshold to be used for the plot. Default is NULL}
+
+\item{ylim}{Maximum y axis limit. Default is NULL}
+
+\item{use.ggplot}{Boolean, use methods from ggplot2 package to plot the results. Default is TRUE}
 }
 \value{
 None

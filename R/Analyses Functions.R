@@ -322,6 +322,8 @@ AddAvgCwtData <- function(framework, locator) {
 #' @param plotHF Boolean, plot results form the HF band. Default is TRUE
 #' @param plotLF Boolean, plot results from the LF band. Default is TRUE
 #' @param thr Coherence threshold to be used for the plot. Default is NULL
+#' @param ylim Maximum y axis limit. Default is NULL
+#' @param use.ggplot Boolean, use methods from ggplot2 package to plot the results. Default is TRUE
 #'
 #' @return None
 #'
@@ -356,7 +358,9 @@ PlotAnalyzedBRS <-
            newPlot = TRUE,
            plotHF = TRUE,
            plotLF = TRUE,
-           thr = NULL) {
+           thr = NULL,
+           ylim = NULL,
+           use.ggplot = TRUE) {
     if (newPlot)
       x11(title = paste("BRS from",
                         framework$Analyses[[locator]]$Name))
@@ -375,16 +379,21 @@ PlotAnalyzedBRS <-
           col = time_col,
           tem = tem,
           plotHF = plotHF,
-          plotLF = plotLF
+          plotLF = plotLF,
+          ylim = ylim,
+          use.ggplot = use.ggplot
         )
       return(im)
     } else if (method == "cwt") {
       tf <- AssembleCwtBRS(framework, locator)
-      im <- PlotCwtBRS(tf,
-                       thr,
-                       use.coherence,
-                       time_flags = time_flags,
-                       tem = tem)
+      im <- PlotCwtBRS(
+        tf,
+        thr,
+        use.coherence,
+        time_flags = time_flags,
+        Max = ylim,
+        tem = tem
+      )
     } else if (method == "cwt.avg") {
       #tf <- framework$Analyses[[locator]]$BRS$AvgCWT
       tf <- AssembleCwtBRS(framework, locator)
@@ -397,7 +406,9 @@ PlotAnalyzedBRS <-
           col = time_col,
           tem = tem,
           plotHF = plotHF,
-          plotLF = plotLF
+          plotLF = plotLF,
+          ylim = ylim,
+          use.ggplot = use.ggplot
         )
       return(im)
     } else if (method == "cwt.phase") {
@@ -411,7 +422,9 @@ PlotAnalyzedBRS <-
           col = time_col,
           tem = tem,
           plotHF = plotHF,
-          plotLF = plotLF
+          plotLF = plotLF,
+          ylim = ylim,
+          use.ggplot = use.ggplot
         )
       return(im)
     }

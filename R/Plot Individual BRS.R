@@ -146,6 +146,8 @@ PlotDwtBRS <-
         if (use.xlim)
           im <-
             im + ggplot2::xlim(time_flags[1] * 60, time_flags[2] * 60)
+        if (!is.null(ylim))
+          im <- im + ggplot2::ylim(0, ylim)
         #return(im)
       }
       if (plotLF) {
@@ -155,9 +157,12 @@ PlotDwtBRS <-
         if (use.xlim)
           im <-
             im + ggplot2::xlim(time_flags[1] * 60, time_flags[2] * 60)
+        if (!is.null(ylim))
+          im <- im + ggplot2::ylim(0, ylim)
         #return(im)
       }
       if (tem) {
+        
         dev.off()
         #return(im)
       }
