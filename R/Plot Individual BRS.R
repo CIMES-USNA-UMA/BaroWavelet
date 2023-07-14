@@ -114,8 +114,12 @@ PlotBRS <-
           tem = tem
         )
       } else {
-        im <- PlotCwtBRS(fun, thr, use.thr, time_flags = time_flags,
-                         tem = tem)
+        im <- PlotCwtBRS(fun,
+                         thr,
+                         use.thr,
+                         time_flags = time_flags,
+                         tem = tem,
+                         Max = ylim)
       }
     }
     if (tem & !newPlot & use.ggplot) {
