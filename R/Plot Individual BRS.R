@@ -18,7 +18,7 @@
 #' @param plotHF Boolean, plot results form the HF band. Default is TRUE
 #' @param plotLF Boolean, plot results from the LF band. Default is TRUE
 #' @param ylim Maximum y axis limit. Default is NULL
-#' @param use.ggplot Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE
+#' @param use.ggplot Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is FALSE
 #' @param HF Maximum limit of the HF band, shown at the plot title. Default is 0.4 Hz
 #' @param LF Maximum limit of the LF band, shown at the plot title. Default is 0.15 Hz
 #' @param VLF Maximum limit of the VLF band, shown at the plot title. Default is 0.04 Hz
@@ -57,10 +57,10 @@ PlotBRS <-
            tem = FALSE,
            newPlot = TRUE,
            title = "data",
-           plotHF = FALSE,
+           plotHF = TRUE,
            plotLF = TRUE,
            ylim = NULL,
-           use.ggplot = TRUE,
+           use.ggplot = FALSE,
            HF = 0.4,
            LF = 0.15,
            VLF = 0.04) {
