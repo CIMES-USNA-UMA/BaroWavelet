@@ -18,13 +18,16 @@ devtools::install_github("CIMES-USNA-UMA/BaroWavelet")
 
 ## Shiny application
 
-There is a complementary shiny application available for this package. To access it, you can use the following BaroWavelet command:
+There is a complementary shiny application available for this package. To access it,
+you need to have package *shiny* already installed.
+
+You can use the following BaroWavelet command:
 
 ```ruby
 BaroWavelet::RunBaroWaveletApp()
 ```
 
-Alternatively, you can use the following code line (you may need to install *shiny*, *ggplot2*, *ggpubr*, *gridExtra* and *BaroWavelet*):
+Alternatively, you can use the following code line (you may need to install *ggplot2*, *ggpubr*, *gridExtra* and *BaroWavelet*):
 
 ```ruby
 shiny::runGitHub("BaroWaveletApp", "CIMES-USNA-UMA", launch.browser = TRUE)

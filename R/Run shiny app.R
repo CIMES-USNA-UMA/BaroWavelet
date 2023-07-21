@@ -4,8 +4,8 @@
 #'
 #'
 #' @author Alvaro Chao-Ecija
+#' 
 #'
-#' @import shiny
 #' @export
 #'
 #'
@@ -15,6 +15,11 @@
 #' }
 #'
 RunBaroWaveletApp <- function() {
+  if (!requiredNamespace("shiny"))
+    stop(
+      "Package 'shiny' is not installed. Package 'shiny' must be installed to 
+      access the shiny aplication."
+    )
   shiny::runGitHub(repo = "CIMES-USNA-UMA/BaroWaveletApp",
                    launch.browser = TRUE)
 }
