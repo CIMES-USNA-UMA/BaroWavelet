@@ -342,9 +342,8 @@ AddAvgCwtData <- function(framework, locator) {
 #' Study <- AddAvgCwtData(Study, 1)
 #'
 #'
-#' PlotAnalyzedBRS(Study, 1, "dwt")
+#' PlotAnalyzedBRS(Study, 1, "cwt", newPlot = FALSE)
 #'
-#' PlotAnalyzedBRS(Study, 1, "cwt")
 PlotAnalyzedBRS <-
   function(framework,
            locator,
@@ -479,7 +478,7 @@ PlotAnalyzedBRS <-
 #' Study <- AddAvgCwtData(Study, 1)
 #'
 #'
-#' PlotAnalyzedHRV(Study, 1)
+#' PlotAnalyzedHRV(Study, 1, newPlot = FALSE)
 
 PlotAnalyzedHRV <- function(framework,
                             locator,
@@ -694,7 +693,7 @@ AnalyzeBRSIndices <-
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(10, 11.7))
 #' Study <- AnalyzeBRSIndices(Study, 1, 3, c(35, 37))
 #'
-#' PlotIndicesFromAnalysis(Study, 1)
+#' PlotIndicesFromAnalysis(Study, 1, newPlot = FALSE)
 #' @export
 PlotIndicesFromAnalysis <-
   function(framework,
@@ -811,7 +810,7 @@ PlotIndicesFromAnalysis <-
 #' Study <- AnalyzeBRSIndices(Study, 1, 2, c(10, 11.7))
 #' Study <- AnalyzeBRSIndices(Study, 1, 3, c(35, 37))
 #'
-#' PlotTimeValues(Study, 1)
+#' PlotTimeValues(Study, 1, newPlot = FALSE)
 PlotTimeValues <- function(framework,
                            locator,
                            use.names = TRUE,
@@ -1369,7 +1368,7 @@ TestHRV <-
 #'
 #' Study <- TestGroups(Study, 1, 2, "Example test")
 #'
-#' PlotTestResults(Study, 1)
+#' PlotTestResults(Study, 1, newPlot = FALSE)
 PlotTestResults <-
   function(framework,
            locator,
@@ -1502,7 +1501,7 @@ PlotTestResults <-
 #'
 #' Study <- TestHRV(Study, 1, 2, "Example test")
 #'
-#' PlotHRVTestResults(Study, 1)
+#' PlotHRVTestResults(Study, 1, newPlot = FALSE)
 PlotHRVTestResults <-
   function(framework,
            locator,
@@ -2056,6 +2055,7 @@ GetAvgCwtBands <-
 #' @param use.thr Boolean, should a coherence threshold be used? Default is TRUE
 #' @param time_flags A vector containing the minimum and maximum limits of a time interval, in minutes.
 #'                   Default is NULL
+#' @param use.phase Use phase estimates instead of gains. Default is FALSE               
 #'
 #' @return A list containg the assembled transfer function or alpha index
 #'
@@ -2067,7 +2067,7 @@ GetAvgCwtBands <-
 #' @examples
 #' Data <- InterpolateData(DataSimulation(), f = 1)
 #' BRS <- TransferFunCWT(Data)
-#' BRS <- SplitByCoherence(Data)
+#' Split_BRS <- SplitByCoherence(BRS)
 SplitByCoherence <-
   function(fun,
            thr = 0.5,

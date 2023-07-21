@@ -76,16 +76,8 @@ Plots an already computed BRS from a specific subject
 \examples{
 Data <- InterpolateData(DataSimulation(), f = 1)
 AlphaIndex <- AlphaIndexDWT(Data, wv = "d8", error = 0.0005)
-TransferFun <- TransferFunCWT(Data)
 
-
-PlotBRS(AlphaIndex, plotHF = TRUE, plotLF = FALSE)
-
-PlotBRS(AlphaIndex, plotHF = FALSE, plotLF = TRUE)
-
-PlotBRS(TransferFun)
-
-PlotBRS(TransferFun, avg = TRUE)
+PlotBRS(AlphaIndex, plotHF = TRUE, plotLF = TRUE, newPlot = FALSE)
 }
 \author{
 Alvaro Chao-Ecija

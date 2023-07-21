@@ -57,7 +57,7 @@ Study <- AnalyzeBRSIndices(Study, 4, 2, c(2.6, 3))
 
 Study <- TestHRV(Study, 1, 2, "Example test")
 
-PlotHRVTestResults(Study, 1)
+PlotHRVTestResults(Study, 1, newPlot = FALSE)
 }
 \author{
 Alvaro Chao-Ecija

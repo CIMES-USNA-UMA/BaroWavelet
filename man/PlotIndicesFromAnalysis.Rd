@@ -63,7 +63,7 @@ Study <- AnalyzeBRSIndices(Study, 1, 1, c(1.7, 3.3))
 Study <- AnalyzeBRSIndices(Study, 1, 2, c(10, 11.7))
 Study <- AnalyzeBRSIndices(Study, 1, 3, c(35, 37))
 
-PlotIndicesFromAnalysis(Study, 1)
+PlotIndicesFromAnalysis(Study, 1, newPlot = FALSE)
 }
 \author{
 Alvaro Chao-Ecija

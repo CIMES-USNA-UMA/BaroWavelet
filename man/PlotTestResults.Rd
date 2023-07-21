@@ -57,7 +57,7 @@ Study <- AnalyzeBRSIndices(Study, 4, 2, c(2.6, 3))
 
 Study <- TestGroups(Study, 1, 2, "Example test")
 
-PlotTestResults(Study, 1)
+PlotTestResults(Study, 1, newPlot = FALSE)
 }
 \author{
 Alvaro Chao-Ecija

@@ -37,11 +37,8 @@
 #' AlphaIndex <- AlphaIndexDWT(Data, wv = "d8", error = 0.0005, hrv = TRUE)
 #'
 #'
-#' PlotHRV(AlphaIndex$HRV, AlphaIndex$Time, plotHF = TRUE, plotLF = FALSE)
-#'
-#' PlotHRV(AlphaIndex$HRV, AlphaIndex$Time, plotHF = FALSE, plotLF = TRUE)
-#'
-#' PlotHRV(AlphaIndex$HRV, AlphaIndex$Time)
+#' PlotHRV(AlphaIndex$HRV, AlphaIndex$Time, plotHF = FALSE, plotLF = TRUE,
+#' newPlot = FALSE)
 #'
 
 PlotHRV <-

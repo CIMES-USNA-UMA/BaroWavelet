@@ -72,9 +72,8 @@ Study <- AnalyzeBRS(Study, 1)
 Study <- AddAvgCwtData(Study, 1)
 
 
-PlotAnalyzedBRS(Study, 1, "dwt")
+PlotAnalyzedBRS(Study, 1, "cwt", newPlot = FALSE)
 
-PlotAnalyzedBRS(Study, 1, "cwt")
 }
 \author{
 Alvaro Chao-Ecija

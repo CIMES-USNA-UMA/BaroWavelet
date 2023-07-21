@@ -134,7 +134,7 @@ IndividualIndicesCWT <-
     HF <- fun$HF
     LF <- fun$LF
     VLF <- fun$VLF
-    fun <- BaroWavelet:::GetBiwaveletObject(fun)
+    fun <- GetBiwaveletObject(fun)
     if (is.null(time_flags)) {
       select_time <- 1:NROW(fun$t)
     } else {

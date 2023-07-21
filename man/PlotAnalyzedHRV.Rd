@@ -64,7 +64,7 @@ Study <- AnalyzeBRS(Study, 1)
 Study <- AddAvgCwtData(Study, 1)
 
 
-PlotAnalyzedHRV(Study, 1)
+PlotAnalyzedHRV(Study, 1, newPlot = FALSE)
 }
 \author{
 Alvaro Chao-Ecija

@@ -21,6 +21,8 @@ SplitByCoherence(
 
 \item{time_flags}{A vector containing the minimum and maximum limits of a time interval, in minutes.
 Default is NULL}
+
+\item{use.phase}{Use phase estimates instead of gains. Default is FALSE}
 }
 \value{
 A list containg the assembled transfer function or alpha index
@@ -31,7 +33,7 @@ Splits BRS estimates computed with the CWT into the HF and LF bands after applyi
 \examples{
 Data <- InterpolateData(DataSimulation(), f = 1)
 BRS <- TransferFunCWT(Data)
-BRS <- SplitByCoherence(Data)
+Split_BRS <- SplitByCoherence(BRS)
 }
 \author{
 Alvaro Chao-Ecija
