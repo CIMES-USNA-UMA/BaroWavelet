@@ -59,7 +59,8 @@ provided by package \href{https://CRAN.R-project.org/package=biwavelet}{biwavele
 compute the baroreflex sensitivity. It employs the functions \code{link[biwavelet]{wt}}
 and \code{link[biwavelet]{smooth.wavelet}}. This last function is used in a smoothing routine
 based on the one that biwavelet function \code{link[biwavelet]{wtc}} uses to smooth
-the wavelet transforms. Further information regarding this method of computation
+the wavelet transforms. Further information regarding this method of computation, as
+well as the \href{https://CRAN.R-project.org/package=biwavelet}{biwavelet} package,
 can be accessed through the references section.
 }
 \examples{
@@ -70,6 +71,10 @@ TransferFun <- TransferFunCWT(Data)
 Keissar K, Maestri R, Pinna GD, La Rovere MT, Gilad O. Non-invasive
 baroreflex sensitivity assessment using wavelet transfer function-based
 time-frequency analysis. Physiol Meas. 2010 ;31(7):1021-36.
+
+Tarik C. Gouhier, Aslak Grinsted, Viliam Simko (2021). R package biwavelet:
+Conduct Univariate and Bivariate Wavelet Analyses (Version 0.20.21).
+Available from https://github.com/tgouhier/biwavelet
 }
 \author{
 Alvaro Chao-Ecija
