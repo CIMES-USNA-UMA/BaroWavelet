@@ -48,7 +48,9 @@
 #' Conduct Univariate and Bivariate Wavelet Analyses (Version 0.20.21).
 #' Available from https://github.com/tgouhier/biwavelet
 #'
-#' @import biwavelet
+#' @importFrom biwavelet wt 
+#' @importFrom biwavelet smooth.wavelet
+#' 
 #' @export
 #'
 #' @examples

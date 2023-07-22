@@ -28,7 +28,17 @@
 #'
 #' @author Alvaro Chao-Ecija
 #'
-#' @import ggplot2
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 geom_boxplot
+#' @importFrom ggplot2 theme_bw
+#' @importFrom ggplot2 ggtitle
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 geom_line
+#' @importFrom ggplot2 geom_smooth
+#' @importFrom ggplot2 theme_minimal
+#' @importFrom ggplot2 labs
+#' @importFrom  biwavelet plot.biwavelet
 #' @export
 #'
 #' @examples
