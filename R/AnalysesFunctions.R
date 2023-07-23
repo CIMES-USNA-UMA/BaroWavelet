@@ -1384,6 +1384,7 @@ PlotTestResults <-
            tem = FALSE,
            newPlot = FALSE,
            draw_paired = FALSE) {
+    Gain <- Group <- Power <- id <- NULL # CMD
     test <- framework$Tests[[locator]]
     if (newPlot)
       dev.new(title = paste("Results from test",
@@ -1526,6 +1527,7 @@ PlotHRVTestResults <-
            tem = FALSE,
            newPlot = FALSE,
            draw_paired = FALSE) {
+    Group <- Power <- id <- NULL # CMD
     test <- framework$TestsHRV[[locator]]
     if (newPlot)
       dev.new(title = paste("Results from test",
@@ -1658,6 +1660,7 @@ ModelClinicalData <-
            segment = 1,
            variable = 1,
            use.names = TRUE) {
+    clinical <- NULL # CMD
     indices <- framework$IndividualIndices[[segment]]
     type <- match.arg(type)
     band <- match.arg(band)

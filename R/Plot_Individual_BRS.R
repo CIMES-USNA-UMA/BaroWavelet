@@ -144,7 +144,7 @@ PlotDwtBRS <-
            fHF = 0.4,
            fLF = 0.15,
            fVLF = 0.04) {
-    time <- fun$Time
+    Time <- fun$Time
     HF <- fun$HF
     LF <- fun$LF
     if (use.ggplot) {
@@ -158,7 +158,7 @@ PlotDwtBRS <-
           res = 400
         )
       }
-      plottingData <- data.frame(Time = time, LF = LF, HF = HF)
+      plottingData <- data.frame(Time = Time, LF = LF, HF = HF)
       if (plotHF & plotLF)
         plotHF <- FALSE # Future implementation
       if (plotHF) {
@@ -194,7 +194,7 @@ PlotDwtBRS <-
         par(mfrow = c(1, 2))
       if (plotHF) {
         plot(
-          time,
+          Time,
           HF,
           type = "l",
           xlab = "Time (s)",
@@ -212,13 +212,13 @@ PlotDwtBRS <-
             time_lims <- time_flags[[ti]] * 60
             ti_col <- col[ti]
             limit1 <-
-              match(min(abs(time_lims[1] - time)), abs(time_lims[1] - time))
+              match(min(abs(time_lims[1] - Time)), abs(time_lims[1] - Time))
             limit2 <-
-              match(min(abs(time_lims[2] - time)), abs(time_lims[2] -  time))
+              match(min(abs(time_lims[2] - Time)), abs(time_lims[2] -  Time))
             select_time <- limit1:limit2
             band <- HF
             band[-select_time] <- NA
-            lines(time, band, col = ti_col)
+            lines(Time, band, col = ti_col)
           }
           
         } else if (is.numeric(time_flags) &&
@@ -226,19 +226,19 @@ PlotDwtBRS <-
                    !is.null(col) && (NROW(col) == 1)) {
           time_flags <- time_flags * 60
           limit1 <-
-            match(min(abs(time_flags[1] - time)), abs(time_flags[1] - time))
+            match(min(abs(time_flags[1] - Time)), abs(time_flags[1] - Time))
           limit2 <-
-            match(min(abs(time_flags[2] - time)), abs(time_flags[2] -  time))
+            match(min(abs(time_flags[2] - Time)), abs(time_flags[2] -  Time))
           select_time <- limit1:limit2
           band <- HF
           band[-select_time] <- NA
-          lines(time, band, col = col)
+          lines(Time, band, col = col)
           time_flags <- time_flags / 60
         }
       }
       if (plotLF) {
         plot(
-          time,
+          Time,
           LF,
           type = "l",
           xlab = "Time (s)",
@@ -256,13 +256,13 @@ PlotDwtBRS <-
             time_lims <- time_flags[[ti]] * 60
             ti_col <- col[ti]
             limit1 <-
-              match(min(abs(time_lims[1] - time)), abs(time_lims[1] - time))
+              match(min(abs(time_lims[1] - Time)), abs(time_lims[1] - Time))
             limit2 <-
-              match(min(abs(time_lims[2] - time)), abs(time_lims[2] -  time))
+              match(min(abs(time_lims[2] - Time)), abs(time_lims[2] -  Time))
             select_time <- limit1:limit2
             band <- LF
             band[-select_time] <- NA
-            lines(time, band, col = ti_col)
+            lines(Time, band, col = ti_col)
           }
           
         } else if (is.numeric(time_flags) &&
@@ -270,13 +270,13 @@ PlotDwtBRS <-
                    !is.null(col) && (NROW(col) == 1)) {
           time_flags = time_flags * 60
           limit1 <-
-            match(min(abs(time_flags[1] - time)), abs(time_flags[1] - time))
+            match(min(abs(time_flags[1] - Time)), abs(time_flags[1] - Time))
           limit2 <-
-            match(min(abs(time_flags[2] - time)), abs(time_flags[2] -  time))
+            match(min(abs(time_flags[2] - Time)), abs(time_flags[2] -  Time))
           select_time <- limit1:limit2
           band <- LF
           band[-select_time] <- NA
-          lines(time, band, col = col)
+          lines(Time, band, col = col)
         }
       }
     }
