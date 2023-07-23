@@ -68,7 +68,7 @@ PlotBRS <-
            VLF = 0.04) {
     #if(dev.cur() > 1)
     if (newPlot & !tem) {
-      x11(title = paste("BRS from", title))
+      dev.new(title = paste("BRS from", title))
     }
     if (fun$type == "brs_dwt") {
       if (!tem & !use.ggplot) {
@@ -203,7 +203,7 @@ PlotDwtBRS <-
           ylim = if (!is.null(ylim))
             c(0, ylim)
         )
-        if ((class(time_flags) == "list") &&
+        if (is.list(time_flags) &&
             !is.null(col) && (length(time_flags) >= NROW(col))) {
           if (length(time_flags) > NROW(col))
             col <-
@@ -221,7 +221,7 @@ PlotDwtBRS <-
             lines(time, band, col = ti_col)
           }
           
-        } else if ((class(time_flags) == "numeric") &&
+        } else if (is.numeric(time_flags) &&
                    (NROW(time_flags) == 2) &&
                    !is.null(col) && (NROW(col) == 1)) {
           time_flags <- time_flags * 60
@@ -247,7 +247,7 @@ PlotDwtBRS <-
           ylim = if (!is.null(ylim))
             c(0, ylim)
         )
-        if ((class(time_flags) == "list") &&
+        if (is.list(time_flags) &&
             !is.null(col) && (length(time_flags) >= NROW(col))) {
           if (length(time_flags) > NROW(col))
             col <-
@@ -265,7 +265,7 @@ PlotDwtBRS <-
             lines(time, band, col = ti_col)
           }
           
-        } else if ((class(time_flags) == "numeric") &&
+        } else if (is.numeric(time_flags) &&
                    (NROW(time_flags) == 2) &&
                    !is.null(col) && (NROW(col) == 1)) {
           time_flags = time_flags * 60

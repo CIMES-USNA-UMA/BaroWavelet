@@ -362,7 +362,7 @@ PlotAnalyzedBRS <-
            ylim = NULL,
            use.ggplot = TRUE) {
     if (newPlot)
-      x11(title = paste("BRS from",
+      dev.new(title = paste("BRS from",
                         framework$Analyses[[locator]]$Name))
     #if(dev.cur() > 1) dev.off()
     method <- match.arg(method)
@@ -708,7 +708,7 @@ PlotIndicesFromAnalysis <-
            tem = FALSE,
            newPlot  = TRUE) {
     if (newPlot)
-      x11(title = paste("Estimates from",
+      dev.new(title = paste("Estimates from",
                         framework$Analyses[[locator]]$Name))
     #if(dev.cur() > 1) dev.off()
     intervals <- framework$IndividualIndices
@@ -822,7 +822,7 @@ PlotTimeValues <- function(framework,
                            tem = FALSE,
                            newPlot  = TRUE) {
   if (newPlot)
-    x11(title = paste("Time values from",
+    dev.new(title = paste("Time values from",
                       framework$Analyses[[locator]]$Name))
   intervals <- framework$IndividualIndices
   N <- length(intervals)
@@ -1386,7 +1386,7 @@ PlotTestResults <-
            draw_paired = FALSE) {
     test <- framework$Tests[[locator]]
     if (newPlot)
-      x11(title = paste("Results from test",
+      dev.new(title = paste("Results from test",
                         test$Name))
     HF <- test$Tables$HF
     LF <- test$Tables$LF
@@ -1528,7 +1528,7 @@ PlotHRVTestResults <-
            draw_paired = FALSE) {
     test <- framework$TestsHRV[[locator]]
     if (newPlot)
-      x11(title = paste("Results from test",
+      dev.new(title = paste("Results from test",
                         test$Name))
     HF <- test$Tables$HF
     LF <- test$Tables$LF
