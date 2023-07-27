@@ -26,6 +26,7 @@
 #' @param size.axis Percentage of scaling of axis values. Default is 100
 #' @param size.labels Percentage of scaling of axis labels. Default is 100
 #' @param size.title Percentage of scaling of plot titles. Default is 100
+#' @param d.labels Percentage of scaling of distance between axis and labels. Default is 100
 #'
 #' @return None
 #'
@@ -71,7 +72,8 @@ PlotHRV <-
            fVLF = 0.04,
            size.axis = 100,
            size.labels = 100,
-           size.title = 100) {
+           size.title = 100,
+           d.labels = 100) {
     if (newPlot & !tem) {
       dev.new(title = paste("Heart Rate Variability from", title))
     }
@@ -81,6 +83,7 @@ PlotHRV <-
     size.axis <- size.axis / 100
     size.labels <- size.labels / 100
     size.title <- size.title / 100
+    d.labels <- d.labels * 3 / 100
     if (use.ggplot) {
       if (tem) {
         im <- tempfile(fileext = ".png")
@@ -134,8 +137,11 @@ PlotHRV <-
       }
     } else {
       if (plotHF & plotLF & !ratio)
-        par(mfrow = c(1, 2))
+        par(mfrow = c(1, 2), mgp = c(d.labels, 1, 0))
+      if (((plotHF & !plotLF) |  (!plotHF & plotLF)) && !ratio)
+        par(mgp = c(d.labels, 1, 0))
       if (plotHF & plotLF & ratio) {
+        par(mgp = c(d.labels, 1, 0))
         plot(
           time,
           LFHF,

@@ -25,6 +25,7 @@
 #' @param size.axis Percentage of scaling of axis values. Default is 100
 #' @param size.labels Percentage of scaling of axis labels. Default is 100
 #' @param size.title Percentage of scaling of plot titles. Default is 100
+#' @param d.labels Percentage of scaling of distance between axis and labels. Default is 100
 #'
 #'
 #' @return None
@@ -71,7 +72,8 @@ PlotBRS <-
            VLF = 0.04,
            size.axis = 100,
            size.labels = 100,
-           size.title = 100) {
+           size.title = 100,
+           d.labels = 100) {
     #if(dev.cur() > 1)
     if (newPlot & !tem) {
       dev.new(title = paste("BRS from", title))
@@ -92,7 +94,8 @@ PlotBRS <-
           fVLF = VLF,
           size.axis = size.axis,
           size.labels = size.labels,
-          size.title = size.title
+          size.title = size.title,
+          d.labels = d.labels
         )
       } else {
         im <-
@@ -110,7 +113,8 @@ PlotBRS <-
             fVLF = VLF,
             size.axis = size.axis,
             size.labels = size.labels,
-            size.title = size.title
+            size.title = size.title,
+            d.labels = d.labels
           )
         return(im)
       }
@@ -128,7 +132,8 @@ PlotBRS <-
           tem = tem,
           size.axis = size.axis,
           size.labels = size.labels,
-          size.title = size.title
+          size.title = size.title,
+          d.labels = d.labels
         )
       } else {
         im <- PlotCwtBRS(
@@ -140,7 +145,8 @@ PlotBRS <-
           Max = ylim,
           size.axis = size.axis,
           size.labels = size.labels,
-          size.title = size.title
+          size.title = size.title,
+          d.labels = d.labels
         )
       }
     }
@@ -166,13 +172,15 @@ PlotDwtBRS <-
            fVLF = 0.04,
            size.axis = 100,
            size.labels = 100,
-           size.title = 100) {
+           size.title = 100,
+           d.labels = 100) {
     Time <- fun$Time
     HF <- fun$HF
     LF <- fun$LF
     size.axis <- size.axis / 100
     size.labels <- size.labels / 100
     size.title <- size.title / 100
+    d.labels <- d.labels * 3 / 100
     if (use.ggplot) {
       if (tem) {
         im <- tempfile(fileext = ".png")
@@ -217,8 +225,9 @@ PlotDwtBRS <-
       
     } else {
       if (plotHF & plotLF)
-        par(mfrow = c(1, 2))
+        par(mfrow = c(1, 2), mgp = c(d.labels, 1, 0))
       if (plotHF) {
+        par(mgp = c(d.labels, 1, 0))
         plot(
           Time,
           HF,
@@ -266,6 +275,7 @@ PlotDwtBRS <-
         }
       }
       if (plotLF) {
+        par(mgp = c(d.labels, 1, 0))
         plot(
           Time,
           LF,
@@ -325,7 +335,8 @@ PlotCwtBRS <-
            show.coi = TRUE,
            size.axis = 100,
            size.labels = 100,
-           size.title = 100) {
+           size.title = 100,
+           d.labels = 100) {
     HF <- fun$HF
     LF <- fun$LF
     VLF <- fun$VLF
@@ -333,6 +344,7 @@ PlotCwtBRS <-
     size.axis <- size.axis / 100
     size.labels <- size.labels / 100
     size.title <- size.title / 100
+    d.labels <- d.labels * 3 / 100
     if (use.thr) {
       mask <- plot.contour <- TRUE
     } else {
@@ -370,7 +382,11 @@ PlotCwtBRS <-
     xlim <- NULL
     if (use.xlim)
       xlim = time_flags * 60
-    par(oma = c(0, 0, 0, 1), mar = c(5, 4, 5, 5) + 0.1)
+    par(
+      oma = c(0, 0, 0, 1),
+      mar = c(5, 4, 5, 5) + 0.1,
+      mgp = c(d.labels, 1, 0)
+    )
     biwavelet::plot.biwavelet(
       fun,
       plot.sig = FALSE,
@@ -434,7 +450,8 @@ PlotAvgCwtBRS <- function(fun,
                           tem  = FALSE,
                           size.axis = 100,
                           size.labels = 100,
-                          size.title = 100) {
+                          size.title = 100,
+                          d.labels = 100) {
   HF <- fun$HF
   LF <- fun$LF
   VLF <- fun$VLF
@@ -445,6 +462,7 @@ PlotAvgCwtBRS <- function(fun,
   size.axis <- size.axis / 100
   size.labels <- size.labels / 100
   size.title <- size.title / 100
+  d.labels <- d.labels * 3 / 100
   if (use.thr) {
     fun$power[which(fun$rsq < thr)] <- NA
   }
@@ -464,7 +482,7 @@ PlotAvgCwtBRS <- function(fun,
       res = 400
     )
   }
-  par(mfrow = c(3, 1))
+  par(mfrow = c(3, 1), mgp = c(d.labels, 1, 0))
   if (!is.null(time_flags)) {
     time_flags <- time_flags * 60
     select_t <-
@@ -475,10 +493,10 @@ PlotAvgCwtBRS <- function(fun,
     freq_results <- rowMeans(fun$power, na.rm = TRUE)
   }
   time_results.HF <-
-    colMeans(fun$power[(freqs <= HF) & (freqs > LF), ],
+    colMeans(fun$power[(freqs <= HF) & (freqs > LF),],
              na.rm = TRUE)
   time_results.LF <-
-    colMeans(fun$power[(freqs <= LF) & (freqs > VLF), ],
+    colMeans(fun$power[(freqs <= LF) & (freqs > VLF),],
              na.rm = TRUE)
   freq_results[is.na(freq_results)] <- 0
   time_results.HF[is.na(time_results.HF)] <- 0

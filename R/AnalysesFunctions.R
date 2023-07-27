@@ -328,7 +328,7 @@ AddAvgCwtData <- function(framework, locator) {
 #' @param size.axis Percentage of scaling of axis values. Default is 100
 #' @param size.labels Percentage of scaling of axis labels. Default is 100
 #' @param size.title Percentage of scaling of plot titles. Default is 100
-#'
+#' @param d.labels Percentage of scaling of distance between axis and labels. Default is 100
 #'
 #' @return None
 #'
@@ -367,7 +367,8 @@ PlotAnalyzedBRS <-
            use.ggplot = TRUE,
            size.axis = 100,
            size.labels = 100,
-           size.title = 100) {
+           size.title = 100,
+           d.labels = 100) {
     if (newPlot)
       dev.new(title = paste("BRS from",
                         framework$Analyses[[locator]]$Name))
@@ -394,7 +395,8 @@ PlotAnalyzedBRS <-
           fVLF = Data$VLF,
           size.axis = size.axis,
           size.labels = size.labels,
-          size.title = size.title
+          size.title = size.title,
+          d.labels = d.labels
         )
       return(im)
     } else if (method == "cwt") {
@@ -408,7 +410,8 @@ PlotAnalyzedBRS <-
         tem = tem,
         size.axis = size.axis,
         size.labels = size.labels,
-        size.title = size.title
+        size.title = size.title,
+        d.labels = d.labels
       )
     } else if (method == "cwt.avg") {
       #tf <- framework$Analyses[[locator]]$BRS$AvgCWT
@@ -430,7 +433,8 @@ PlotAnalyzedBRS <-
           fVLF = Data$VLF,
           size.axis = size.axis,
           size.labels = size.labels,
-          size.title = size.title
+          size.title = size.title,
+          d.labels = d.labels
         )
       return(im)
     } else if (method == "cwt.phase") {
@@ -452,7 +456,8 @@ PlotAnalyzedBRS <-
           fVLF = Data$VLF,
           size.axis = size.axis,
           size.labels = size.labels,
-          size.title = size.title
+          size.title = size.title,
+          d.labels = d.labels
         )
       return(im)
     }
@@ -483,8 +488,7 @@ PlotAnalyzedBRS <-
 #' @param size.axis Percentage of scaling of axis values. Default is 100
 #' @param size.labels Percentage of scaling of axis labels. Default is 100
 #' @param size.title Percentage of scaling of plot titles. Default is 100
-#'
-#'
+#' @param d.labels Percentage of scaling of distance between axis and labels. Default is 100
 #'
 #'
 #' @return None
@@ -520,7 +524,8 @@ PlotAnalyzedHRV <- function(framework,
                             use.ggplot = TRUE,
                             size.axis = 100,
                             size.labels = 100,
-                            size.title = 100) {
+                            size.title = 100,
+                            d.labels = 100) {
   Data <- ExtractDataFromAnalysis(framework, locator)
   hrv <- framework$Analyses[[locator]]$HRV
   Time <- Data$Data[, 1]
@@ -542,7 +547,8 @@ PlotAnalyzedHRV <- function(framework,
       fVLF = Data$VLF,
       size.axis = size.axis,
       size.labels = size.labels,
-      size.title = size.title
+      size.title = size.title,
+      d.labels = d.labels
     )
   return(im)
 }

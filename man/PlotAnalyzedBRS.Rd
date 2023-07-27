@@ -23,7 +23,8 @@ PlotAnalyzedBRS(
   use.ggplot = TRUE,
   size.axis = 100,
   size.labels = 100,
-  size.title = 100
+  size.title = 100,
+  d.labels = 100
 )
 }
 \arguments{
@@ -65,6 +66,8 @@ Default is NULL.}
 \item{size.labels}{Percentage of scaling of axis labels. Default is 100}
 
 \item{size.title}{Percentage of scaling of plot titles. Default is 100}
+
+\item{d.labels}{Percentage of scaling of distance between axis and labels. Default is 100}
 }
 \value{
 None
