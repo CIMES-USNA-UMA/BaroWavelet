@@ -23,7 +23,9 @@
 #' @param fHF Maximum limit of the HF band, shown at the plot title. Default is 0.4 Hz
 #' @param fLF Maximum limit of the LF band, shown at the plot title. Default is 0.15 Hz
 #' @param fVLF Maximum limit of the VLF band, shown at the plot title. Default is 0.04 Hz
-#'
+#' @param size.axis Percentage of scaling of axis values. Default is 100
+#' @param size.labels Percentage of scaling of axis labels. Default is 100
+#' @param size.title Percentage of scaling of plot titles. Default is 100
 #'
 #' @return None
 #'
@@ -66,13 +68,19 @@ PlotHRV <-
            use.ggplot = TRUE,
            fHF = 0.4,
            fLF = 0.15,
-           fVLF = 0.04) {
+           fVLF = 0.04,
+           size.axis = 100,
+           size.labels = 100,
+           size.title = 100) {
     if (newPlot & !tem) {
       dev.new(title = paste("Heart Rate Variability from", title))
     }
     HF <- hrv$HF
     LF <- hrv$LF
     LFHF <- hrv$LFHF
+    size.axis <- size.axis / 100
+    size.labels <- size.labels / 100
+    size.title <- size.title / 100
     if (use.ggplot) {
       if (tem) {
         im <- tempfile(fileext = ".png")
@@ -136,7 +144,10 @@ PlotHRV <-
           ylab = "LF/HF ratio",
           main = "HRV: LF/HF ratio",
           ylim = if (!is.null(ylim))
-            c(0, ylim)
+            c(0, ylim),
+          cex.axis = size.axis,
+          cex.lab = size.labels,
+          cex.main = size.title
         )
         if (is.list(time_flags) &&
             !is.null(col) && (length(time_flags) >= NROW(col))) {
@@ -179,7 +190,10 @@ PlotHRV <-
             ylab = expression(HRV ~ ms ^ 2),
             main = paste("HF band (", fHF, " - ", fLF, " Hz)", sep = ""),
             ylim = if (!is.null(ylim))
-              c(0, ylim)
+              c(0, ylim),
+            cex.axis = size.axis,
+            cex.lab = size.labels,
+            cex.main = size.title
           )
           if (is.list(time_flags) &&
               !is.null(col) && (length(time_flags) >= NROW(col))) {
@@ -223,7 +237,10 @@ PlotHRV <-
             ylab = expression(HRV ~ ms ^ 2),
             main = paste("LF band (", fLF, " - ", fVLF, " Hz)", sep = ""),
             ylim = if (!is.null(ylim))
-              c(0, ylim)
+              c(0, ylim),
+            cex.axis = size.axis,
+            cex.lab = size.labels,
+            cex.main = size.title
           )
           if (is.list(time_flags) &&
               !is.null(col) && (length(time_flags) >= NROW(col))) {

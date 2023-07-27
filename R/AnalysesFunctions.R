@@ -325,6 +325,10 @@ AddAvgCwtData <- function(framework, locator) {
 #' @param thr Coherence threshold to be used for the plot. Default is NULL
 #' @param ylim Maximum y axis limit. Default is NULL
 #' @param use.ggplot Boolean, use methods from ggplot2 package to plot the results. Default is TRUE
+#' @param size.axis Percentage of scaling of axis values. Default is 100
+#' @param size.labels Percentage of scaling of axis labels. Default is 100
+#' @param size.title Percentage of scaling of plot titles. Default is 100
+#'
 #'
 #' @return None
 #'
@@ -360,7 +364,10 @@ PlotAnalyzedBRS <-
            plotLF = TRUE,
            thr = NULL,
            ylim = NULL,
-           use.ggplot = TRUE) {
+           use.ggplot = TRUE,
+           size.axis = 100,
+           size.labels = 100,
+           size.title = 100) {
     if (newPlot)
       dev.new(title = paste("BRS from",
                         framework$Analyses[[locator]]$Name))
@@ -385,6 +392,9 @@ PlotAnalyzedBRS <-
           fHF = Data$HF,
           fLF = Data$LF,
           fVLF = Data$VLF,
+          size.axis = size.axis,
+          size.labels = size.labels,
+          size.title = size.title
         )
       return(im)
     } else if (method == "cwt") {
@@ -395,7 +405,10 @@ PlotAnalyzedBRS <-
         use.coherence,
         time_flags = time_flags,
         Max = ylim,
-        tem = tem
+        tem = tem,
+        size.axis = size.axis,
+        size.labels = size.labels,
+        size.title = size.title
       )
     } else if (method == "cwt.avg") {
       #tf <- framework$Analyses[[locator]]$BRS$AvgCWT
@@ -415,6 +428,9 @@ PlotAnalyzedBRS <-
           fHF = Data$HF,
           fLF = Data$LF,
           fVLF = Data$VLF,
+          size.axis = size.axis,
+          size.labels = size.labels,
+          size.title = size.title
         )
       return(im)
     } else if (method == "cwt.phase") {
@@ -434,6 +450,9 @@ PlotAnalyzedBRS <-
           fHF = Data$HF,
           fLF = Data$LF,
           fVLF = Data$VLF,
+          size.axis = size.axis,
+          size.labels = size.labels,
+          size.title = size.title
         )
       return(im)
     }
@@ -461,6 +480,12 @@ PlotAnalyzedBRS <-
 #'              set to TRUE.
 #' @param ylim Maximum y axis limit. Default is NULL
 #' @param use.ggplot Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE
+#' @param size.axis Percentage of scaling of axis values. Default is 100
+#' @param size.labels Percentage of scaling of axis labels. Default is 100
+#' @param size.title Percentage of scaling of plot titles. Default is 100
+#'
+#'
+#'
 #'
 #' @return None
 #'
@@ -492,7 +517,10 @@ PlotAnalyzedHRV <- function(framework,
                             ratio = TRUE,
                             newPlot = TRUE,
                             ylim = NULL,
-                            use.ggplot = TRUE) {
+                            use.ggplot = TRUE,
+                            size.axis = 100,
+                            size.labels = 100,
+                            size.title = 100) {
   Data <- ExtractDataFromAnalysis(framework, locator)
   hrv <- framework$Analyses[[locator]]$HRV
   Time <- Data$Data[, 1]
@@ -511,7 +539,10 @@ PlotAnalyzedHRV <- function(framework,
       use.ggplot = use.ggplot,
       fHF = Data$HF,
       fLF = Data$LF,
-      fVLF = Data$VLF
+      fVLF = Data$VLF,
+      size.axis = size.axis,
+      size.labels = size.labels,
+      size.title = size.title
     )
   return(im)
 }

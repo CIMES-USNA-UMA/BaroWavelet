@@ -17,7 +17,10 @@ PlotAnalyzedHRV(
   ratio = TRUE,
   newPlot = TRUE,
   ylim = NULL,
-  use.ggplot = TRUE
+  use.ggplot = TRUE,
+  size.axis = 100,
+  size.labels = 100,
+  size.title = 100
 )
 }
 \arguments{
@@ -48,6 +51,12 @@ set to TRUE.}
 \item{ylim}{Maximum y axis limit. Default is NULL}
 
 \item{use.ggplot}{Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE}
+
+\item{size.axis}{Percentage of scaling of axis values. Default is 100}
+
+\item{size.labels}{Percentage of scaling of axis labels. Default is 100}
+
+\item{size.title}{Percentage of scaling of plot titles. Default is 100}
 }
 \value{
 None

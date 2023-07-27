@@ -20,7 +20,10 @@ PlotHRV(
   use.ggplot = TRUE,
   fHF = 0.4,
   fLF = 0.15,
-  fVLF = 0.04
+  fVLF = 0.04,
+  size.axis = 100,
+  size.labels = 100,
+  size.title = 100
 )
 }
 \arguments{
@@ -59,6 +62,12 @@ set to TRUE.}
 \item{fLF}{Maximum limit of the LF band, shown at the plot title. Default is 0.15 Hz}
 
 \item{fVLF}{Maximum limit of the VLF band, shown at the plot title. Default is 0.04 Hz}
+
+\item{size.axis}{Percentage of scaling of axis values. Default is 100}
+
+\item{size.labels}{Percentage of scaling of axis labels. Default is 100}
+
+\item{size.title}{Percentage of scaling of plot titles. Default is 100}
 }
 \value{
 None

@@ -22,6 +22,9 @@
 #' @param HF Maximum limit of the HF band, shown at the plot title. Default is 0.4 Hz
 #' @param LF Maximum limit of the LF band, shown at the plot title. Default is 0.15 Hz
 #' @param VLF Maximum limit of the VLF band, shown at the plot title. Default is 0.04 Hz
+#' @param size.axis Percentage of scaling of axis values. Default is 100
+#' @param size.labels Percentage of scaling of axis labels. Default is 100
+#' @param size.title Percentage of scaling of plot titles. Default is 100
 #'
 #'
 #' @return None
@@ -65,7 +68,10 @@ PlotBRS <-
            use.ggplot = FALSE,
            HF = 0.4,
            LF = 0.15,
-           VLF = 0.04) {
+           VLF = 0.04,
+           size.axis = 100,
+           size.labels = 100,
+           size.title = 100) {
     #if(dev.cur() > 1)
     if (newPlot & !tem) {
       dev.new(title = paste("BRS from", title))
@@ -83,7 +89,10 @@ PlotBRS <-
           use.ggplot = FALSE,
           fHF = HF,
           fLF = LF,
-          fVLF = VLF
+          fVLF = VLF,
+          size.axis = size.axis,
+          size.labels = size.labels,
+          size.title = size.title
         )
       } else {
         im <-
@@ -98,7 +107,10 @@ PlotBRS <-
             use.ggplot = TRUE,
             fHF = HF,
             fLF = LF,
-            fVLF = VLF
+            fVLF = VLF,
+            size.axis = size.axis,
+            size.labels = size.labels,
+            size.title = size.title
           )
         return(im)
       }
@@ -113,15 +125,23 @@ PlotBRS <-
           HFcolor = HFcolor,
           LFcolor = LFcolor,
           Tcolor = time_col,
-          tem = tem
+          tem = tem,
+          size.axis = size.axis,
+          size.labels = size.labels,
+          size.title = size.title
         )
       } else {
-        im <- PlotCwtBRS(fun,
-                         thr,
-                         use.thr,
-                         time_flags = time_flags,
-                         tem = tem,
-                         Max = ylim)
+        im <- PlotCwtBRS(
+          fun,
+          thr,
+          use.thr,
+          time_flags = time_flags,
+          tem = tem,
+          Max = ylim,
+          size.axis = size.axis,
+          size.labels = size.labels,
+          size.title = size.title
+        )
       }
     }
     if (tem & !newPlot & use.ggplot) {
@@ -143,10 +163,16 @@ PlotDwtBRS <-
            use.ggplot = TRUE,
            fHF = 0.4,
            fLF = 0.15,
-           fVLF = 0.04) {
+           fVLF = 0.04,
+           size.axis = 100,
+           size.labels = 100,
+           size.title = 100) {
     Time <- fun$Time
     HF <- fun$HF
     LF <- fun$LF
+    size.axis <- size.axis / 100
+    size.labels <- size.labels / 100
+    size.title <- size.title / 100
     if (use.ggplot) {
       if (tem) {
         im <- tempfile(fileext = ".png")
@@ -201,7 +227,10 @@ PlotDwtBRS <-
           ylab = "BRS (ms/mmHg)",
           main = paste("HF band (", fHF, " - ", fLF, " Hz)", sep = ""),
           ylim = if (!is.null(ylim))
-            c(0, ylim)
+            c(0, ylim),
+          cex.axis = size.axis,
+          cex.lab = size.labels,
+          cex.main = size.title
         )
         if (is.list(time_flags) &&
             !is.null(col) && (length(time_flags) >= NROW(col))) {
@@ -245,7 +274,10 @@ PlotDwtBRS <-
           ylab = "BRS (ms/mmHg)",
           main = paste("LF band (", fLF, " - ", fVLF, " Hz)", sep = ""),
           ylim = if (!is.null(ylim))
-            c(0, ylim)
+            c(0, ylim),
+          cex.axis = size.axis,
+          cex.lab = size.labels,
+          cex.main = size.title
         )
         if (is.list(time_flags) &&
             !is.null(col) && (length(time_flags) >= NROW(col))) {
@@ -290,11 +322,17 @@ PlotCwtBRS <-
            tem  = FALSE,
            Max = NULL,
            use.xlim = FALSE,
-           show.coi = TRUE) {
+           show.coi = TRUE,
+           size.axis = 100,
+           size.labels = 100,
+           size.title = 100) {
     HF <- fun$HF
     LF <- fun$LF
     VLF <- fun$VLF
     isAlpha <- fun$Alpha
+    size.axis <- size.axis / 100
+    size.labels <- size.labels / 100
+    size.title <- size.title / 100
     if (use.thr) {
       mask <- plot.contour <- TRUE
     } else {
@@ -349,7 +387,10 @@ PlotCwtBRS <-
       ylim = c(1 / HF, 1 / VLF),
       xlim = xlim,
       fill.cols = col,
-      zlim = c(0, Max)
+      zlim = c(0, Max),
+      cex.axis = size.axis,
+      cex.lab = size.labels,
+      cex.main = size.title
     )
     if (plot.contour) {
       contour(
@@ -390,7 +431,10 @@ PlotAvgCwtBRS <- function(fun,
                           HFcolor = "yellow",
                           LFcolor = "green",
                           Tcolor = "brown",
-                          tem  = FALSE) {
+                          tem  = FALSE,
+                          size.axis = 100,
+                          size.labels = 100,
+                          size.title = 100) {
   HF <- fun$HF
   LF <- fun$LF
   VLF <- fun$VLF
@@ -398,6 +442,9 @@ PlotAvgCwtBRS <- function(fun,
   fun <- GetBiwaveletObject(fun)
   freqs <- 1 / fun$period
   sel_power <- fun$power
+  size.axis <- size.axis / 100
+  size.labels <- size.labels / 100
+  size.title <- size.title / 100
   if (use.thr) {
     fun$power[which(fun$rsq < thr)] <- NA
   }
@@ -428,10 +475,10 @@ PlotAvgCwtBRS <- function(fun,
     freq_results <- rowMeans(fun$power, na.rm = TRUE)
   }
   time_results.HF <-
-    colMeans(fun$power[(freqs <= HF) & (freqs > LF),],
+    colMeans(fun$power[(freqs <= HF) & (freqs > LF), ],
              na.rm = TRUE)
   time_results.LF <-
-    colMeans(fun$power[(freqs <= LF) & (freqs > VLF),],
+    colMeans(fun$power[(freqs <= LF) & (freqs > VLF), ],
              na.rm = TRUE)
   freq_results[is.na(freq_results)] <- 0
   time_results.HF[is.na(time_results.HF)] <- 0
@@ -449,7 +496,10 @@ PlotAvgCwtBRS <- function(fun,
     ),
     ylim =
       c(0, max(freq_results)),
-    xaxt = "n"
+    xaxt = "n",
+    cex.axis = size.axis,
+    cex.lab = size.labels,
+    cex.main = size.title
   )
   polygon(
     x = c(log2(freqs[(freqs <= HF) & (freqs >= VLF)]),
@@ -479,7 +529,10 @@ PlotAvgCwtBRS <- function(fun,
       isAlpha,
       "Time Domain Alpha Index (HF band)",
       "Time Domain Transfer Function (HF band)"
-    )
+    ),
+    cex.axis = size.axis,
+    cex.lab = size.labels,
+    cex.main = size.title
   )
   if (!is.null(time_flags)) {
     polygon(
@@ -499,7 +552,10 @@ PlotAvgCwtBRS <- function(fun,
       isAlpha,
       "Time Domain Alpha Index (LF band)",
       "Time Domain Transfer Function (LF band)"
-    )
+    ),
+    cex.axis = size.axis,
+    cex.lab = size.labels,
+    cex.main = size.title
   )
   if (!is.null(time_flags)) {
     polygon(
