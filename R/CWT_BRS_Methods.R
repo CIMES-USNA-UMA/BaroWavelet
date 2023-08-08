@@ -92,10 +92,8 @@ TransferFunCWT <- function(data,
   sm.WTransform.y <- Smoothed$sm.WTransform.y
   XWTransform <- Smoothed$XWTransform
   sm.XWTransform <- Smoothed$sm.XWTransform
-  Cospectrum <-
-    Re(sm.XWTransform / sqrt(sm.WTransform.x * sm.WTransform.y))
-  Quadrature <-
-    Im(sm.XWTransform / sqrt(sm.WTransform.x * sm.WTransform.y))
+  Cospectrum <- Re(sm.XWTransform)
+  Quadrature <- Im(sm.XWTransform)
   Coherence <-
     abs(sm.XWTransform) ^ 2 / (sm.WTransform.x * sm.WTransform.y)
   Phase <- atan2(Quadrature, Cospectrum)
@@ -128,7 +126,6 @@ TransferFunCWT <- function(data,
     )
   )
 }
-
 
 
 #########################################################
