@@ -43,9 +43,9 @@ citation("BaroWavelet")
 #>
 #> To cite BaroWavelet in publications use:
 #>
-#>  Chao-Ecija, A., and Dawid-Milner, M. (2023). BaroWavelet: An R-based tool for
-#>  dynamic baroreflex evaluation through wavelet analysis techniques. Comput Methods
-#>  Programs Biomed, 107758. doi: 10.1016/J.CMPB.2023.107758.
+#>  A Chao-Ecija , MS Dawid-Milner , BaroWavelet: An R-based tool for dynamic
+#>  baroreflex evaluation through wavelet analysis techniques, Computer Methods and
+#>  Programs in Biomedicine (2023), doi: https://doi.org/10.1016/j.cmpb.2023.107758
 #>
 #> A BibTeX entry for LaTeX users is
 #>
