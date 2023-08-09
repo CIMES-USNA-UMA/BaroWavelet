@@ -75,6 +75,10 @@ time-frequency analysis. Physiol Meas. 2010 ;31(7):1021-36.
 Tarik C. Gouhier, Aslak Grinsted, Viliam Simko (2021). R package biwavelet:
 Conduct Univariate and Bivariate Wavelet Analyses (Version 0.20.21).
 Available from https://github.com/tgouhier/biwavelet
+
+Chao-Ecija, A., and Dawid-Milner, M. (2023). BaroWavelet: An R-based tool for 
+dynamic baroreflex evaluation through wavelet analysis techniques.
+Comput Methods Programs Biomed, 107758. doi: 10.1016/J.CMPB.2023.107758.
 }
 \author{
 Alvaro Chao-Ecija

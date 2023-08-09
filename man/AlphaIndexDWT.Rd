@@ -66,6 +66,10 @@ Garcia Martinez CA, Otero Quintana A, Vila XA, Lado Tourino MJ, Rodriguez-Linare
 
 Constantino A. García, Abraham Otero, Xosé Vila, David G. Márquez. A new algorithm for wavelet-based heart rate variability analysis,
 Biomedical Signal Processing and Control, Volume 8, Issue 6, 2013, Pages 542-550.
+
+Chao-Ecija, A., and Dawid-Milner, M. (2023). BaroWavelet: An R-based tool for 
+dynamic baroreflex evaluation through wavelet analysis techniques.
+Comput Methods Programs Biomed, 107758. doi: 10.1016/J.CMPB.2023.107758.
 }
 \author{
 Alvaro Chao-Ecija
