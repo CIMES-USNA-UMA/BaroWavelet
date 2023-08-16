@@ -1,6 +1,6 @@
 #' Continuous Wavelet Transform Transfer Function
 #'
-#' Computes barorreflex sensitivity as a transfer function using the Continuous Wavelet Transform
+#' Computes baroreflex sensitivity as a transfer function using the Continuous Wavelet Transform
 #' @param data A matrix with 3 columns containing time values (first column), RR and SBP values (second
 #'             and third column).
 #' @param HF Maximum limit of the HF band. Default is 0.4 Hz
@@ -105,6 +105,14 @@ TransferFunCWT <- function(data,
     sm.WTransform.x <- abs(WTransform.x$wave) ^ 2
     sm.WTransform.y <- abs(WTransform.y$wave) ^ 2
     sm.XWTransform <- XWTransform
+    Phase <- atan2(Im(XWTransform), Re(XWTransform))
+    warning(
+      paste(
+        "There will be no effective syncronization between the computed",
+        ifelse(!alpha, "transfer function", "alpha index"),
+        "and the wavelet coherence due to the lack of smoothing."
+      )
+    )
   }
   if (!alpha) {
     TransferFun <- sm.XWTransform / sm.WTransform.x
