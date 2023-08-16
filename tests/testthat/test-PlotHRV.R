@@ -1,3 +1,6 @@
+pdf(NULL)
+
+
 Data <- InterpolateData(DataSimulation(), f = 1)
 AlphaDWT <- AlphaIndexDWT(Data, hrv = TRUE)
 

@@ -1,4 +1,4 @@
-
+pdf(NULL)
 
 
 test_that("A structure should be built with no problems", {
