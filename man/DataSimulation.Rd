@@ -7,8 +7,12 @@
 DataSimulation(
   use.noise = TRUE,
   seed = 1,
+  varies = c("brs", "noise"),
   v = 9,
-  s = c(0.25, 1.5, 2.75, 2, 0.75)
+  s = c(0.25, 1.5, 2.75, 2, 0.75),
+  sds1 = c(2, 4, 10, 20, 2, 4, 10, 20),
+  sds2 = c(5, 10, 50, 70, 5, 10, 50, 70),
+  N = 500
 )
 }
 \arguments{
@@ -16,9 +20,19 @@ DataSimulation(
 
 \item{seed}{Constant for reproducibility purposes}
 
+\item{varies}{Select if the simulation will have variable brs or variable noise distributions}
+
 \item{v}{Vagal (instantaneous) component of the simulation. Default is 9}
 
 \item{s}{Vector of sympathetic (lagged) components of the simulation}
+
+\item{sds1}{Vector of standard deviations for IBI noise sources. If the noise distributions remain
+constant, only the first value of the vector will be considered}
+
+\item{sds2}{Vector of standard deviations for SBP noise sources. If the noise distributions remain
+constant, only the first value of the vector will be considered}
+
+\item{N}{Length of intervals of interest, only used when noise distributions vary}
 }
 \value{
 A data frame containing timestamps and simulated RR and SBP recordings
