@@ -76,6 +76,8 @@ PlotHRV <-
            d.labels = 100) {
     if (newPlot & !tem) {
       dev.new(title = paste("Heart Rate Variability from", title))
+    } else if (!newPlot & !tem) {
+      if(!is.null(dev.list())) dev.off()
     }
     HF <- hrv$HF
     LF <- hrv$LF
