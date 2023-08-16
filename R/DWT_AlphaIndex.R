@@ -58,6 +58,7 @@ AlphaIndexDWT <- function(data,
   if (!is.data.frame(data))
     data <- as.data.frame(data)
   error.type <- match.arg(error.type)
+  if(!is.numeric(error)) stop("Please provide a numeric value for the error level.")
   RHRVobjects <- GenerateRHRVObjects(data)
   RHRVobjects <-
     SendDataToRHRV(RHRVobjects, HF, LF, VLF, wv, error,
