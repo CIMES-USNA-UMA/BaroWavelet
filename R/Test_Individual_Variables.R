@@ -160,7 +160,7 @@ TestBRSCWT <-
 #' @param time_flags1 A vector containing the minimum and maximum limits for the first time interval, in minutes
 #' @param time_flags2 A vector containing the minimum and maximum limits for the second time interval, in minutes
 #'
-#' @return A vector contaning p-values computed for the HR and the SBP
+#' @return A vector containing p-values computed for the HR and the SBP
 #'
 #'
 #' @author Alvaro Chao-Ecija
@@ -222,7 +222,7 @@ TestIndHRandBP <- function(data, time_flags1, time_flags2) {
 #' Test Individual HRV
 #'
 #' Significant test to compare two time-domain segments from an individual HRV computation
-#' @param fun BRS obtainedfrom \link[BaroWavelet]{AlphaIndexDWT}, with HRV data.
+#' @param fun BRS obtained from \link[BaroWavelet]{AlphaIndexDWT}, with HRV data.
 #' @param time_flags1 A vector containing the minimum and maximum limits for the first time interval, in minutes.
 #' @param time_flags2 A vector containing the minimum and maximum limits for the second time interval, in minutes.
 #'
