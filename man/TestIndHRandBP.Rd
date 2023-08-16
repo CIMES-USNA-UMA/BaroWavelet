@@ -14,7 +14,7 @@ TestIndHRandBP(data, time_flags1, time_flags2)
 \item{time_flags2}{A vector containing the minimum and maximum limits for the second time interval, in minutes}
 }
 \value{
-A vector contaning p-values computed for the HR and the SBP
+A vector containing p-values computed for the HR and the SBP
 }
 \description{
 Significant test to compare two time-domain segments in HR and BP recordings

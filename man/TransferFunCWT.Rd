@@ -51,7 +51,7 @@ A list with the estimated components of the baroreflex transfer function in the 
 \item{Alpha}{Boolean value indicating if the computed BRS is an alpha index}
 }
 \description{
-Computes barorreflex sensitivity as a transfer function using the Continuous Wavelet Transform
+Computes baroreflex sensitivity as a transfer function using the Continuous Wavelet Transform
 }
 \details{
 This function makes use of the Continuous Wavelet Transform methods

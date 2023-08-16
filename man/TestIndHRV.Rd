@@ -7,7 +7,7 @@
 TestIndHRV(fun, time_flags1, time_flags2)
 }
 \arguments{
-\item{fun}{BRS obtainedfrom \link[BaroWavelet]{AlphaIndexDWT}, with HRV data.}
+\item{fun}{BRS obtained from \link[BaroWavelet]{AlphaIndexDWT}, with HRV data.}
 
 \item{time_flags1}{A vector containing the minimum and maximum limits for the first time interval, in minutes.}
 
