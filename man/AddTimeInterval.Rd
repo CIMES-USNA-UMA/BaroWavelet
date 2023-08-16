@@ -24,7 +24,7 @@ AddTimeInterval(
 A framework with the new additional interval.
 }
 \description{
-Adds a certain time interval cathegory to the structure, so that estimates can be obteined from it.
+Adds a certain time interval to the structure, so that estimates can be obtained from it.
 }
 \details{
 This function allows users to add new time segments to their study environments.For example, it
