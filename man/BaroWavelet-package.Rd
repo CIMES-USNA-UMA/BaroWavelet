@@ -6,7 +6,7 @@
 \alias{BaroWavelet-package}
 \title{BaroWavelet: Baroreflex Sensitivity Assessment with Wavelet Transforms}
 \description{
-Performs autonomic evaluation and baroreflex sensitivity assessment of interbeat intervals and blood pressure recordings using wavelet transforms. It includes different analysis techniques based on the continuous and discrete wavelet transforms. For more details please check the following in-press article: A Chao-Ecija , MS Dawid-Milner , BaroWavelet: An R-based tool for dynamic baroreflex evaluation through wavelet analysis techniques, Computer Methods and Programs in Biomedicine (2023), doi: \url{https://doi.org/10.1016/j.cmpb.2023.107758}.
+Performs autonomic evaluation and baroreflex sensitivity assessment of interbeat intervals and blood pressure recordings using wavelet transforms. It includes different analysis techniques based on the continuous and discrete wavelet transforms. For more details please check the following in-press article: A Chao-Ecija , MS Dawid-Milner , BaroWavelet: An R-based tool for dynamic baroreflex evaluation through wavelet analysis techniques, Computer Methods and Programs in Biomedicine (2023), \doi{10.1016/j.cmpb.2023.107758}.
 }
 \seealso{
 Useful links:

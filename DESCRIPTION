@@ -11,7 +11,7 @@ Description: Performs autonomic evaluation and baroreflex sensitivity assessment
              For more details please check the following in-press article: A Chao-Ecija , 
              MS Dawid-Milner , BaroWavelet: An R-based tool for dynamic baroreflex evaluation 
              through wavelet analysis techniques, Computer Methods and Programs in Biomedicine 
-             (2023), doi: <https://doi.org/10.1016/j.cmpb.2023.107758>.
+             (2023), <doi:10.1016/j.cmpb.2023.107758>.
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
