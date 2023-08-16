@@ -9,6 +9,7 @@
 #' @importFrom graphics lines
 #' @importFrom graphics par
 #' @importFrom graphics polygon
+#' @importFrom grDevices dev.list
 #' @importFrom grDevices dev.new
 #' @importFrom grDevices dev.off
 #' @importFrom grDevices png
