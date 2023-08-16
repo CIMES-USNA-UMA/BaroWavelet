@@ -55,7 +55,7 @@ citation("BaroWavelet")
 #>    journal = {Computer Methods and Programs in Biomedicine},
 #>    year = {2023},
 #>    pages = {107758},
-#>    doi = {https://doi.org/10.1016/j.cmpb.2023.107758},
+#>    doi = {10.1016/j.cmpb.2023.107758},
 #>    url = {https://www.sciencedirect.com/science/article/pii/S0169260723004248},
 #>  }
 ```
