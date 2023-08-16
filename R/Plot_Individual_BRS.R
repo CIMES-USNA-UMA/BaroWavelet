@@ -77,6 +77,8 @@ PlotBRS <-
     #if(dev.cur() > 1)
     if (newPlot & !tem) {
       dev.new(title = paste("BRS from", title))
+    } else if (!newPlot & !tem) {
+      if(!is.null(dev.list())) dev.off()
     }
     if (fun$type == "brs_dwt") {
       if (!tem & !use.ggplot) {
