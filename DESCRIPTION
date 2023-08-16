@@ -6,8 +6,12 @@ Author: Alvaro Chao-Ecija <alvarochaoecija.rprojects@gmail.com> [aut, cre] (<htt
         Marc Stefan Dawid-Milner [ths]
 Maintainer: Alvaro Chao-Ecija <alvarochaoecija.rprojects@gmail.com>
 Description: This package allows autonomic evaluation and baroreflex sensitivity assessment
-             of interbeat intervals and blood pressure recordings using wavelet transforms. It includes different
-             analysis techniques based on the continuous and discrete wavelet transforms. 
+             of interbeat intervals and blood pressure recordings using wavelet transforms. 
+             It includes different analysis techniques based on the continuous and discrete 
+             wavelet transforms. For more details please check the following in-press article: 
+             A Chao-Ecija , MS Dawid-Milner , BaroWavelet: An R-based tool for dynamic
+             baroreflex evaluation through wavelet analysis techniques, Computer Methods and
+             Programs in Biomedicine (2023), doi: <https://doi.org/10.1016/j.cmpb.2023.107758>.
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
@@ -19,9 +23,12 @@ Imports:
     gridExtra (>= 2.3)
 Depends: 
     R (>= 3.0.0)
-Suggests: 
-    shiny (>= 1.7.4)
+Suggests:
+    shiny (>= 1.7.4),
+    testthat (>= 3.0.0)
 NeedsCompilation: no
 RoxygenNote: 7.2.2
+Language: en-US
 URL: https://github.com/CIMES-USNA-UMA/BaroWavelet
 BugReports: https://github.com/CIMES-USNA-UMA/BaroWavelet/issues
+Config/testthat/edition: 3
