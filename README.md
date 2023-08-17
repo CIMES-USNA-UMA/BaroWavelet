@@ -15,10 +15,10 @@ MD-PhD. Marc Stefan Dawid Milner.
 
 ## Installation
 
-To install the package, use the following code line in R (package devtools is required):
+To install the package, use the following code line in R (package remotes is required):
 
 ```ruby
-devtools::install_github("CIMES-USNA-UMA/BaroWavelet")
+remotes::install_github("CIMES-USNA-UMA/BaroWavelet")
 ```
 
 ## Shiny application
