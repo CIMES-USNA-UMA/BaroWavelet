@@ -2,6 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/CIMES-USNA-UMA/BaroWavelet/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CIMES-USNA-UMA/BaroWavelet/actions/workflows/R-CMD-check.yaml)
+[![DOI:10.1016/j.cmpb.2023.107758](https://img.shields.io/badge/DOI-10.1016/j.cmpb.2023.107758-dcdcdc.svg)](https://doi.org/10.1016/j.cmpb.2023.107758)
 <!-- badges: end -->
 
 ## Description
