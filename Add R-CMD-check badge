@@ -1,5 +1,9 @@
 # BaroWavelet
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/CIMES-USNA-UMA/BaroWavelet/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CIMES-USNA-UMA/BaroWavelet/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 ## Description
 
 Developed by Alvaro Chao-Ecija (2022-2023 Collaboration Scholarship at the 
