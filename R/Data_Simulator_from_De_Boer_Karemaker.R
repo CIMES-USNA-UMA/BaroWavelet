@@ -40,9 +40,9 @@ DataSimulation <-
       function(f,
                v,
                s) {
-        lags = 0:(NROW(c(v,s)) - 1)
-        angle = -lags * f * 360 
-        phase = angle * pi / 180
+        lags <- 0:(NROW(c(v,s)) - 1)
+        angle <- -lags * f * 360 
+        phase <- angle * pi / 180
         x <- y <- c(v,s)
         for (n in 1:NROW(c(v,s))) {
           x[n] <- cos(phase[n]) * c(v,s)[n]
@@ -50,7 +50,7 @@ DataSimulation <-
         }
         brs <- c(sum(x), sum(y))
         mbrs <- sqrt(brs[1] ^ 2 + brs[2] ^ 2)
-        angle = atan2(brs[2], brs[1]) * 180 / pi
+        angle <- atan2(brs[2], brs[1]) * 180 / pi
         symp <- c(sum(x[-1]), sum(y[-1]))
         msymp <- sqrt(symp[1] ^ 2 + symp[2] ^ 2)
         symp_a <- atan2(symp[2], symp[1]) * 180 / pi
