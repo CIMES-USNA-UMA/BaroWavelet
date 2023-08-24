@@ -20,7 +20,10 @@
 #' @author Alvaro Chao-Ecija
 #'
 #' @references
-#' de Boer RW, Karemaker JM. Cross-Wavelet Time-Frequency Analysis Reveals Sympathetic Contribution to Baroreflex Sensitivity as Cause of Variable Phase Delay Between Blood Pressure and Heart Rate. Front Neurosci. 2019 Jul 9;13:694. Available from: https://www.frontiersin.org/articles/10.3389/fnins.2019.00694/full
+#' de Boer RW, Karemaker JM. Cross-Wavelet Time-Frequency Analysis Reveals Sympathetic 
+#' Contribution to Baroreflex Sensitivity as Cause of Variable Phase Delay Between Blood 
+#' Pressure and Heart Rate. Front Neurosci. 2019 Jul 9;13:694. Available from: 
+#' https://www.frontiersin.org/articles/10.3389/fnins.2019.00694/full
 #'
 #' @export
 #'
