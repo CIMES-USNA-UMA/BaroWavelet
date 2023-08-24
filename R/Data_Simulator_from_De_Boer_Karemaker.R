@@ -40,6 +40,7 @@ DataSimulation <-
       function(f,
                v,
                s) {
+        # For future feature
         lags <- 0:(NROW(c(v,s)) - 1)
         angle <- -lags * f * 360 
         phase <- angle * pi / 180
