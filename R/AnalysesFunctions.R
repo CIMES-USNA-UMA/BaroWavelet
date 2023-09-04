@@ -324,7 +324,7 @@ AddAvgCwtData <- function(framework, locator) {
 #' @param plotLF Boolean, plot results from the LF band. Default is TRUE
 #' @param thr Coherence threshold to be used for the plot. Default is NULL
 #' @param ylim Maximum y axis limit. Default is NULL
-#' @param use.ggplot Boolean, use methods from ggplot2 package to plot the results. Default is TRUE
+#' @param use.ggplot Boolean, use methods from ggplot2 package to plot the results. Default is FALSE
 #' @param size.axis Percentage of scaling of axis values. Default is 100
 #' @param size.labels Percentage of scaling of axis labels. Default is 100
 #' @param size.title Percentage of scaling of plot titles. Default is 100
@@ -364,7 +364,7 @@ PlotAnalyzedBRS <-
            plotLF = TRUE,
            thr = NULL,
            ylim = NULL,
-           use.ggplot = TRUE,
+           use.ggplot = FALSE,
            size.axis = 100,
            size.labels = 100,
            size.title = 100,
@@ -484,7 +484,7 @@ PlotAnalyzedBRS <-
 #' @param ratio Boolean. Should the LF/HF ratio be plotted? Default is FALSE. Arguments plotHF and plotLF must also be
 #'              set to TRUE.
 #' @param ylim Maximum y axis limit. Default is NULL
-#' @param use.ggplot Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE
+#' @param use.ggplot Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is FALSE
 #' @param size.axis Percentage of scaling of axis values. Default is 100
 #' @param size.labels Percentage of scaling of axis labels. Default is 100
 #' @param size.title Percentage of scaling of plot titles. Default is 100
@@ -521,7 +521,7 @@ PlotAnalyzedHRV <- function(framework,
                             ratio = TRUE,
                             newPlot = TRUE,
                             ylim = NULL,
-                            use.ggplot = TRUE,
+                            use.ggplot = FALSE,
                             size.axis = 100,
                             size.labels = 100,
                             size.title = 100,

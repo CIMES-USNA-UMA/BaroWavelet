@@ -20,7 +20,7 @@ PlotAnalyzedBRS(
   plotLF = TRUE,
   thr = NULL,
   ylim = NULL,
-  use.ggplot = TRUE,
+  use.ggplot = FALSE,
   size.axis = 100,
   size.labels = 100,
   size.title = 100,
@@ -59,7 +59,7 @@ Default is NULL.}
 
 \item{ylim}{Maximum y axis limit. Default is NULL}
 
-\item{use.ggplot}{Boolean, use methods from ggplot2 package to plot the results. Default is TRUE}
+\item{use.ggplot}{Boolean, use methods from ggplot2 package to plot the results. Default is FALSE}
 
 \item{size.axis}{Percentage of scaling of axis values. Default is 100}
 
