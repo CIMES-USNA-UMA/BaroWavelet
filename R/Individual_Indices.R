@@ -16,7 +16,9 @@
 #' @author Alvaro Chao-Ecija
 #'
 #' @references
-#' Lazaro J, Gil E, Orini M, Laguna P, Bailón R. Baroreflex Sensitivity Measured by Pulse Photoplethysmography. Front Neurosci. 2019 Apr 18;13:339. Available from: https://www.frontiersin.org/articles/10.3389/fnins.2019.00339/full
+#' Lazaro J, Gil E, Orini M, Laguna P, Bailon R. Baroreflex Sensitivity Measured 
+#' by Pulse Photoplethysmography. Front Neurosci. 2019 Apr 18;13:339. Available from: 
+#' https://www.frontiersin.org/articles/10.3389/fnins.2019.00339/full
 #'
 #' @export
 #'

@@ -42,7 +42,9 @@ AlphaIndex <- AlphaIndexDWT(Data, wv = "d8", error = 0.0005)
 IndividualIndices(AlphaIndex, c(0, 100/60))
 }
 \references{
-Lazaro J, Gil E, Orini M, Laguna P, Bailón R. Baroreflex Sensitivity Measured by Pulse Photoplethysmography. Front Neurosci. 2019 Apr 18;13:339. Available from: https://www.frontiersin.org/articles/10.3389/fnins.2019.00339/full
+Lazaro J, Gil E, Orini M, Laguna P, Bailon R. Baroreflex Sensitivity Measured 
+by Pulse Photoplethysmography. Front Neurosci. 2019 Apr 18;13:339. Available from: 
+https://www.frontiersin.org/articles/10.3389/fnins.2019.00339/full
 }
 \author{
 Alvaro Chao-Ecija

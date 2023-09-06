@@ -70,7 +70,7 @@ TransferFun <- TransferFunCWT(Data)
 \references{
 Keissar K, Maestri R, Pinna GD, La Rovere MT, Gilad O. Non-invasive
 baroreflex sensitivity assessment using wavelet transfer function-based
-time-frequency analysis. Physiol Meas. 2010 ;31(7):1021-36.
+time-frequency analysis. Physiol Meas. 2010;31(7):1021-36.
 
 Tarik C. Gouhier, Aslak Grinsted, Viliam Simko (2021). R package biwavelet:
 Conduct Univariate and Bivariate Wavelet Analyses (Version 0.20.21).

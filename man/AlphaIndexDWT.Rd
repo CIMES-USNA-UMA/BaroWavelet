@@ -60,12 +60,16 @@ Data <- InterpolateData(DataSimulation(), f = 1)
 AlphaIndex <- AlphaIndexDWT(Data, wv = "d8", error = 0.0005)
 }
 \references{
-Rodriguez-Linares L, Mendez AJ, Lado MJ, Olivieri DN, Vila XA, Gomez-Conde I. An open source tool for heart rate variability spectral analysis. Comput Methods Programs Biomed. 2011;103(1):39-50.
+Rodriguez-Linares L, Mendez AJ, Lado MJ, Olivieri DN, Vila XA, Gomez-Conde I. 
+An open source tool for heart rate variability spectral analysis. Comput Methods 
+Programs Biomed. 2011;103(1):39-50.
 
-Garcia Martinez CA, Otero Quintana A, Vila XA, Lado Tourino MJ, Rodriguez-Linares L, Rodriguez Presedo JM, Mendez Penin AJ. Heart Rate Variability Analysis with the R package RHRV. Springer Cham; 2017.
+Garcia Martinez CA, Otero Quintana A, Vila XA, Lado Tourino MJ, Rodriguez-Linares L, 
+Rodriguez Presedo JM, Mendez Penin AJ. Heart Rate Variability Analysis with the R 
+package RHRV. Springer Cham; 2017.
 
-Constantino A. García, Abraham Otero, Xosé Vila, David G. Márquez. A new algorithm for wavelet-based heart rate variability analysis,
-Biomedical Signal Processing and Control, Volume 8, Issue 6, 2013, Pages 542-550.
+Garcia CA, Otero A, Vila X, Marquez DG. A new algorithm for wavelet-based heart 
+rate variability analysis, Biomed Signal Process Control. 2013;8(6):542-50.
 
 A Chao-Ecija , MS Dawid-Milner , BaroWavelet: An R-based tool for dynamic 
 baroreflex evaluation through wavelet analysis techniques, Computer Methods 
