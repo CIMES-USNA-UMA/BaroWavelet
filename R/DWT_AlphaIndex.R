@@ -34,11 +34,11 @@
 #' Programs Biomed. 2011;103(1):39-50.
 #'
 #' Garcia Martinez CA, Otero Quintana A, Vila XA, Lado Tourino MJ, Rodriguez-Linares L, 
-#' Rodriguez Presedo JM, Mendez Penin AJ. Heart Rate Variability Analysis with the R 
-#' package RHRV. Springer Cham; 2017.
+#' Rodriguez Presedo JM, Mendez Penin AJ. Heart Rate Variability Analysis with the R package 
+#' RHRV. Cham: Springer International Publishing; 2017. 
 #'
 #' Garcia CA, Otero A, Vila X, Marquez DG. A new algorithm for wavelet-based heart 
-#' rate variability analysis, Biomed Signal Process Control. 2013;8(6):542-50.
+#' rate variability analysis. Biomed Signal Process Control. 2013;8(6):542-50.
 #'
 #' A Chao-Ecija , MS Dawid-Milner , BaroWavelet: An R-based tool for dynamic 
 #' baroreflex evaluation through wavelet analysis techniques, Computer Methods 

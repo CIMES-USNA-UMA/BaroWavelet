@@ -41,8 +41,8 @@ and \code{link[RHRV]{FilterNIHR}}.
 }
 \references{
 Garcia Martinez CA, Otero Quintana A, Vila XA, Lado Tourino MJ, Rodriguez-Linares L, 
-Rodriguez Presedo JM, Mendez Penin AJ. Heart Rate Variability Analysis with the R 
-package RHRV. Springer Cham; 2017.
+Rodriguez Presedo JM, Mendez Penin AJ. Heart Rate Variability Analysis with the R package 
+RHRV. Cham: Springer International Publishing; 2017.
 }
 \author{
 Alvaro Chao-Ecija
