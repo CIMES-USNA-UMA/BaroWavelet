@@ -20,9 +20,9 @@ A vector containing p-values computed for the HR and the SBP
 Significant test to compare two time-domain segments in HR and BP recordings
 }
 \details{
-This function is based on the strategy used by Rodriguez-Linares et al. to compare
-time-variable estimates. It employs the Kolmogorov-Smirnov test to compare the distribution of
-heart rate and blood pressure estimates at the intervals of interest.
+In this function, the Kolmogorov-Smirnov test is used to compare the distributions of
+heart rate and blood pressure estimates at the intervals of interest. This procedure 
+is based on the strategy used by Rodriguez-Linares et al. to compare time-variable estimates.
 }
 \examples{
 Data <- InterpolateData(DataSimulation(), f = 1)

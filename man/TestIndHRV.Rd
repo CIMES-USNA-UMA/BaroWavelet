@@ -20,9 +20,9 @@ A vector contaning p-values computed for the HF and LF bands, as well as the LF/
 Significant test to compare two time-domain segments from an individual HRV computation
 }
 \details{
-This function is based on the strategy used by Rodriguez-Linares et al. to compare
-time-variable estimates. It employs the Kolmogorov-Smirnov test to compare the distribution of
-HRV estimates at the intervals of interest.
+In this function, the Kolmogorov-Smirnov test is used to compare the distributions of
+HRV estimates at the intervals of interest. This procedure is based on the strategy used by 
+Rodriguez-Linares et al. to compare time-variable estimates.
 }
 \examples{
 Data <- InterpolateData(DataSimulation(), f = 1)

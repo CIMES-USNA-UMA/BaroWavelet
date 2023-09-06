@@ -13,9 +13,9 @@
 #'
 #' @author Alvaro Chao-Ecija
 #' 
-#' @details This function is based on the strategy used by Rodriguez-Linares et al. to compare
-#' time-variable estimates. It employs the Kolmogorov-Smirnov test to compare the distribution of
-#' BRS estimates at the intervals of interest.
+#' @details In this function, the Kolmogorov-Smirnov test is used to compare the distributions of
+#' BRS estimates at the intervals of interest. This procedure is based on the strategy used by 
+#' Rodriguez-Linares et al. to compare time-variable estimates.
 #' 
 #' @references
 #' Rodriguez-Linares L, Lado MJ, Vila XA, Mendez AJ, Cuesta P. gHRV: Heart rate variability 
@@ -173,9 +173,9 @@ TestBRSCWT <-
 #'
 #' @author Alvaro Chao-Ecija
 #' 
-#' @details This function is based on the strategy used by Rodriguez-Linares et al. to compare
-#' time-variable estimates. It employs the Kolmogorov-Smirnov test to compare the distribution of
-#' heart rate and blood pressure estimates at the intervals of interest.
+#' @details In this function, the Kolmogorov-Smirnov test is used to compare the distributions of
+#' heart rate and blood pressure estimates at the intervals of interest. This procedure 
+#' is based on the strategy used by Rodriguez-Linares et al. to compare time-variable estimates.
 #' 
 #' @references
 #' Rodriguez-Linares L, Lado MJ, Vila XA, Mendez AJ, Cuesta P. gHRV: Heart rate variability 
@@ -248,9 +248,9 @@ TestIndHRandBP <- function(data, time_flags1, time_flags2) {
 #'
 #' @author Alvaro Chao-Ecija
 #' 
-#' @details This function is based on the strategy used by Rodriguez-Linares et al. to compare
-#' time-variable estimates. It employs the Kolmogorov-Smirnov test to compare the distribution of
-#' HRV estimates at the intervals of interest.
+#' @details In this function, the Kolmogorov-Smirnov test is used to compare the distributions of
+#' HRV estimates at the intervals of interest. This procedure is based on the strategy used by 
+#' Rodriguez-Linares et al. to compare time-variable estimates.
 #' 
 #' @references
 #' Rodriguez-Linares L, Lado MJ, Vila XA, Mendez AJ, Cuesta P. gHRV: Heart rate variability 
