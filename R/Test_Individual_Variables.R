@@ -12,6 +12,14 @@
 #'
 #'
 #' @author Alvaro Chao-Ecija
+#' 
+#' @details This function is based on the strategy used by Rodriguez-Linares et al. to compare
+#' time-variable estimates. It employs the Kolmogorov-Smirnov test to compare the distribution of
+#' BRS estimates at the intervals of interest.
+#' 
+#' @references
+#' Rodriguez-Linares L, Lado MJ, Vila XA, Mendez AJ, Cuesta P. gHRV: Heart rate variability 
+#' analysis made easy. Comput Methods Programs Biomed. 2014 Aug;116(1):26-38.
 #'
 #'
 #' @export
@@ -164,6 +172,15 @@ TestBRSCWT <-
 #'
 #'
 #' @author Alvaro Chao-Ecija
+#' 
+#' @details This function is based on the strategy used by Rodriguez-Linares et al. to compare
+#' time-variable estimates. It employs the Kolmogorov-Smirnov test to compare the distribution of
+#' heart rate and blood pressure estimates at the intervals of interest.
+#' 
+#' @references
+#' Rodriguez-Linares L, Lado MJ, Vila XA, Mendez AJ, Cuesta P. gHRV: Heart rate variability 
+#' analysis made easy. Comput Methods Programs Biomed. 2014 Aug;116(1):26-38.
+#'
 #'
 #'
 #' @export
@@ -230,6 +247,14 @@ TestIndHRandBP <- function(data, time_flags1, time_flags2) {
 #'
 #'
 #' @author Alvaro Chao-Ecija
+#' 
+#' @details This function is based on the strategy used by Rodriguez-Linares et al. to compare
+#' time-variable estimates. It employs the Kolmogorov-Smirnov test to compare the distribution of
+#' HRV estimates at the intervals of interest.
+#' 
+#' @references
+#' Rodriguez-Linares L, Lado MJ, Vila XA, Mendez AJ, Cuesta P. gHRV: Heart rate variability 
+#' analysis made easy. Comput Methods Programs Biomed. 2014 Aug;116(1):26-38.
 #'
 #'
 #' @export

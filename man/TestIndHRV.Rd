@@ -19,12 +19,21 @@ A vector contaning p-values computed for the HF and LF bands, as well as the LF/
 \description{
 Significant test to compare two time-domain segments from an individual HRV computation
 }
+\details{
+This function is based on the strategy used by Rodriguez-Linares et al. to compare
+time-variable estimates. It employs the Kolmogorov-Smirnov test to compare the distribution of
+HRV estimates at the intervals of interest.
+}
 \examples{
 Data <- InterpolateData(DataSimulation(), f = 1)
 AlphaIndex <- AlphaIndexDWT(Data, wv = "d8", error = 0.0005, hrv = TRUE)
 
 TestIndHRV(AlphaIndex, c(0, 1.7), c(35, 38))
 TestIndHRV(AlphaIndex, c(0, 1.7), c(8, 9.5))
+}
+\references{
+Rodriguez-Linares L, Lado MJ, Vila XA, Mendez AJ, Cuesta P. gHRV: Heart rate variability 
+analysis made easy. Comput Methods Programs Biomed. 2014 Aug;116(1):26-38.
 }
 \author{
 Alvaro Chao-Ecija
