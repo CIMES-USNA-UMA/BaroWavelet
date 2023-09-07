@@ -43,8 +43,8 @@ DataSimulation <-
       function(f,
                v,
                s) {
-        # GetSimulatedEV is not currently on use, it will be used for a
-        # future feature
+        # Internal function GetSimulatedEV is not currently on use, 
+        # it will be used for a future feature.
         lags <- 0:(NROW(c(v,s)) - 1)
         angle <- -lags * f * 360 
         phase <- angle * pi / 180
