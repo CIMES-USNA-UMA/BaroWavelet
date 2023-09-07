@@ -15,7 +15,7 @@
 #' }
 #'
 RunBaroWaveletApp <- function() {
-  if (!requireNamespace("shiny"))
+  if (!requireNamespace("shiny", quietly = TRUE))
     stop(
       "Package 'shiny' is not installed. Package 'shiny' must be installed to 
       access the shiny aplication."
