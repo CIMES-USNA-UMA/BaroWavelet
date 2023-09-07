@@ -2066,14 +2066,17 @@ AddTimeValues <-
   }
 
 
+
 AdjustTime <- function(fun, time_flags = NULL) {
   if (is.null(time_flags)) {
     select_time <- 1:NROW(fun$Time)
   } else {
     time_flags <- time_flags * 60
-    select_time <- fun$Time[(fun$Time >= time_flags[1]) &
-                              (fun$Time <= time_flags[2])]
-    select_time <- match(select_time, fun$Time)
+    limit1 <-
+      match(min(abs(time_flags[1] - fun$Time)), abs(time_flags[1] - fun$Time))
+    limit2 <-
+      match(min(abs(time_flags[2] - fun$Time)), abs(time_flags[2] - fun$Time))
+    select_time <- limit1:limit2
   }
   return(c(min(fun$Time[select_time] / 60), max(fun$Time[select_time] /
                                                   60)))
