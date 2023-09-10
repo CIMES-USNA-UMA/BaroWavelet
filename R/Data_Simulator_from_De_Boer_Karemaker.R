@@ -9,9 +9,9 @@
 #' @param varies Select if the simulation will have variable brs or variable noise distributions
 #' @param v Vagal (instantaneous) component of the simulation. Default is 9
 #' @param s Vector of sympathetic (lagged) components of the simulation
-#' @param sds1 Vector of standard deviations for IBI noise sources. If the noise distributions remain
+#' @param sds1 Vector of standard deviations for SBP noise sources. If the noise distributions remain
 #'             constant, only the first value of the vector will be considered
-#' @param sds2 Vector of standard deviations for SBP noise sources. If the noise distributions remain
+#' @param sds2 Vector of standard deviations for IBI noise sources. If the noise distributions remain
 #'             constant, only the first value of the vector will be considered
 #' @param N Length of intervals of interest, only used when noise distributions vary 
 #'
