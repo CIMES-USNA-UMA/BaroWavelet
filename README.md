@@ -39,28 +39,28 @@ shiny::runGitHub("BaroWaveletApp", "CIMES-USNA-UMA", launch.browser = TRUE)
 ```
 ## Citation
 
-An article of this project is in the process of being published and is currently
-available as a Journal Pre-proof, with the following citation details (these details
-will be updated once the final version of the article is published):
+To cite *BaroWavelet*, use the following citation information:
 
 ```ruby
 citation("BaroWavelet")
+#>To cite BaroWavelet in publications use:
 #>
-#> To cite BaroWavelet in publications use:
+#>  A. Chao-Ecija, M.S. Dawid-Milner, BaroWavelet: An R-based tool for dynamic baroreflex evaluation
+#>  through wavelet analysis techniques, Comput Methods Programs Biomed. 242 (2023) 107758.
+#>  https://doi.org/10.1016/j.cmpb.2023.107758.
 #>
-#>  A Chao-Ecija , MS Dawid-Milner , BaroWavelet: An R-based tool for dynamic
-#>  baroreflex evaluation through wavelet analysis techniques, Computer Methods and
-#>  Programs in Biomedicine (2023), doi: https://doi.org/10.1016/j.cmpb.2023.107758
+#>A BibTeX entry for LaTeX users is
 #>
-#> A BibTeX entry for LaTeX users is
-#>
-#>  @Article{,
-#>    title = {BaroWavelet: An R-based tool for dynamic baroreflex evaluation through wavelet analysis techniques},
-#>    author = {A Chao-Ecija and MS Dawid-Milner},
+#>  @Article{CHAOECIJA2023107758,
+#>    title = {BaroWavelet: An R-based tool for dynamic baroreflex evaluation through 
+#>  wavelet analysis techniques},
+#>    author = {A. Chao-Ecija and M.S. Dawid-Milner},
 #>    journal = {Computer Methods and Programs in Biomedicine},
 #>    year = {2023},
+#>    volume = {242},
 #>    pages = {107758},
 #>    doi = {10.1016/j.cmpb.2023.107758},
+#>    issn = {0169-2607},
 #>    url = {https://www.sciencedirect.com/science/article/pii/S0169260723004248},
 #>  }
 ```

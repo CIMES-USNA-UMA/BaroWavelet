@@ -2,20 +2,21 @@ citHeader("To cite BaroWavelet in publications use:")
 
 citEntry(
   entry    = "Article",
-  title    = "BaroWavelet: An R-based tool for dynamic baroreflex evaluation through wavelet analysis techniques",
-  author   = "A Chao-Ecija and MS Dawid-Milner",
+  key      = "CHAOECIJA2023107758",
+  title    = "BaroWavelet: An R-based tool for dynamic baroreflex evaluation through 
+  wavelet analysis techniques",
+  author   = "A. Chao-Ecija and M.S. Dawid-Milner",
   journal  = "Computer Methods and Programs in Biomedicine",
   year     = 2023,
-  volume   = NULL,
+  volume   = 242,
   number   = NULL,
   pages    = 107758,
   doi      = "10.1016/j.cmpb.2023.107758",
+  issn     = "0169-2607",
   url      = "https://www.sciencedirect.com/science/article/pii/S0169260723004248",
   textVersion = paste(
-     "A Chao-Ecija , MS Dawid-Milner , BaroWavelet: An R-based tool for dynamic baroreflex         
-     evaluation through wavelet analysis techniques, Computer Methods and Programs
-     in Biomedicine (2023), doi: https://doi.org/10.1016/j.cmpb.2023.107758"
- 
-
+     "A. Chao-Ecija, M.S. Dawid-Milner, BaroWavelet: An R-based tool for dynamic 
+     baroreflex evaluation through wavelet analysis techniques, Comput Methods 
+     Programs Biomed. 242 (2023) 107758. https://doi.org/10.1016/j.cmpb.2023.107758."
   )
 )
