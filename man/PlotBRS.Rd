@@ -20,6 +20,7 @@ PlotBRS(
   plotHF = TRUE,
   plotLF = TRUE,
   ylim = NULL,
+  zlim = NULL,
   use.ggplot = FALSE,
   HF = 0.4,
   LF = 0.15,
@@ -62,6 +63,8 @@ Default is NULL}
 \item{plotLF}{Boolean, plot results from the LF band. Default is TRUE}
 
 \item{ylim}{Maximum y axis limit. Default is NULL}
+
+\item{zlim}{Maximum z axis limit for the CWT plot. Default is NULL}
 
 \item{use.ggplot}{Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is FALSE}
 

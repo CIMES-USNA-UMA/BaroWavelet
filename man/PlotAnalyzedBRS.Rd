@@ -20,6 +20,7 @@ PlotAnalyzedBRS(
   plotLF = TRUE,
   thr = NULL,
   ylim = NULL,
+  zlim = NULL,
   use.ggplot = FALSE,
   size.axis = 100,
   size.labels = 100,
@@ -58,6 +59,8 @@ Default is NULL.}
 \item{thr}{Coherence threshold to be used for the plot. Default is NULL}
 
 \item{ylim}{Maximum y axis limit. Default is NULL}
+
+\item{zlim}{Maximum z axis limit for the CWT plot. Default is NULL}
 
 \item{use.ggplot}{Boolean, use methods from ggplot2 package to plot the results. Default is FALSE}
 

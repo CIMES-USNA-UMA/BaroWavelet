@@ -324,6 +324,7 @@ AddAvgCwtData <- function(framework, locator) {
 #' @param plotLF Boolean, plot results from the LF band. Default is TRUE
 #' @param thr Coherence threshold to be used for the plot. Default is NULL
 #' @param ylim Maximum y axis limit. Default is NULL
+#' @param zlim Maximum z axis limit for the CWT plot. Default is NULL
 #' @param use.ggplot Boolean, use methods from ggplot2 package to plot the results. Default is FALSE
 #' @param size.axis Percentage of scaling of axis values. Default is 100
 #' @param size.labels Percentage of scaling of axis labels. Default is 100
@@ -364,6 +365,7 @@ PlotAnalyzedBRS <-
            plotLF = TRUE,
            thr = NULL,
            ylim = NULL,
+           zlim = NULL,
            use.ggplot = FALSE,
            size.axis = 100,
            size.labels = 100,
@@ -406,7 +408,7 @@ PlotAnalyzedBRS <-
         thr,
         use.coherence,
         time_flags = time_flags,
-        Max = ylim,
+        Max = zlim,
         tem = tem,
         size.axis = size.axis,
         size.labels = size.labels,
@@ -2181,3 +2183,5 @@ SplitByCoherence <-
     output <- list(HF = results.HF, LF = results.LF)
     return(output)
   }
+
+
