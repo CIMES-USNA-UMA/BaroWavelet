@@ -151,19 +151,23 @@ TransferFunCWT <- function(data,
 # This function is based on the routine that the biwavelet function wtc uses to
 # calculate the wavelet coherence, using the biwavelet function smooth.wavelet.
 # This function adapts this routine for the computation of the BRS (for more
-# information, please check the references section at the top of this document)
+# information, please check the details and references sections at the top of
+# this document).
 SmoothTransforms <- function(x, y, chosen.dj = 1 / 20) {
   N <- nrow(x$wave)
   M <- ncol(x$wave)
-  inverse_scales <- matrix(rep(1 / t(x$scale), M), ncol = M,
-                           nrow = N)
+  scales <- matrix(rep(x$scale, M), ncol = M, nrow = N)
   XWTransform <- (Conj(x$wave) * y$wave)
-  sm.WTransform.x <- biwavelet::smooth.wavelet(inverse_scales *
-                                                 (abs(x$wave) ^ 2), x$dt, chosen.dj, x$scale)
-  sm.WTransform.y <- biwavelet::smooth.wavelet(inverse_scales *
-                                                 (abs(y$wave) ^ 2), x$dt, chosen.dj, x$scale)
-  sm.XWTransform <- biwavelet::smooth.wavelet(inverse_scales *
-                                                XWTransform, x$dt, chosen.dj, x$scale)
+  WTransform.x_power <- abs(x$wave) ^ 2
+  WTransform.y_power <- abs(y$wave) ^ 2
+  sm.WTransform.x <-
+    biwavelet::smooth.wavelet(WTransform.x_power / scales,
+                              x$dt, chosen.dj, x$scale)
+  sm.WTransform.y <-
+    biwavelet::smooth.wavelet(WTransform.y_power / scales,
+                              x$dt, chosen.dj, x$scale)
+  sm.XWTransform <- biwavelet::smooth.wavelet(XWTransform / scales,
+                                              x$dt, chosen.dj, x$scale)
   return(
     list(
       sm.WTransform.x = sm.WTransform.x,
