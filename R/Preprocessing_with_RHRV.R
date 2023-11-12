@@ -87,7 +87,7 @@ PreprocessData <- function(data,
     SBP = SBP,
     DBP = DBP,
     PP = SBP - DBP,
-    MAP = (2 * SBP - DBP) / 3
+    MAP = (2 * DBP + SBP) / 3
   ))
 }
 
