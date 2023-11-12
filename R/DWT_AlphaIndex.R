@@ -100,29 +100,44 @@ AlphaIndexDWT <- function(data,
 # analysis, and variables that serve as indicators for BaroWavelet regarding how the data
 # should be processed.
 GenerateRHRVObjects <- function(data) {
-  HRV <- list()
-  length(HRV) <- 2
+  RHRVobjects <- list()
+  length(RHRVobjects) <- 2
+  # Calls data in RHRV package to create a template.
+  template <- GenerateRHRVtemplate()
   for (n in 1:2) {
-    # The lists will have share some elements with the ones produced by RHRV's function
+    # The lists will share some elements with the ones produced by RHRV's function
     # CreateHRVData to make the data recognizable by RHRV.
-    HRV[[n]]$Ext <- "hrv"
-    HRV[[n]]$FreqAnalysis <- list()
-    HRV[[n]]$Verbose <- FALSE
-    HRV[[n]]$Beat <- list()
-    HRV[[n]]$Beat$Time <- data[, 1]
-    HRV[[n]]$Freq_HR <- 1 / abs(diff(data[, 1]))[1]
+    RHRVobjects[[n]] <- template
+    RHRVobjects[[n]][[4]][[1]] <- data[, 1]
+    RHRVobjects[[n]][[5]] <- 1 / abs(diff(data[, 1]))[1]
     # HR and SBP data is incorporated to these objects. Boolean variables tell the package how
     # the data should be processed.
     if (n == 1) {
-      HRV[[n]]$HR <- 60000 / data[, n + 1]
-      HRV[[n]]$Adapt <- FALSE
+      RHRVobjects[[n]][[6]] <- 60000 / data[, n + 1]
+      RHRVobjects[[n]]$Adapt <- FALSE
     } else {
-      HRV[[n]]$SBP <- data[, n + 1]
-      HRV[[n]]$Adapt <- TRUE
+      RHRVobjects[[n]][[6]] <- NULL
+      RHRVobjects[[n]]$SBP <- data[, n + 1]
+      RHRVobjects[[n]]$Adapt <- TRUE
     }
   }
-  names(HRV) <- c("RR", "SBP")
-  return(HRV)
+  names(RHRVobjects) <- c("RR", "SBP")
+  return(RHRVobjects)
+}
+
+
+# Private function: calls example data from RHRV to create a template for a 
+# compatible RHRV object.
+GenerateRHRVtemplate <- function(){
+  # Calls data in RHRV package to create a template
+  data(HRVProcessedData, package = "RHRV", envir = environment()) 
+  template <- HRVProcessedData
+  template <- template[-c(3,4,6)]
+  names_in_template4 <- names(template[[4]])
+  template[[4]] <- list()
+  length(template[[4]]) <- 1
+  names(template[[4]]) <- names_in_template4[1]
+  return(template)
 }
 
 
