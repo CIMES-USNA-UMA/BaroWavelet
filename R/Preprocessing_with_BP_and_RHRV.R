@@ -4,7 +4,7 @@
 
 
 
-#'Preprocess data with RHRV
+#'Preprocess data using blood pressure levels and RHRV
 #'
 #'@param data Cardiovascular data to be processed
 #'@param maxSBP Maximum value allowed for the SBP
