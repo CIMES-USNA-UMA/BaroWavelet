@@ -83,6 +83,8 @@ AlphaIndexDWT <- function(data,
     output$HRV$HF <- RR_HF
     output$HRV$LF <- RR_LF
     output$HRV$LFHF <- RR_LF / RR_HF
+    output$HRV$HFnu <- RR_HF * 100 / (RR_HF + RR_LF)
+    output$HRV$LFnu <- RR_LF * 100 / (RR_HF + RR_LF)
   }
   return(output)
 }
@@ -129,6 +131,7 @@ GenerateRHRVObjects <- function(data) {
 # Private function: calls example data from RHRV to create a template for a 
 # compatible RHRV object.
 GenerateRHRVtemplate <- function(){
+  HRVProcessedData <- NULL # Added to solve note
   # Calls data in RHRV package to create a template
   data(HRVProcessedData, package = "RHRV", envir = environment()) 
   template <- HRVProcessedData

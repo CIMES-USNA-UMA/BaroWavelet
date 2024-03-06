@@ -15,6 +15,7 @@ PlotAnalyzedHRV(
   plotHF = TRUE,
   plotLF = TRUE,
   ratio = TRUE,
+  normalize = FALSE,
   newPlot = TRUE,
   ylim = NULL,
   use.ggplot = FALSE,
@@ -46,6 +47,8 @@ Default is NULL.}
 
 \item{ratio}{Boolean. Should the LF/HF ratio be plotted? Default is FALSE. Arguments plotHF and plotLF must also be
 set to TRUE.}
+
+\item{normalize}{Boolean. Should normalized HRV be plotted? Default is FALSE}
 
 \item{newPlot}{Boolean, generates a new plot without overwriting a previous plot. Default is TRUE}
 

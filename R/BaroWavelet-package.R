@@ -23,5 +23,6 @@
 #' @importFrom stats splinefun
 #' @importFrom stats t.test
 #' @importFrom stats wilcox.test
+#' @importFrom utils data
 ## usethis namespace: end
 NULL

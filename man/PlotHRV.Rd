@@ -16,6 +16,7 @@ PlotHRV(
   plotHF = TRUE,
   plotLF = TRUE,
   ratio = TRUE,
+  normalize = FALSE,
   ylim = NULL,
   use.ggplot = TRUE,
   fHF = 0.4,
@@ -53,6 +54,8 @@ Default is NULL.}
 
 \item{ratio}{Boolean. Should the LF/HF ratio be plotted? Default is FALSE. Arguments plotHF and plotLF must also be
 set to TRUE.}
+
+\item{normalize}{Boolean. Should normalized HRV be plotted? Default is FALSE}
 
 \item{ylim}{Maximum y axis limit. Default is NULL}
 

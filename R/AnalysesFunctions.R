@@ -485,6 +485,7 @@ PlotAnalyzedBRS <-
 #' @param plotLF Boolean, plot results from the LF band. Default is TRUE
 #' @param ratio Boolean. Should the LF/HF ratio be plotted? Default is FALSE. Arguments plotHF and plotLF must also be
 #'              set to TRUE.
+#' @param normalize Boolean. Should normalized HRV be plotted? Default is FALSE         
 #' @param ylim Maximum y axis limit. Default is NULL
 #' @param use.ggplot Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is FALSE
 #' @param size.axis Percentage of scaling of axis values. Default is 100
@@ -521,6 +522,7 @@ PlotAnalyzedHRV <- function(framework,
                             plotHF = TRUE,
                             plotLF = TRUE,
                             ratio = TRUE,
+                            normalize = FALSE,
                             newPlot = TRUE,
                             ylim = NULL,
                             use.ggplot = FALSE,
@@ -541,6 +543,7 @@ PlotAnalyzedHRV <- function(framework,
       plotHF = plotHF,
       plotLF = plotLF,
       ratio = ratio,
+      normalize = normalize,
       newPlot = newPlot,
       ylim = ylim,
       use.ggplot = use.ggplot,
@@ -1925,9 +1928,9 @@ AddExpectedHRV <-
     method <- ifelse(method == "mean", mean, median)
     for (n in 1:length(hrv))
       hrv[[n]] <- method(hrv[[n]][select_time])
-    hrv <- rbind(hrv[[1]], hrv[[2]], hrv[[3]])
+    hrv <- rbind(hrv[[1]], hrv[[2]], hrv[[3]], hrv[[4]], hrv[[5]])
     if (N == 0) {
-      rownames(hrv) <- c("HF", "LF", "LFHF")
+      rownames(hrv) <- c("HF", "LF", "LFHF", "HFnu", "LFnu")
     } else if (locator_a <= ncol(others)) {
       results <- others
       results[, locator_a] <- hrv
@@ -1989,7 +1992,7 @@ PrepareIntervalSlots <-
       }
       if (length(int) == 0 || is.null(int[[1]])) {
         int <- Time <- matrix(NA, ncol = n, nrow = 2)
-        int2 <- matrix(NA, ncol = n, nrow = 3)
+        int2 <- matrix(NA, ncol = n, nrow = 5)
         #HR <- SBP <- matrix(NA, ncol = n, nrow = k)
         colnames(int) <- colnames(int2) <-  rep("Unnamed", n)
       } else if (n > ncol(int)) {

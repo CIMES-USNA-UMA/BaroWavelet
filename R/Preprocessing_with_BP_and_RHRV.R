@@ -100,6 +100,7 @@ PreprocessData <- function(data,
 # with a defined time support, which RHRV will use to preprocess the data.
 PrepareTachoForRHRV <- function(time) {
   # Calls data in RHRV package to create a template
+  HRVData <- NULL # Added because of note
   data(HRVData, package = "RHRV", envir = environment()) 
   template <- HRVData
   template <- template[-c(3,4,6)]

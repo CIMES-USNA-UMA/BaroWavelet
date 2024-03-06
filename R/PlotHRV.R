@@ -18,6 +18,7 @@
 #' @param plotLF Boolean, plot results from the LF band. Default is TRUE
 #' @param ratio Boolean. Should the LF/HF ratio be plotted? Default is FALSE. Arguments plotHF and plotLF must also be
 #'              set to TRUE.
+#' @param normalize Boolean. Should normalized HRV be plotted? Default is FALSE   
 #' @param ylim Maximum y axis limit. Default is NULL
 #' @param use.ggplot Boolean, use methods from \href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} package to plot the results. Default is TRUE
 #' @param fHF Maximum limit of the HF band, shown at the plot title. Default is 0.4 Hz
@@ -65,6 +66,7 @@ PlotHRV <-
            plotHF = TRUE,
            plotLF = TRUE,
            ratio = TRUE,
+           normalize = FALSE,
            ylim = NULL,
            use.ggplot = TRUE,
            fHF = 0.4,
@@ -79,8 +81,13 @@ PlotHRV <-
     } else if (!newPlot & !tem & !use.ggplot) {
       if(!is.null(dev.list())) dev.off()
     }
-    HF <- hrv$HF
-    LF <- hrv$LF
+    if(normalize){
+       HF <- hrv$HFnu
+       LF <- hrv$LFnu
+    } else {
+      HF <- hrv$HF
+      LF <- hrv$LF
+    }
     LFHF <- hrv$LFHF
     size.axis <- size.axis / 100
     size.labels <- size.labels / 100
@@ -148,7 +155,7 @@ PlotHRV <-
           time,
           LFHF,
           type = "l",
-          xlab = "time (s)",
+          xlab = "Time (s)",
           ylab = "LF/HF ratio",
           main = "HRV: LF/HF ratio",
           ylim = if (!is.null(ylim))
@@ -194,8 +201,8 @@ PlotHRV <-
             time,
             HF,
             type = "l",
-            xlab = "time (s)",
-            ylab = expression(HRV ~ ms ^ 2),
+            xlab = "Time (s)",
+            ylab = ifelse(normalize, "HRV (n.u.)", expression(HRV ~ ms ^ 2)),
             main = paste("HF band (", fHF, " - ", fLF, " Hz)", sep = ""),
             ylim = if (!is.null(ylim))
               c(0, ylim),
@@ -241,8 +248,8 @@ PlotHRV <-
             time,
             LF,
             type = "l",
-            xlab = "time (s)",
-            ylab = expression(HRV ~ ms ^ 2),
+            xlab = "Time (s)",
+            ylab = ifelse(normalize, "HRV (n.u.)", expression(HRV ~ ms ^ 2)),,
             main = paste("LF band (", fLF, " - ", fVLF, " Hz)", sep = ""),
             ylim = if (!is.null(ylim))
               c(0, ylim),
