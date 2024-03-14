@@ -189,6 +189,7 @@ ShowLocatorIndices <-
 #' @param time A vector of time values
 #' @param raw Boolean. If TRUE, data is handled as non-interpolated. If NULL, the function will check
 #'            if the time series have been interpolated.
+#' @param interpolate Boolean. Should raw data be interpolated?
 #' @param f Frequency for raw data resampling
 #'
 #' @return The original analysis environment, in which new data has been placed in the chosen
@@ -202,7 +203,7 @@ ShowLocatorIndices <-
 #' Study <- BuildStructure()
 #' Study <- AddAnalysis(Study, name = "Simulation")
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
-AddDataToAnalysis <- function(framework, locator, RR, SBP, time, raw = NULL, f = 4) {
+AddDataToAnalysis <- function(framework, locator, RR, SBP, time, raw = NULL, interpolate = TRUE, f = 4) {
   if(is.null(raw)){
     check <- CheckInterpolation(time)
     if(check){
@@ -215,9 +216,11 @@ AddDataToAnalysis <- function(framework, locator, RR, SBP, time, raw = NULL, f =
   framework$Raw[[locator]]$Data <- cbind(Time = time,
                                                 RR = RR, SBP = SBP)
   Data <- data.frame(Time = time, RR = RR, SBP = SBP)
+  if(interpolate){
   Data <- InterpolateData(Data, f)
   framework$Analyses[[locator]]$Data <- cbind(Time = Data$Time,
                                               RR = Data$RR, SBP = Data$SBP)
+  }
   } else {
   framework$Analyses[[locator]]$Data <- cbind(Time = time,
                                               RR = RR, SBP = SBP)
