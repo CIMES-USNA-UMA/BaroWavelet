@@ -45,16 +45,28 @@ The original framework with the test results attached
 Compares two groups of paired or unpaired data to check for significant differences
 }
 \examples{
-Data <- InterpolateData(DataSimulation(), f = 1)
+niData <- DataSimulation()
+Data <- InterpolateData(niData, f = 1)
 Study <- BuildStructure(error = 0.01)
 Study <- AddAnalysis(Study, name = "Simulation 1")
 Study <- AddAnalysis(Study, name = "Simulation 2")
 Study <- AddAnalysis(Study, name = "Simulation 3")
 Study <- AddAnalysis(Study, name = "Simulation 4")
+
 Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], Data$Time[1:300])
 Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[1:300])
 Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1:300])
 Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
+
+Study <- AddDataToAnalysis(Study, 1, niData$RR[1:300], niData$SBP[1:300], 
+niData$Time[1:300], raw = TRUE)
+Study <- AddDataToAnalysis(Study, 2, niData$RR[501:800], niData$SBP[501:800], 
+niData$Time[1:300], raw = TRUE)
+Study <- AddDataToAnalysis(Study, 3, niData$RR[1001:1300], niData$SBP[1001:1300], 
+niData$Time[1:300], raw = TRUE)
+Study <- AddDataToAnalysis(Study, 4, niData$RR[1501:1800], niData$SBP[1501:1800], 
+niData$Time[1:300], raw = TRUE)
+
 for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
 

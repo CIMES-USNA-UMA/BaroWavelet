@@ -6,7 +6,8 @@ test_that("A structure should be built with no problems", {
 })
 
 Structure <- BuildStructure(error = 0.01)
-Data <- InterpolateData(DataSimulation())
+niData <- DataSimulation()
+Data <- InterpolateData(niData)
 
 test_that("Analysis additions to Structure should work", {
   Structure <- AddAnalysis(Structure)
@@ -27,12 +28,34 @@ test_that("Data should be added to Structure without problems", {
   expect_equal(Structure$Analyses[[1]]$Data[, "RR"], Data$RR)
 })
 
+test_that("Non interpolated data should be added to Structure without problems", {
+  Structure <-
+    AddDataToAnalysis(
+      Structure,
+      1,
+      RR = niData$RR,
+      SBP = niData$SBP,
+      time = niData$Time,
+      raw  =TRUE
+    )
+  expect_equal(Structure$Raw[[1]]$Data[, "RR"], niData$RR)
+})
+
 Structure <-
   AddDataToAnalysis(Structure,
                     1,
                     RR = Data$RR,
                     SBP = Data$SBP,
                     time = Data$Time)
+Structure <-
+  AddDataToAnalysis(
+    Structure,
+    1,
+    RR = niData$RR,
+    SBP = niData$SBP,
+    time = niData$Time,
+    raw  =TRUE
+  )
 
 test_that("DWT analysis should work", {
   Structure <- AnalyzeBRS(Structure, 1, method = "dwt")

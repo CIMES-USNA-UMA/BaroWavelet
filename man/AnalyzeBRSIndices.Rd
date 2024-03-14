@@ -10,7 +10,8 @@ AnalyzeBRSIndices(
   locator_t,
   time_flags,
   method = c("both", "dwt", "cwt"),
-  use.name = TRUE
+  use.name = TRUE,
+  use.raw = TRUE
 )
 }
 \arguments{
@@ -27,6 +28,8 @@ Default is NULL.}
 The default is both.}
 
 \item{use.name}{Boolean, should the names of the subjects be used?}
+
+\item{use.raw}{Boolean. If TRUE, HR and BP estimates will be computed from non-interpolated time series}
 }
 \value{
 The original framework with new computed indices.
@@ -35,10 +38,12 @@ The original framework with new computed indices.
 Compute BRS indices from specific time intervals for all subjects.
 }
 \examples{
-Data <- InterpolateData(DataSimulation(), f = 1)
+niData <- DataSimulation()
+Data <- InterpolateData(niData, f = 1)
 Study <- BuildStructure()
 Study <- AddAnalysis(Study, name = "Simulation")
 Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
+Study <- AddDataToAnalysis(Study, 1, niData$RR, niData$SBP, niData$Time, raw = TRUE)
 Study <- AnalyzeBRS(Study, 1)
 Study <- AddAvgCwtData(Study, 1)
 

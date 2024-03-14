@@ -22,7 +22,7 @@ A list with HR and BP levels
 Computes HR and BP time domain indices
 }
 \examples{
-Data <- InterpolateData(DataSimulation(), f = 1)
+Data <- DataSimulation()
 
 TimeDomainValues(Data, c(0, 100/60), "mean")
 }

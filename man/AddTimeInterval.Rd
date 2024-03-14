@@ -31,10 +31,12 @@ This function allows users to add new time segments to their study environments.
          allows users to define a control interval and a stimulation interval for their study.
 }
 \examples{
-Data <- InterpolateData(DataSimulation(), f = 1)
+niData <- DataSimulation()
+Data <- InterpolateData(niData, f = 1)
 Study <- BuildStructure()
 Study <- AddAnalysis(Study, name = "Simulation")
 Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
+Study <- AddDataToAnalysis(Study, 1, niData$RR, niData$SBP, niData$Time, raw = TRUE)
 Study <- AnalyzeBRS(Study, 1)
 Study <- AddAvgCwtData(Study, 1)
 

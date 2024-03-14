@@ -287,7 +287,7 @@ IndividualIndicesPhaseCWT <-
 #' @export
 #'
 #' @examples
-#' Data <- InterpolateData(DataSimulation(), f = 1)
+#' Data <- DataSimulation()
 #'
 #' TimeDomainValues(Data, c(0, 100/60), "mean")
 TimeDomainValues <-
