@@ -45,12 +45,10 @@ None
 Plots HR and SBP levels associated to a specific subject at each interval
 }
 \examples{
-niData <- DataSimulation()
-Data <- InterpolateData(niData, f = 1)
+Data <- DataSimulation()
 Study <- BuildStructure()
 Study <- AddAnalysis(Study, name = "Simulation")
-Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
-Study <- AddDataToAnalysis(Study, 1, niData$RR, niData$SBP, niData$Time, raw = TRUE)
+Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time, f = 1)
 Study <- AnalyzeBRS(Study, 1)
 Study <- AddAvgCwtData(Study, 1)
 
