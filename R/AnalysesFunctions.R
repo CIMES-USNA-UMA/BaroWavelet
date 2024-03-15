@@ -60,7 +60,6 @@ BuildStructure <-
       index.method
     Framework$n <- 0
     Framework$Analyses <- list()
-    Framework$Raw <- list()
     Framework$Controls <- list()
     Framework$BRS <- list()
     Framework$IndividualIndices <- list()
@@ -109,15 +108,12 @@ SetAsControl <-
 AddAnalysis <- function(framework, name = NULL) {
   N <- length(framework$Analyses)
   length(framework$Analyses) <- N + 1
-  length(framework$Raw) <- N + 1
   output <- list()
   output$Date <- date()
   output$locator <- N + 1
   if (is.null(name))
     name <- paste("Analysis", N + 1)
   output$Name <- name
-  framework$Raw[[N + 1]] <- output
-  framework$Raw[[N + 1]]$Data <- list()
   output$BRS <- output$HRV <- output$Data <- list()
   output$BRS$CWT <- output$BRS$DWT <- list()
   framework$Analyses[[N + 1]] <- output
@@ -187,10 +183,6 @@ ShowLocatorIndices <-
 #' @param RR A vector with RR data
 #' @param SBP A vector with systolic blood pressure data
 #' @param time A vector of time values
-#' @param raw Boolean. If TRUE, data is handled as non-interpolated. If NULL, the function will check
-#'            if the time series have been interpolated.
-#' @param interpolate Boolean. Should raw data be interpolated?
-#' @param f Frequency for raw data resampling
 #'
 #' @return The original analysis environment, in which new data has been placed in the chosen
 #'          analysis slot.
@@ -203,28 +195,9 @@ ShowLocatorIndices <-
 #' Study <- BuildStructure()
 #' Study <- AddAnalysis(Study, name = "Simulation")
 #' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
-AddDataToAnalysis <- function(framework, locator, RR, SBP, time, raw = NULL, interpolate = TRUE, f = 4) {
-  if(is.null(raw)){
-    check <- CheckInterpolation(time)
-    if(check){
-       raw = FALSE
-    } else {
-      raw = TRUE
-    }
-  }
-  if(raw){
-  framework$Raw[[locator]]$Data <- cbind(Time = time,
-                                                RR = RR, SBP = SBP)
-  Data <- data.frame(Time = time, RR = RR, SBP = SBP)
-  if(interpolate){
-  Data <- InterpolateData(Data, f)
-  framework$Analyses[[locator]]$Data <- cbind(Time = Data$Time,
-                                              RR = Data$RR, SBP = Data$SBP)
-  }
-  } else {
+AddDataToAnalysis <- function(framework, locator, RR, SBP, time) {
   framework$Analyses[[locator]]$Data <- cbind(Time = time,
                                               RR = RR, SBP = SBP)
-  }
   return(framework)
 }
 
@@ -242,10 +215,10 @@ AddDataToAnalysis <- function(framework, locator, RR, SBP, time, raw = NULL, int
 #' @export
 #'
 #' @examples
-#' Data <- DataSimulation()
+#' Data <- InterpolateData(DataSimulation(), f = 1)
 #' Study <- BuildStructure()
 #' Study <- AddAnalysis(Study, name = "Simulation")
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time, f = 1)
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 AnalyzeBRS <-
   function(framework,
@@ -312,10 +285,10 @@ AnalyzeBRS <-
 #' @export
 #'
 #' @examples
-#' Data <- DataSimulation()
+#' Data <- InterpolateData(DataSimulation(), f = 1)
 #' Study <- BuildStructure()
 #' Study <- AddAnalysis(Study, name = "Simulation")
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time, f = 1)
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
 AddAvgCwtData <- function(framework, locator) {
@@ -366,10 +339,10 @@ AddAvgCwtData <- function(framework, locator) {
 #' @export
 #'
 #' @examples
-#' Data <- DataSimulation()
+#' Data <- InterpolateData(DataSimulation(), f = 1)
 #' Study <- BuildStructure()
 #' Study <- AddAnalysis(Study, name = "Simulation")
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time, f = 1)
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
 #'
@@ -529,10 +502,10 @@ PlotAnalyzedBRS <-
 #' @export
 #'
 #' @examples
-#' Data <- DataSimulation()
+#' Data <- InterpolateData(DataSimulation(), f = 1)
 #' Study <- BuildStructure()
 #' Study <- AddAnalysis(Study, name = "Simulation")
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time, f = 1)
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
 #'
@@ -604,10 +577,10 @@ PlotAnalyzedHRV <- function(framework,
 #' @export
 #'
 #' @examples
-#' Data <- DataSimulation()
+#' Data <- InterpolateData(DataSimulation(), f = 1)
 #' Study <- BuildStructure()
 #' Study <- AddAnalysis(Study, name = "Simulation")
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time, f = 1)
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
 #'
@@ -660,7 +633,6 @@ AddTimeInterval <- function(framework,
 #' @param method From which transfer function are the estimates to be computed, either cwt, dwt or both.
 #'              The default is both.
 #' @param use.name Boolean, should the names of the subjects be used?
-#' @param use.raw Boolean. If TRUE, HR and BP estimates will be computed from non-interpolated time series
 #'
 #' @return The original framework with new computed indices.
 #'
@@ -670,10 +642,10 @@ AddTimeInterval <- function(framework,
 #' @export
 #'
 #' @examples
-#' Data <- DataSimulation()
+#' Data <- InterpolateData(DataSimulation(), f = 1)
 #' Study <- BuildStructure()
 #' Study <- AddAnalysis(Study, name = "Simulation")
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time, f = 1)
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
 #'
@@ -690,8 +662,7 @@ AnalyzeBRSIndices <-
            locator_t,
            time_flags,
            method = c("both", "dwt", "cwt"),
-           use.name = TRUE,
-           use.raw = TRUE) {
+           use.name = TRUE) {
     method <- match.arg(method)
     if (method == "both") {
       framework <-
@@ -719,7 +690,7 @@ AnalyzeBRSIndices <-
     }
     framework <-
       AddTimeValues(framework, locator_a, locator_t, time_flags,
-                    use.name, use.raw)
+                    use.name)
     if (method != "cwt")
       framework <- AddExpectedHRV(framework, locator_a, locator_t)
     return(framework)
@@ -749,10 +720,10 @@ AnalyzeBRSIndices <-
 #' @export
 #'
 #' @examples
-#' Data <- DataSimulation()
+#' Data <- InterpolateData(DataSimulation(), f = 1)
 #' Study <- BuildStructure()
 #' Study <- AddAnalysis(Study, name = "Simulation")
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time, f = 1)
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
 #'
@@ -866,10 +837,10 @@ PlotIndicesFromAnalysis <-
 #' @export
 #'
 #' @examples
-#' Data <- DataSimulation()
+#' Data <- InterpolateData(DataSimulation(), f = 1)
 #' Study <- BuildStructure()
 #' Study <- AddAnalysis(Study, name = "Simulation")
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time, f = 1)
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 #' Study <- AnalyzeBRS(Study, 1)
 #' Study <- AddAvgCwtData(Study, 1)
 #'
@@ -987,22 +958,16 @@ PlotTimeValues <- function(framework,
 #' @export
 #'
 #' @examples
-#' Data <- DataSimulation()
+#' Data <- InterpolateData(DataSimulation(), f = 1)
 #' Study <- BuildStructure(error = 0.01)
 #' Study <- AddAnalysis(Study, name = "Simulation 1")
 #' Study <- AddAnalysis(Study, name = "Simulation 2")
 #' Study <- AddAnalysis(Study, name = "Simulation 3")
 #' Study <- AddAnalysis(Study, name = "Simulation 4")
-#' 
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], 
-#' Data$Time[1:300], f = 1)
-#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], 
-#' Data$Time[1:300], f = 1)
-#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], 
-#' Data$Time[1:300], f = 1)
-#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], 
-#' Data$Time[1:300], f = 1)
-#' 
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 #' for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 #' for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
 #'
@@ -1188,22 +1153,16 @@ TestGroups <-
 #' @export
 #'
 #' @examples
-#' Data <- DataSimulation()
+#' Data <- InterpolateData(DataSimulation(), f = 1)
 #' Study <- BuildStructure(error = 0.01)
 #' Study <- AddAnalysis(Study, name = "Simulation 1")
 #' Study <- AddAnalysis(Study, name = "Simulation 2")
 #' Study <- AddAnalysis(Study, name = "Simulation 3")
 #' Study <- AddAnalysis(Study, name = "Simulation 4")
-#' 
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], 
-#' Data$Time[1:300], f = 1)
-#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], 
-#' Data$Time[1:300], f = 1)
-#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], 
-#' Data$Time[1:300], f = 1)
-#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], 
-#' Data$Time[1:300], f = 1)
-#' 
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 #' for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 #' for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
 #'
@@ -1433,23 +1392,16 @@ TestHRV <-
 #' @export
 #'
 #' @examples
-#' Data <- DataSimulation()
+#' Data <- InterpolateData(DataSimulation(), f = 1)
 #' Study <- BuildStructure(error = 0.01)
 #' Study <- AddAnalysis(Study, name = "Simulation 1")
 #' Study <- AddAnalysis(Study, name = "Simulation 2")
 #' Study <- AddAnalysis(Study, name = "Simulation 3")
 #' Study <- AddAnalysis(Study, name = "Simulation 4")
-#' 
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], 
-#' Data$Time[1:300], f = 1)
-#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], 
-#' Data$Time[1:300], f = 1)
-#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], 
-#' Data$Time[1:300], f = 1)
-#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], 
-#' Data$Time[1:300], f = 1)
-#' 
-#' 
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 #' for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 #' for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
 #'
@@ -1583,22 +1535,16 @@ PlotTestResults <-
 #' @export
 #'
 #' @examples
-#' Data <- DataSimulation()
+#' Data <- InterpolateData(DataSimulation(), f = 1)
 #' Study <- BuildStructure(error = 0.01)
 #' Study <- AddAnalysis(Study, name = "Simulation 1")
 #' Study <- AddAnalysis(Study, name = "Simulation 2")
 #' Study <- AddAnalysis(Study, name = "Simulation 3")
 #' Study <- AddAnalysis(Study, name = "Simulation 4")
-#' 
-#' Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], 
-#' Data$Time[1:300], f = 1)
-#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], 
-#' Data$Time[1:300], f = 1)
-#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], 
-#' Data$Time[1:300], f = 1)
-#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], 
-#' Data$Time[1:300], f = 1)
-#' 
+#' Study <- AddDataToAnalysis(Study, 1, Data$RR[1:300], Data$SBP[1:300], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 2, Data$RR[501:800], Data$SBP[501:800], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 3, Data$RR[1001:1300], Data$SBP[1001:1300], Data$Time[1:300])
+#' Study <- AddDataToAnalysis(Study, 4, Data$RR[1501:1800], Data$SBP[1501:1800], Data$Time[1:300])
 #' for(n in 1:4) Study <- AnalyzeBRS(Study, n)
 #' for(n in 1:4) Study <- AddAvgCwtData(Study, 1)
 #'
@@ -2086,8 +2032,7 @@ AddTimeValues <-
            locator_a,
            locator_t,
            time_flags,
-           use.name = TRUE,
-           use.raw = TRUE) {
+           use.name = TRUE) {
     method <- framework$"General Data"$"Index Method"
     if (method == "median") {
       k <- 3
@@ -2095,11 +2040,7 @@ AddTimeValues <-
       k <- 2
     }
     interval <- framework$IndividualIndices[[locator_t]]
-    if(use.raw){
-      Analysis <- framework$Raw[[locator_a]]
-    } else {
-      Analysis <- framework$Analyses[[locator_a]]
-    }
+    Analysis <- framework$Analyses[[locator_a]]
     HR <- interval$HR
     SBP <- interval$SBP
     TimeValues <-
@@ -2246,10 +2187,4 @@ SplitByCoherence <-
     return(output)
   }
 
-CheckInterpolation <- function(time){
-  diffs <- diff(time)
-  out <- sum(diffs == diffs[1]) == NROW(diffs)
-  out <- out & (diffs[1] != 0)
-  return(out)
-}
 

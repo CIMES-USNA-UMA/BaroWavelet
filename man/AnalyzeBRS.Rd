@@ -21,10 +21,10 @@ The original analysis environment, in which baroreflex sensitivity has been esti
 Computes the baroreflex sensitivity from data located in an analysis environment.
 }
 \examples{
-Data <- DataSimulation()
+Data <- InterpolateData(DataSimulation(), f = 1)
 Study <- BuildStructure()
 Study <- AddAnalysis(Study, name = "Simulation")
-Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time, f = 1)
+Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 Study <- AnalyzeBRS(Study, 1)
 }
 \author{

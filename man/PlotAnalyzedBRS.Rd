@@ -79,10 +79,10 @@ None
 Plots an already computed transfer function from a specific analysis in an analysis environment.
 }
 \examples{
-Data <- DataSimulation()
+Data <- InterpolateData(DataSimulation(), f = 1)
 Study <- BuildStructure()
 Study <- AddAnalysis(Study, name = "Simulation")
-Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time, f = 1)
+Study <- AddDataToAnalysis(Study, 1, Data$RR, Data$SBP, Data$Time)
 Study <- AnalyzeBRS(Study, 1)
 Study <- AddAvgCwtData(Study, 1)
 

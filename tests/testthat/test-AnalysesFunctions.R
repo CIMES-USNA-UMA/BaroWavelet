@@ -6,8 +6,7 @@ test_that("A structure should be built with no problems", {
 })
 
 Structure <- BuildStructure(error = 0.01)
-niData <- DataSimulation()
-Data <- InterpolateData(niData)
+Data <- InterpolateData(DataSimulation())
 
 test_that("Analysis additions to Structure should work", {
   Structure <- AddAnalysis(Structure)
@@ -28,34 +27,12 @@ test_that("Data should be added to Structure without problems", {
   expect_equal(Structure$Analyses[[1]]$Data[, "RR"], Data$RR)
 })
 
-test_that("Non interpolated data should be added to Structure without problems", {
-  Structure <-
-    AddDataToAnalysis(
-      Structure,
-      1,
-      RR = niData$RR,
-      SBP = niData$SBP,
-      time = niData$Time,
-      raw  =TRUE
-    )
-  expect_equal(Structure$Raw[[1]]$Data[, "RR"], niData$RR)
-})
-
 Structure <-
   AddDataToAnalysis(Structure,
                     1,
                     RR = Data$RR,
                     SBP = Data$SBP,
                     time = Data$Time)
-Structure <-
-  AddDataToAnalysis(
-    Structure,
-    1,
-    RR = niData$RR,
-    SBP = niData$SBP,
-    time = niData$Time,
-    raw  =TRUE
-  )
 
 test_that("DWT analysis should work", {
   Structure <- AnalyzeBRS(Structure, 1, method = "dwt")
@@ -118,7 +95,7 @@ Structure <- AddTimeInterval(Structure)
 
 test_that("Analyzing BRS index in a given time interval should work for dwt", {
   Structure <-
-    AnalyzeBRSIndices(Structure, 1, 1, c(0, 200 / 60), method = "dwt", use.raw = TRUE)
+    AnalyzeBRSIndices(Structure, 1, 1, c(0, 200 / 60), method = "dwt")
   expect_true(is.matrix(Structure$IndividualIndices[[1]]$HR))
   expect_true(is.numeric(Structure$IndividualIndices[[1]]$Time_DWT))
   expect_true(is.numeric(Structure$IndividualIndices[[1]]$DWT))
@@ -128,7 +105,7 @@ test_that("Analyzing BRS index in a given time interval should work for dwt", {
 
 test_that("Analyzing BRS index in a given time interval should work for cwt", {
   Structure <-
-    AnalyzeBRSIndices(Structure, 1, 1, c(0, 200 / 60), method = "cwt", use.raw = TRUE)
+    AnalyzeBRSIndices(Structure, 1, 1, c(0, 200 / 60), method = "cwt")
   expect_true(is.numeric(Structure$IndividualIndices[[1]]$Time_CWT))
   expect_true(is.numeric(Structure$IndividualIndices[[1]]$CWT))
   
@@ -137,7 +114,7 @@ test_that("Analyzing BRS index in a given time interval should work for cwt", {
 Structure <- AddTimeInterval(Structure)
 test_that("Analyzing BRS index in a given time interval should work for both methods",
           {
-            Structure <- AnalyzeBRSIndices(Structure, 1, 2, c(0, 100 / 60), use.raw = TRUE)
+            Structure <- AnalyzeBRSIndices(Structure, 1, 2, c(0, 100 / 60))
             expect_true(is.matrix(Structure$IndividualIndices[[2]]$HR))
             expect_true(is.numeric(Structure$IndividualIndices[[2]]$Time_DWT))
             expect_true(is.numeric(Structure$IndividualIndices[[2]]$Time_CWT))
@@ -146,8 +123,8 @@ test_that("Analyzing BRS index in a given time interval should work for both met
             
           })
 
-Structure <- AnalyzeBRSIndices(Structure, 1, 1, c(0, 200 / 60), use.raw = TRUE)
-Structure <- AnalyzeBRSIndices(Structure, 1, 2, c(0, 100 / 60), use.raw = TRUE)
+Structure <- AnalyzeBRSIndices(Structure, 1, 1, c(0, 200 / 60))
+Structure <- AnalyzeBRSIndices(Structure, 1, 2, c(0, 100 / 60))
 
 test_that("Plotting indices should work", {
   expect_true(is.null(
