@@ -31,7 +31,7 @@ test_that("An error should be returned when equal intervals are used #2", {
 
 test_that("Function should work for AlphaDWT #2", {
   test <- TestIndHRV(AlphaDWT, c(0, 200 / 60), c(300 / 60, 450 / 60))
-  expect_equal(NROW(test), 3)
+  expect_equal(NROW(test), 5)
 })
 
 
