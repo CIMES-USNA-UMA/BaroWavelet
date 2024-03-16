@@ -307,8 +307,12 @@ TestIndHRV <- function(fun, time_flags1, time_flags2) {
     ks.test(fun$LF[select_time1], fun$LF[select_time2])$p.value
   LFHFtest <-
     ks.test(fun$LFHF[select_time1], fun$LFHF[select_time2])$p.value
-  output <- c(HFtest, LFtest, LFHFtest)
-  names(output) <- c("HF", "LF", "LFHF")
+  HFnutest <-
+    ks.test(fun$HFnu[select_time1], fun$HFnu[select_time2])$p.value
+  LFnutest <-
+    ks.test(fun$LFnu[select_time1], fun$LFnu[select_time2])$p.value
+  output <- c(HFtest, LFtest, LFHFtest, HFnutest, LFnutest)
+  names(output) <- c("HF", "LF", "LFHF", "HFnu", "LFnu")
   return(output)
 }
 
